@@ -14,14 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ *     To respond to the user clicking the + button at the bottom of the screen.
+ *     This will pop up a fragment where the user can add all the habit info and it will
+ *     add the habit to the habit list on the home page
+ */
 public class AddHabitFragment extends DialogFragment {
     /*
-    Purpose: To open a fragment that lets the user add a new medication when the button in the
-    bottom left is clicked
+    Purpose: To respond to the user clicking the + button at the bottom of the screen.
+    This will pop up a fragment where the user can add all the habit info and it will
+    add the habit to the habit list on the home page
 
-    Outstanding Issues: Data checking for the Name (to make sure a name is actually submitted, i did
-    error checking for it and if the user leaves it blank it will assign null to the name) and a
-    dropdown for the unit type (mg, mcg, drop)
+    Outstanding Issues:
+    -XML formatting, need to make it look better
+    -Several text formatting errors, need to format text properly, rushed through it
+    -need date picker to choose the date (just have normal text right now)
 
      */
     private EditText habitName;
@@ -31,9 +38,12 @@ public class AddHabitFragment extends DialogFragment {
     private OnFragmentInteractionListener listener;
 
     // create a interface to call a function in mainActivity
+
+    /**
+     * A interface to connect the fragment with Main activity
+     */
     public interface OnFragmentInteractionListener {
         void onOkPressed(Habit newHabit);
-
     }
     // error checking for OnFragment listener
     @Override
@@ -51,13 +61,12 @@ public class AddHabitFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         // inflate the layout for this fragment
+        // get the user input and send it to the "onOkPressed listener"
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_habit_fragment, null);
         habitName = view.findViewById(R.id.habitNameEditText);
         habitDate = view.findViewById(R.id.habitDateEditText);
         habitReason = view.findViewById(R.id.habitReasonEditText);
 
-
-        // create a pop up with a calendar and multiple areas for the user to fill in
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -78,6 +87,13 @@ public class AddHabitFragment extends DialogFragment {
                 }).create();
     }
     // to check if the user entered anything, if he entered nothing it will add NULL
+
+    /**
+     * If the string len is 0 set the string to NULL and return
+     * @param str
+     * @return str
+     * returns either the original string or the NULL
+     */
     public String check(String str){
         if (str.length() == 0){
             str = "Null";

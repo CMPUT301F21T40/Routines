@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * A custom list to add the habits into
+ */
 public class CustomList extends ArrayAdapter<Habit> {
     /*
     Purpose: To create the list that all the habits will be stored in for the duration of program
@@ -36,7 +39,7 @@ public class CustomList extends ArrayAdapter<Habit> {
         if(view==null){
             view = LayoutInflater.from(context).inflate(R.layout.custom_list, parent, false);
         }
-
+        // a habit list to store the habits
         Habit habit = habits.get(position);
         TextView habitName = view.findViewById(R.id.habitName);
         TextView habitDate = view.findViewById(R.id.habitDate);

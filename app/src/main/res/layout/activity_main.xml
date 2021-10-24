@@ -18,7 +18,7 @@
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name             Reason                        Date Started"
+        android:text="Habit              Reason                        Date Started"
         />
 
     <ListView

@@ -38,13 +38,13 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         BottomNavigator = findViewById(R.id.bottom_navigation);
         BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
+
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch(id){
 
                     case R.id.home:
                         return true;
-
                     case R.id.search:
                         startActivity(new Intent(getApplicationContext(),SearchActivity.class));
                         overridePendingTransition(0,0);
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
                 return true;
             }
         });
+
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
@@ -85,7 +86,10 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         });
 
     }
-    
+
+
+
+
     // this is called from the AddHabitFragment so we can add a new Habit to the list
     /**
      * This is called when the + button is pressed and the info from the pop up fragment

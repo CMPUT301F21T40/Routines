@@ -9,7 +9,8 @@ android {
 
     defaultConfig {
         applicationId "com.example.routines"
-        minSdk 21  //Firebase: Targets API level 16 (Jelly Bean) or higher
+        //Firebase: Targets API level 16 (Jelly Bean) or higher
+        minSdk 21
         multiDexEnabled true
         targetSdk 31
         versionCode 1

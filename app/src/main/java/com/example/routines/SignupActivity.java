@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 
 public class SignupActivity extends AppCompatActivity {
+    public static final String EXTRA_TEXT = "com.example.routines.EXTRA_TEXT";
 
     FirebaseFirestore db;
     CollectionReference collectionReference;
@@ -161,6 +162,7 @@ public class SignupActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Void unused) {
                                     Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                    intent.putExtra(EXTRA_TEXT, UserId);
                                     startActivity(intent);
 
                                 }

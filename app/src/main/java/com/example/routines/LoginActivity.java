@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
+    public static final String EXTRA_TEXT = "com.example.routines.EXTRA_TEXT";
 
     FirebaseFirestore db;
     CollectionReference collectionReference;
@@ -97,7 +98,10 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = myAuth.getCurrentUser();
+                            String UserId = user.getUid();
+
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra(EXTRA_TEXT, UserId);
                             startActivity(intent);
                         }else{
                             Log.d(TAG, "signInWithEmail:failure", task.getException());

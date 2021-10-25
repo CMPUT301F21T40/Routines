@@ -1,11 +1,19 @@
 package com.example.routines;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import android.view.MenuItem;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -17,10 +25,40 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
     private ArrayAdapter<Habit> habitAdapter;
 
+    BottomNavigationView BottomNavigator;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Bottom Navigation Bar
+        BottomNavigator = findViewById(R.id.bottom_navigation);
+        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch(id){
+
+                    case R.id.home:
+                        return true;
+
+                    case R.id.search:
+                        startActivity(new Intent(getApplicationContext(),SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                }
+                return true;
+            }
+        });
+
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
@@ -56,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
      */
     public void onOkPressed(Habit newHabit){
         habitAdapter.add(newHabit);
+
     }
 
 

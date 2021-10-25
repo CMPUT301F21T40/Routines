@@ -22,6 +22,8 @@ import com.google.android.material.navigation.NavigationBarView;
 
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -37,12 +39,13 @@ import java.util.HashMap;
  * Main Activity
  */
 public class MainActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
-    public static final String EXTRA_TEXT = "com.example.routines.EXTRA_TEXT";
 
     private ArrayAdapter<Habit> habitAdapter;
 
     FirebaseFirestore db;
     String userID;
+    FirebaseAuth myAuth;
+
     DocumentReference userDocumentRef;
     CollectionReference userHabitCollectionRef;
 
@@ -54,15 +57,10 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Get user ID from either login page or sign up page
-        Intent intent = getIntent();
-        String loginUserID = intent.getStringExtra(LoginActivity.EXTRA_TEXT);
-        String signUpUserID = intent.getStringExtra(SignupActivity.EXTRA_TEXT);
-        if (loginUserID != null) {
-            userID = loginUserID;
-        } else {
-            userID = signUpUserID;
-        }
+//        Get user ID
+        myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        userID = user.getUid();
 
 //        Create a Habits list under the current User
         db = FirebaseFirestore.getInstance();
@@ -110,12 +108,9 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
 
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
-//                    Log.d(TAG, String.valueOf(doc.getData().get("Province Name")));
-
                     String habitName = doc.getId();
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
-
                     habitAdapter.add(new Habit(habitName, habitReason, habitDate));
                 }
             }

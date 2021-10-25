@@ -21,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -30,11 +32,14 @@ public class SignupActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     CollectionReference collectionReference;
+    CollectionReference userNames;
     FirebaseAuth myAuth;
+
 
     private String UserId;
 
     final String TAG = "SignUp";
+    private int flag;
 
 
     private TextView SignUpText;
@@ -64,6 +69,8 @@ public class SignupActivity extends AppCompatActivity {
         myAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users");
+        userNames = db.collection("User Names");
+
 
         initializeView();
 
@@ -97,7 +104,12 @@ public class SignupActivity extends AppCompatActivity {
                     SignPassword.setText("");
 
                 }else{
-                    buildFile(InputEmail, InputPassword);
+                    if(isValidUserName(InputName)) {
+                        buildFile(InputEmail, InputPassword);
+                    }else{
+                        SignUser.setText("");
+                    }
+
                 }
 
             }
@@ -140,6 +152,32 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    public boolean isValidUserName(String strName){
+        DocumentReference docRef = userNames.document(strName);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Toast.makeText(getApplicationContext(),"User name used", Toast.LENGTH_SHORT).show();
+                        flag = 1;
+                    } else {
+                        assert true;
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        if (flag == 0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
 
 
     public void buildFile(String UserEmail, String UserPassword){
@@ -153,6 +191,7 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = myAuth.getCurrentUser();
                             UserId = user.getUid();
                             HashMap<String, String> data = new HashMap<>();
+                            data.put("User ID", UserId);
                             data.put("User Name", InputName );
                             data.put("Email", InputEmail);
                             data.put("Password", InputPassword);
@@ -170,8 +209,19 @@ public class SignupActivity extends AppCompatActivity {
                                     Log.w("Update Failed", "Error on writing documentation on Firebase");
                                 }
                             });
-
-
+                            userNames.document(InputName)
+                                    .set(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.d("Update Success", "User Information updated to User Names collection");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Update Failure",  "User information fails to update in User Names collection");
+                                }
+                            });
                         }else{
                             Log.w(TAG,"createUserWithEmail:failure" );
                             Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_SHORT).show();

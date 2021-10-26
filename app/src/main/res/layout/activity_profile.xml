@@ -66,7 +66,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_user_lable_profile" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_profile"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -77,7 +77,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_email_lable_profile" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/text_user_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -87,7 +87,7 @@
         app:layout_constraintStart_toEndOf="@+id/text_user_lable_profile" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/text_email_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

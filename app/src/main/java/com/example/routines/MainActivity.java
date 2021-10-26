@@ -46,8 +46,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
     String userID;
     FirebaseAuth myAuth;
 
-    DocumentReference userDocumentRef;
-    CollectionReference userHabitCollectionRef;
+    CollectionReference userHabitCollection;
 
     BottomNavigationView BottomNavigator;
 
@@ -62,10 +61,9 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         FirebaseUser user = myAuth.getCurrentUser();
         userID = user.getUid();
 
-//        Create a Habits list under the current User
+//        Create a separate Habits collection
         db = FirebaseFirestore.getInstance();
-        userDocumentRef = db.collection("Users").document(userID);
-        userHabitCollectionRef = db.collection("Users").document(userID).collection("Habits");
+        userHabitCollection = db.collection("Habits");
 
         // Bottom Navigation Bar
         BottomNavigator = findViewById(R.id.bottom_navigation);
@@ -101,17 +99,20 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         habitList.setAdapter(habitAdapter);
 
 //        Add habits from Firestore to local habit list
-        userHabitCollectionRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        userHabitCollection.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 habitAdapter.clear();
-
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
                     String habitName = doc.getId();
+                    String currentUserID = (String)doc.getData().get("User ID");
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
-                    habitAdapter.add(new Habit(habitName, habitReason, habitDate));
+                    if (currentUserID.equals(userID)) {
+                        habitDataList.add(new Habit(habitName, habitReason, habitDate));
+                        habitAdapter.notifyDataSetChanged();
+                    }
                 }
             }
         });
@@ -141,9 +142,10 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
 
 //        Add new habit to Firestore
         HashMap<String, String> data = new HashMap<>();
+        data.put("User ID", userID);
         data.put("Habit Reason", habitReason);
         data.put("Start Date", habitDate);
-        userHabitCollectionRef.document(habitName)
+        userHabitCollection.document(habitName)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {

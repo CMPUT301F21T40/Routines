@@ -9,14 +9,27 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    FirebaseFirestore db;
+    CollectionReference collectionReference;
+    CollectionReference userNames;
+    FirebaseAuth myAuth;
 
     BottomNavigationView BottomNavigator;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        myAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        collectionReference = db.collection("Users");
+        userNames = db.collection("User Names");
 
         // The bottom Navigation bar
         BottomNavigator = findViewById(R.id.bottom_navigation);
@@ -43,5 +56,10 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+        
+
+        
     }
 }

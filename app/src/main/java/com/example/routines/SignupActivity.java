@@ -37,10 +37,8 @@ public class SignupActivity extends AppCompatActivity {
 
 
     private String UserId;
-
     final String TAG = "SignUp";
     private int flag;
-
 
     private TextView SignUpText;
     private TextView SignUserText;

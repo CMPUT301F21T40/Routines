@@ -89,4 +89,4 @@ lint/tmp/
 .idea/misc.xml
 .idea/deploymentTargetDropDown.xml
 .idea/compiler.xml
-
+*.idea

@@ -67,32 +67,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         userDocumentRef = db.collection("Users").document(userID);
         userHabitCollectionRef = db.collection("Users").document(userID).collection("Habits");
 
-        // Bottom Navigation Bar
-        BottomNavigator = findViewById(R.id.bottom_navigation);
-        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch(id){
-
-                    case R.id.home:
-                        return true;
-
-                    case R.id.search:
-                        startActivity(new Intent(getApplicationContext(),SearchActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-
-                    case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-
-                }
-                return true;
-            }
-        });
-
+        switchActivity();
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
@@ -159,6 +134,34 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
 //        Add to local habit list
         habitAdapter.add(newHabit);
 
+    }
+
+    public void switchActivity(){
+        // The bottom Navigation bar
+        BottomNavigator = findViewById(R.id.bottom_navigation);
+        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                switch(id){
+
+                    case R.id.home:
+                        return true;
+
+                    case R.id.search:
+                        startActivity(new Intent(getApplicationContext(),SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.profile:
+                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                }
+                return true;
+            }
+        });
     }
 
 

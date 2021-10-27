@@ -1,12 +1,19 @@
 package com.example.routines;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +32,8 @@ import org.w3c.dom.Text;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    final String TAG = "Profile";
+
     FirebaseFirestore db;
     CollectionReference Users;
     CollectionReference userNames;
@@ -32,11 +41,11 @@ public class ProfileActivity extends AppCompatActivity {
     private String UserId;
     BottomNavigationView BottomNavigator;
 
-    TextView NameText;
-    TextView EmailText;
-    TextView UserName;
-    TextView UserEmail;
-    ImageView UserPhoto;
+    private TextView NameText;
+    private TextView EmailText;
+    private TextView UserName;
+    private TextView UserEmail;
+    private ImageView UserPhoto;
     Button LogOutButton;
 
 
@@ -51,8 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         initializeData();
         switchActivity();
-
-
+        showInformation();
 
 
 
@@ -65,6 +73,21 @@ public class ProfileActivity extends AppCompatActivity {
         UserName = findViewById(R.id.text_user_profile);
         UserPhoto = findViewById(R.id.image_profile);
         LogOutButton = findViewById(R.id.button_profile);
+        LogOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myAuth.signOut();
+                Intent intent = new Intent(ProfileActivity.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        UserPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                choosePicture();
+            }
+        });
 
     }
 
@@ -103,10 +126,55 @@ public class ProfileActivity extends AppCompatActivity {
             Users.document(UserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        Log.w(TAG, "Listen failed.", error);
+                        return;
+                    }
+
+                    if (value != null && value.exists()) {
+                        Log.d(TAG, "Current data: " + value.getData());
+                        String Name = (String) value.getData().get("User Name");
+                        String Email = (String) value.getData().get("Email");
+                        UserName.setText(Name);
+                        UserEmail.setText(Email);
+
+                    } else {
+                        Log.d(TAG, "Current data: null");
+                    }
 
                 }
             });
 
         }
     }
+
+    public void choosePicture(){
+
+        startActivityForResult(intent, 1);
+
+        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // There are no request codes
+                            Intent data = result.getData();
+                            doSomeOperations();
+                        }
+                    }
+                });
+
+        public void openSomeActivityForResult(){
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            someActivityResultLauncher.launch(intent);
+        }
+
+
+
+    }
+
+
 }

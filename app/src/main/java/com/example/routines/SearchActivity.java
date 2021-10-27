@@ -17,8 +17,13 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        switchActivity();
 
-        //Bottom Navigation Bar
+
+    }
+
+    public void switchActivity(){
+        // The bottom Navigation bar
         BottomNavigator = findViewById(R.id.bottom_navigation);
         BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

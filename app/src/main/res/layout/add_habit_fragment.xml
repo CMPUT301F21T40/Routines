@@ -14,6 +14,7 @@
             android:id="@+id/habitNameEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:maxLength="20"
             android:ems="10"
             android:hint="Habit Name"
             android:inputType="textPersonName" />
@@ -30,6 +31,7 @@
             android:id="@+id/habitReasonEditText"
             android:ems="10"
             android:hint="Habit Reason"
+            android:maxLength="30"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 

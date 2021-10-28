@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
@@ -66,6 +67,7 @@ public class AddHabitFragment extends DialogFragment {
         habitName = view.findViewById(R.id.habitNameEditText);
         habitDate = view.findViewById(R.id.habitDateEditText);
         habitReason = view.findViewById(R.id.habitReasonEditText);
+        habitReason.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder

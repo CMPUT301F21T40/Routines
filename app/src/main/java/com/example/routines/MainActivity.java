@@ -118,13 +118,16 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         String habitReason = newHabit.getReason();
         String habitDate = newHabit.getDate();
         ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
+        if (frequencyList.isEmpty()) {
+            frequencyList.add("Null");
+        }
 
 //        Add new habit to Firestore
         HashMap<String, Object> data = new HashMap<>();
         data.put("User ID", userID);
         data.put("Habit Reason", habitReason);
         data.put("Start Date", habitDate);
-//        data.put("Frequency", frequency);
+        data.put("Frequency", frequencyList);
         userHabitCollection.document(habitName)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

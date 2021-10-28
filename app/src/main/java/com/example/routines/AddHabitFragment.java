@@ -209,10 +209,6 @@ public class AddHabitFragment extends DialogFragment {
             }
         });
 
-        if (frequencyList.isEmpty()) {
-            frequencyList.add("Null");
-        }
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder

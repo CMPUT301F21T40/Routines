@@ -1,7 +1,5 @@
 package com.example.routines;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -38,7 +35,7 @@ import java.util.HashMap;
 /**
  * Main Activity
  */
-public class MainActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
 
     private ArrayAdapter<Habit> habitAdapter;
 
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
 //        Get user ID
         myAuth = FirebaseAuth.getInstance();
@@ -70,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
         ArrayList<Habit> habitDataList = new ArrayList<>();
-        habitAdapter = new CustomList(this, habitDataList);
+        habitAdapter = new HabitList(this, habitDataList);
         habitList.setAdapter(habitAdapter);
 
 //        Add habits from Firestore to local habit list

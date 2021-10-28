@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
 //        Get user ID
         myAuth = FirebaseAuth.getInstance();
@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
         ArrayList<Habit> habitDataList = new ArrayList<>();
-        habitAdapter = new CustomList(this, habitDataList);
+        habitAdapter = new HabitList(this, habitDataList);
         habitList.setAdapter(habitAdapter);
 
 //        Add habits from Firestore to local habit list

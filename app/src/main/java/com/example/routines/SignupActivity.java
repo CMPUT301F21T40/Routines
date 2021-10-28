@@ -197,7 +197,7 @@ public class SignupActivity extends AppCompatActivity {
                                     .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
                                     startActivity(intent);
 
                                 }

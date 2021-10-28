@@ -34,6 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Main Activity
@@ -41,6 +42,7 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
 
     private ArrayAdapter<Habit> habitAdapter;
+    private ArrayList<Habit> habitDataList;
 
     FirebaseFirestore db;
     String userID;
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
-        ArrayList<Habit> habitDataList = new ArrayList<>();
+        habitDataList = new ArrayList<>();
         habitAdapter = new CustomList(this, habitDataList);
         habitList.setAdapter(habitAdapter);
 
@@ -84,8 +86,9 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
                     String currentUserID = (String)doc.getData().get("User ID");
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
+                    ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");
                     if (currentUserID.equals(userID)) {
-                        habitDataList.add(new Habit(habitName, habitReason, habitDate));
+                        habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency));
                         habitAdapter.notifyDataSetChanged();
                     }
                 }
@@ -114,12 +117,17 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
         String habitName = newHabit.getName();
         String habitReason = newHabit.getReason();
         String habitDate = newHabit.getDate();
+        ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
+        if (frequencyList.isEmpty()) {
+            frequencyList.add("Null");
+        }
 
 //        Add new habit to Firestore
-        HashMap<String, String> data = new HashMap<>();
+        HashMap<String, Object> data = new HashMap<>();
         data.put("User ID", userID);
         data.put("Habit Reason", habitReason);
         data.put("Start Date", habitDate);
+        data.put("Frequency", frequencyList);
         userHabitCollection.document(habitName)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

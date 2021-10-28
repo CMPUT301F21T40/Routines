@@ -35,7 +35,7 @@ import java.util.HashMap;
 /**
  * Main Activity
  */
-public class MainActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
 
     private ArrayAdapter<Habit> habitAdapter;
 

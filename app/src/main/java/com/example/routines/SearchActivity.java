@@ -32,7 +32,7 @@ public class SearchActivity extends AppCompatActivity {
                 switch(id){
 
                     case R.id.home:
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         overridePendingTransition(0,0);
                         return true;
 

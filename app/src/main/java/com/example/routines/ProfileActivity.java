@@ -54,17 +54,17 @@ public class ProfileActivity extends AppCompatActivity {
     StorageReference storageRef;
     StorageReference fileRef;
 
-    private String UserId;
-    BottomNavigationView BottomNavigator;
+    private String userId;
+    BottomNavigationView bottomNavigator;
 
 
-    private TextView NameText;
-    private TextView EmailText;
-    private TextView UserName;
-    private TextView UserEmail;
-    private ImageView UserPhoto;
-    private Uri ImageUri;
-    Button LogOutButton;
+    private TextView nameText;
+    private TextView emailText;
+    private TextView userName;
+    private TextView userEmail;
+    private ImageView userPhoto;
+    private Uri imageUri;
+    Button logOutButton;
     ActivityResultLauncher<String> mGetContent;
 
 
@@ -78,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity {
         Users = db.collection("Users");
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child("User Photo");
-        UserId = myAuth.getCurrentUser().getUid();
+        userId = myAuth.getCurrentUser().getUid();
 
         initializeData();
         showImage();
@@ -91,13 +91,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void initializeData(){
-        EmailText = findViewById(R.id.text_email_lable_profile);
-        NameText = findViewById(R.id.text_user_lable_profile);
-        UserEmail = findViewById(R.id.text_email_profile);
-        UserName = findViewById(R.id.text_user_profile);
-        UserPhoto = findViewById(R.id.image_profile);
-        LogOutButton = findViewById(R.id.button_profile);
-        LogOutButton.setOnClickListener(new View.OnClickListener() {
+        emailText = findViewById(R.id.text_email_lable_profile);
+        nameText = findViewById(R.id.text_user_lable_profile);
+        userEmail = findViewById(R.id.text_email_profile);
+        userName = findViewById(R.id.text_user_profile);
+        userPhoto = findViewById(R.id.image_profile);
+        logOutButton = findViewById(R.id.button_profile);
+        logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 myAuth.signOut();
@@ -106,7 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        UserPhoto.setOnClickListener(new View.OnClickListener() {
+        userPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mGetContent.launch("image/*");
@@ -117,8 +117,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void switchActivity(){
         // The bottom Navigation bar
-        BottomNavigator = findViewById(R.id.bottom_navigation);
-        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigator = findViewById(R.id.bottom_navigation);
+        bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -144,13 +144,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void showImage(){
-        StorageReference imageRef = storageRef.child(UserId);
+        StorageReference imageRef = storageRef.child(userId);
         imageRef.getBytes(1024*1024)
                 .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        UserPhoto.setImageBitmap(bitmap);
+                        userPhoto.setImageBitmap(bitmap);
                     }
                 });
     }
@@ -158,8 +158,8 @@ public class ProfileActivity extends AppCompatActivity {
     public void showInformation(){
         FirebaseUser User = myAuth.getCurrentUser();
         if(User != null){
-            UserId = User.getUid();
-            Users.document(UserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            userId = User.getUid();
+            Users.document(userId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                     if (error != null) {
@@ -171,8 +171,8 @@ public class ProfileActivity extends AppCompatActivity {
                         Log.d(TAG, "Current data: " + value.getData());
                         String Name = (String) value.getData().get("User Name");
                         String Email = (String) value.getData().get("Email");
-                        UserName.setText(Name);
-                        UserEmail.setText(Email);
+                        userName.setText(Name);
+                        userEmail.setText(Email);
 
                     } else {
                         Log.d(TAG, "Current data: null");
@@ -191,10 +191,10 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onActivityResult(Uri uri) {
                         if(uri != null){
                             try {
-                                ImageUri = uri;
-                                InputStream imageStream = getContentResolver().openInputStream(ImageUri);
+                                imageUri = uri;
+                                InputStream imageStream = getContentResolver().openInputStream(imageUri);
                                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                                UserPhoto.setImageBitmap(selectedImage);
+                                userPhoto.setImageBitmap(selectedImage);
                                 uploadImage();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
@@ -213,8 +213,8 @@ public class ProfileActivity extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();
-        fileRef = storageRef.child(UserId);
-        fileRef.putFile(ImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        fileRef = storageRef.child(userId);
+        fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

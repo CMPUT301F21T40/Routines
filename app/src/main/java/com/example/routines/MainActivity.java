@@ -1,7 +1,5 @@
 package com.example.routines;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -48,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
 
     CollectionReference userHabitCollection;
 
-    BottomNavigationView BottomNavigator;
+    BottomNavigationView bottomNavigator;
 
 
     @Override
@@ -140,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements AddHabitFragment.
 
     public void switchActivity(){
         // The bottom Navigation bar
-        BottomNavigator = findViewById(R.id.bottom_navigation);
-        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigator = findViewById(R.id.bottom_navigation);
+        bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();

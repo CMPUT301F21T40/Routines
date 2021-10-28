@@ -8,12 +8,20 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  *     To respond to the user clicking the + button at the bottom of the screen.
@@ -35,6 +43,23 @@ public class AddHabitFragment extends DialogFragment {
     private EditText habitName;
     private EditText habitDate;
     private EditText habitReason;
+    private DatePicker datePicker;
+    private Button confirmDateButton;
+    private TextView frequencySelector;
+
+    private int day;
+    private int month;
+    private int year;
+
+    private Switch monSwitch;
+    private Switch tueSwitch;
+    private Switch wedSwitch;
+    private Switch thurSwitch;
+    private Switch friSwitch;
+    private Switch satSwitch;
+    private Switch sunSwitch;
+
+    private ArrayList<String> frequencyList;
 
     private OnFragmentInteractionListener listener;
 
@@ -44,7 +69,7 @@ public class AddHabitFragment extends DialogFragment {
      * A interface to connect the fragment with Main activity
      */
     public interface OnFragmentInteractionListener {
-        void onOkPressed(Habit newHabit);
+        void onOkPressed(Habit habit);
     }
     // error checking for OnFragment listener
     @Override
@@ -69,6 +94,124 @@ public class AddHabitFragment extends DialogFragment {
         habitReason = view.findViewById(R.id.habitReasonEditText);
         habitReason.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
 
+        datePicker = view.findViewById(R.id.date_picker);
+        confirmDateButton = view.findViewById(R.id.confirm_button);
+
+        frequencyList = new ArrayList<>();
+        monSwitch = view.findViewById(R.id.mon_switch);
+        tueSwitch = view.findViewById(R.id.tue_switch);
+        wedSwitch = view.findViewById(R.id.wed_switch);
+        thurSwitch = view.findViewById(R.id.thur_switch);
+        friSwitch = view.findViewById(R.id.fri_switch);
+        satSwitch = view.findViewById(R.id.sat_switch);
+        sunSwitch = view.findViewById(R.id.sun_switch);
+
+//        Set current date as default
+        Calendar c = Calendar.getInstance();
+        day = c.get(Calendar.DAY_OF_MONTH);
+        month = c.get(Calendar.MONTH) + 1;
+        year = c.get(Calendar.YEAR);
+        habitDate.setText(String.format("%d-%02d-%d", year, month, day));
+
+//        Create Date picker
+        confirmDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                day = datePicker.getDayOfMonth();
+                month = (datePicker.getMonth() + 1);
+                year = datePicker.getYear();
+//                Format entered date
+                habitDate.setText(String.format("%d-%02d-%d", year, month, day));
+            }
+        });
+
+
+//        Create Frequency switches
+        monSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Monday")) {
+                    frequencyList.add("Monday");
+                }
+                else if (!isChecked && frequencyList.contains("Monday")){
+                    frequencyList.remove("Monday");
+                }
+            }
+        });
+
+        tueSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Tuesday")) {
+                    frequencyList.add("Tuesday");
+                }
+                else if (!isChecked && frequencyList.contains("Tuesday")){
+                    frequencyList.remove("Tuesday");
+                }
+            }
+        });
+
+        wedSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Wednesday")) {
+                    frequencyList.add("Wednesday");
+                }
+                else if (!isChecked && frequencyList.contains("Wednesday")){
+                    frequencyList.remove("Wednesday");
+                }
+            }
+        });
+
+        thurSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Thursday")) {
+                    frequencyList.add("Thursday");
+                }
+                else if (!isChecked && frequencyList.contains("Thursday")){
+                    frequencyList.remove("Thursday");
+                }
+            }
+        });
+
+        friSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Friday")) {
+                    frequencyList.add("Friday");
+                }
+                else if (!isChecked && frequencyList.contains("Friday")){
+                    frequencyList.remove("Friday");
+                }
+            }
+        });
+
+        satSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Saturday")) {
+                    frequencyList.add("Saturday");
+                }
+                else if (!isChecked && frequencyList.contains("Saturday")){
+                    frequencyList.remove("Saturday");
+                }
+            }
+        });
+
+        sunSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !frequencyList.contains("Sunday")) {
+                    frequencyList.add("Sunday");
+                }
+                else if (!isChecked && frequencyList.contains("Sunday")){
+                    frequencyList.remove("Sunday");
+                }
+            }
+        });
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
@@ -84,7 +227,7 @@ public class AddHabitFragment extends DialogFragment {
                         String reason = habitReason.getText().toString();
                         reason = check(reason);
 
-                        listener.onOkPressed(new Habit(name, reason, date));
+                        listener.onOkPressed(new Habit(name, reason, date, frequencyList));
                     }
                 }).create();
     }

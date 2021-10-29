@@ -108,7 +108,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(MainActivity.this, ViewHabitActivity.class);
+                Intent intent = new Intent(HomeActivity.this, ViewHabitActivity.class);
                 String habitName = habitDataList.get(i).getName();
                 intent.putExtra("habitName", habitName);
                 startActivity(intent);

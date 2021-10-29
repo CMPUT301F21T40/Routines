@@ -32,7 +32,7 @@
                 android:contentDescription="back_button"
                 android:focusable="true"
                 android:visibility="visible"
-                app:tint="@color/white" />
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/add_event_title"

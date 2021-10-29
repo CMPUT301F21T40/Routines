@@ -21,11 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class TodayFilterFragment extends Fragment {
 
     private View rootView;
-    AppCompatRadioButton switchHabits;
-    AppCompatRadioButton switchTodayHabits;
-
-    TextView fragmentLabel;
-    TextView fragmentLine;
     ListView fragmentHabitsList;
 
     FirebaseFirestore db;
@@ -57,6 +52,7 @@ public class TodayFilterFragment extends Fragment {
         fragmentHabitsList = (ListView) rootView.findViewById(R.id.fragment_habitList);
         db = FirebaseFirestore.getInstance();
         //collectionReference = db.collection("")
+
     }
 
 

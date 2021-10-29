@@ -19,10 +19,10 @@ import java.util.Date;
 
 /**
  * Response when the user clicks edit after selecting a habit.
- * User is shown the habit's information with the option to update it.
+ * User has the ability to update the information of a given habit.
  */
 
-public class editHabitFragment extends DialogFragment {
+public class EditHabitFragment extends DialogFragment {
 
     private OnFragmentInteractionListener listener;
 
@@ -30,6 +30,11 @@ public class editHabitFragment extends DialogFragment {
         void onEditPressed(Habit habit, String name, String date, String reason);
     }
 
+    /**
+     * An instance of the habit that is to be edited
+     * @param habit
+     * @return
+     */
     static AddHabitFragment newInstance(Habit habit) {
         Bundle args = new Bundle();
         args.putSerializable("habit", (Serializable) habit);
@@ -44,19 +49,19 @@ public class editHabitFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view;
         Bundle bundle = getArguments();
-        Habit original_habit = (Habit) bundle.getSerializable("habit");
-        String current_name = original_habit.getName();
-        String current_date = original_habit.getDate();
-        String current_reason = original_habit.getReason();
+        Habit originalHabit = (Habit) bundle.getSerializable("habit");
+        String currentName = originalHabit.getName();
+        String currentDate = originalHabit.getDate();
+        String currentReason = originalHabit.getReason();
 
         view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_habit_fragment, null);
 
         EditText habitName = view.findViewById(R.id.edit_name_float);
         EditText habitDate = view.findViewById(R.id.edit_date_float);
         EditText habitReason = view.findViewById(R.id.edit_reason_float);
-        habitName.setText(current_name);
-        habitDate.setText(current_date);
-        habitReason.setText(current_reason);
+        habitName.setText(currentName);
+        habitDate.setText(currentDate);
+        habitReason.setText(currentReason);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -67,11 +72,27 @@ public class editHabitFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String new_name = habitName.getText().toString();
-                        String new_date = habitDate.getText().toString();
-                        String new_reason = habitReason.getText().toString();
-                        listener.onEditPressed(original_habit, new_name, new_date, new_reason);
+                        String newName = habitName.getText().toString();
+                        newName = check(newName);
+                        String newDate = habitDate.getText().toString();
+                        newDate = check(newDate);
+                        String newReason = habitReason.getText().toString();
+                        newReason = check(newReason);
+                        listener.onEditPressed(originalHabit, newName, newDate, newReason);
                     }
                 }).create();
+    }
+
+    /**
+     * If the string length is 0, set the string to NULL and return
+     * Same function from AddHabitFragment
+     * @param str
+     * @return
+     */
+    public String check(String str) {
+        if (str.length() == 0) {
+            str = "Null";
+        }
+        return str;
     }
 }

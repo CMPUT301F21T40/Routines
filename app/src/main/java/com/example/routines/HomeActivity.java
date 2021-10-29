@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -104,6 +105,16 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
             }
         });
 
+        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(HomeActivity.this, ViewHabitActivity.class);
+                String habitName = habitDataList.get(i).getName();
+                intent.putExtra("habitName", habitName);
+                startActivity(intent);
+            }
+        });
+
     }
     
     // this is called from the AddHabitFragment so we can add a new Habit to the list
@@ -172,6 +183,8 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
             }
         });
     }
+
+
 
 
 }

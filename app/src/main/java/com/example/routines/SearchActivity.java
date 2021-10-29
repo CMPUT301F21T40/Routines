@@ -11,7 +11,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class SearchActivity extends AppCompatActivity {
-    BottomNavigationView BottomNavigator;
+    BottomNavigationView bottomNavigator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +24,15 @@ public class SearchActivity extends AppCompatActivity {
 
     public void switchActivity(){
         // The bottom Navigation bar
-        BottomNavigator = findViewById(R.id.bottom_navigation);
-        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigator = findViewById(R.id.bottom_navigation);
+        bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
                 switch(id){
 
                     case R.id.home:
-                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                         overridePendingTransition(0,0);
                         return true;
 

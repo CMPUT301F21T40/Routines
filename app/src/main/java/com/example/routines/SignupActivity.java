@@ -40,24 +40,24 @@ public class SignupActivity extends AppCompatActivity {
     final String TAG = "SignUp";
     private int flag;
 
-    private TextView SignUpText;
-    private TextView SignUserText;
-    private TextView SignEmailText;
-    private TextView SignPasswordText;
-    private TextView SignConfirmText;
+    private TextView signUpText;
+    private TextView signUserText;
+    private TextView signEmailText;
+    private TextView signPasswordText;
+    private TextView signConfirmText;
 
-    private EditText SignUser;
-    private EditText SignEmail;
-    private EditText SignPassword;
-    private EditText SignConfirm;
+    private EditText signUser;
+    private EditText signEmail;
+    private EditText signPassword;
+    private EditText signConfirm;
 
-    private FloatingActionButton SignUpExit;
-    private Button SignUpButton;
+    private FloatingActionButton signUpExit;
+    private Button signUpButton;
 
-    private String InputName;
-    private String InputEmail;
-    private String InputPassword;
-    private String InputConfirm;
+    private String inputName;
+    private String inputEmail;
+    private String inputPassword;
+    private String inputConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,37 +75,37 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-        SignUpButton.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                InputName = SignUser.getText().toString();
-                InputEmail = SignEmail.getText().toString();
-                InputPassword = SignPassword.getText().toString();
-                InputConfirm =SignConfirm.getText().toString();
+                inputName = signUser.getText().toString();
+                inputEmail = signEmail.getText().toString();
+                inputPassword = signPassword.getText().toString();
+                inputConfirm = signConfirm.getText().toString();
 
 
-                boolean isValid = isValidEmail(SignEmail.getText().toString());
+                boolean isValid = isValidEmail(signEmail.getText().toString());
                 if(!(isValid)){
-                    SignEmail.setText("");
+                    signEmail.setText("");
                     Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
                 }
 
-                if(InputName.length()==0 ||InputEmail.length()==0|| InputPassword.length()==0|| InputConfirm.length()==0){
+                if(inputName.length()==0 || inputEmail.length()==0|| inputPassword.length()==0|| inputConfirm.length()==0){
                     Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT).show();
-                }else if(!(InputPassword.equals(InputConfirm))) {
+                }else if(!(inputPassword.equals(inputConfirm))) {
                     Toast.makeText(getApplicationContext(), "Password doesn't match", Toast.LENGTH_SHORT).show();
-                    SignConfirm.setText("");
-                    SignPassword.setText("");
-                }else if(InputPassword.length() < 6){
+                    signConfirm.setText("");
+                    signPassword.setText("");
+                }else if(inputPassword.length() < 6){
                     Toast.makeText(getApplicationContext(),"Password should be at least 6 digits", Toast.LENGTH_SHORT).show();
-                    SignPassword.setText("");
+                    signPassword.setText("");
 
                 }else{
-                    if(isValidUserName(InputName)) {
-                        buildFile(InputEmail, InputPassword);
+                    if(isValidUserName(inputName)) {
+                        buildFile(inputEmail, inputPassword);
                     }else{
-                        SignUser.setText("");
+                        signUser.setText("");
                     }
 
                 }
@@ -113,7 +113,7 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
 
-        SignUpExit.setOnClickListener(new View.OnClickListener() {
+        signUpExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -124,19 +124,19 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void initializeView(){
-        SignUpText = findViewById(R.id.text_signup_page);
-        SignUserText = findViewById(R.id.text_user);
-        SignEmailText = findViewById(R.id.text_Email_signup);
-        SignPasswordText = findViewById(R.id.text_password_signup);
-        SignConfirmText = findViewById(R.id.text_password_confirm);
+        signUpText = findViewById(R.id.text_signup_page);
+        signUserText = findViewById(R.id.text_user);
+        signEmailText = findViewById(R.id.text_Email_signup);
+        signPasswordText = findViewById(R.id.text_password_signup);
+        signConfirmText = findViewById(R.id.text_password_confirm);
 
-        SignUser = findViewById(R.id.editText_userName_signup);
-        SignEmail = findViewById(R.id.editText_email_signup);
-        SignPassword = findViewById(R.id.editText_password_signup);
-        SignConfirm = findViewById(R.id.editText_password_confirm);
+        signUser = findViewById(R.id.editText_userName_signup);
+        signEmail = findViewById(R.id.editText_email_signup);
+        signPassword = findViewById(R.id.editText_password_signup);
+        signConfirm = findViewById(R.id.editText_password_confirm);
 
-        SignUpButton = findViewById(R.id.button_signup_page);
-        SignUpExit = findViewById(R.id.floatingButton_Signup);
+        signUpButton = findViewById(R.id.button_signup_page);
+        signUpExit = findViewById(R.id.floatingButton_Signup);
     }
 
 
@@ -190,14 +190,14 @@ public class SignupActivity extends AppCompatActivity {
                             UserId = user.getUid();
                             HashMap<String, String> data = new HashMap<>();
                             data.put("User ID", UserId);
-                            data.put("User Name", InputName );
-                            data.put("Email", InputEmail);
-                            data.put("Password", InputPassword);
+                            data.put("User Name", inputName);
+                            data.put("Email", inputEmail);
+                            data.put("Password", inputPassword);
                             collectionReference.document(UserId)
                                     .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void unused) {
-                                    Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                                    Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
                                     startActivity(intent);
 
                                 }
@@ -207,7 +207,7 @@ public class SignupActivity extends AppCompatActivity {
                                     Log.w("Update Failed", "Error on writing documentation on Firebase");
                                 }
                             });
-                            userNames.document(InputName)
+                            userNames.document(inputName)
                                     .set(data)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -223,9 +223,9 @@ public class SignupActivity extends AppCompatActivity {
                         }else{
                             Log.w(TAG,"createUserWithEmail:failure" );
                             Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_SHORT).show();
-                            SignConfirm.setText("");
-                            SignPassword.setText("");
-                            SignEmail.setText("");
+                            signConfirm.setText("");
+                            signPassword.setText("");
+                            signEmail.setText("");
 
                         }
                     }

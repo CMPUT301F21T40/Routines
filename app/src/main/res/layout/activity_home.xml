@@ -1,71 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-   
-
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingTop="0dp"
-    android:paddingBottom="10dp"
-    tools:context=".HomeActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <RadioGroup
+        android:id="@+id/radio_button"
+        android:layout_width="220dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/switch_habits"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_left_selector"
+            android:button="@android:color/transparent"
+            android:checked="true"
+            android:gravity="center"
+            android:text="Habits"
+            android:textColor="@color/white" />
 
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/switch_today"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_right_selector"
+            android:button="@android:color/transparent"
+            android:checked="false"
+            android:gravity="center"
+            android:text="Today"
+            android:textColor="@color/black" />
+
+    </RadioGroup>
 
     <TextView
         android:id="@+id/label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:textSize="17dp"
         android:text="  Habit                Reason                          Date Started"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
     <TextView
-        android:layout_marginTop="10dp"
+        android:id="@+id/home_line"
+        android:layout_marginTop="53dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="____________________________________________________"
-        android:textSize="17dp" />
+        android:textSize="17dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/home_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        tools:context=".HomeActivity">
 
-    <ListView
-        android:id="@+id/habitList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
-        android:paddingLeft="4dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="60dp">
-    </ListView>
+        <ListView
+            android:id="@+id/habitList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="4dp"
+            android:paddingBottom="60dp">
+        </ListView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addHabitButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="60dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:srcCompat="@android:drawable/ic_input_add"
-        tools:ignore="SpeakableTextPresentCheck" />
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addHabitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="60dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:srcCompat="@android:drawable/ic_input_add"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:background="@color/white"
         app:itemBackground="@color/white"
         app:itemIconTint="@color/yellow"
         app:itemTextColor="@color/yellow"
-        android:layout_gravity="bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/menu_bottom_nav" />
 
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

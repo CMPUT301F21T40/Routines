@@ -3,15 +3,21 @@ package com.example.routines;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +37,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Main Activity
@@ -40,6 +45,10 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
 
     private ArrayAdapter<Habit> habitAdapter;
     private ArrayList<Habit> habitDataList;
+    AppCompatRadioButton switchHabits;
+    AppCompatRadioButton switchTodayHabits;
+    FrameLayout fragmentLayout;
+    TodayFilterFragment myFragment;
 
     FirebaseFirestore db;
     String userID;
@@ -64,7 +73,10 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         db = FirebaseFirestore.getInstance();
         userHabitCollection = db.collection("Habits");
 
+        fragmentLayout = findViewById(R.id.container);
+
         switchActivity();
+        switchRadioButton();
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
         ListView habitList = findViewById(R.id.habitList);
@@ -171,6 +183,51 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
                 return true;
             }
         });
+    }
+
+    public void switchRadioButton(){
+        switchHabits = findViewById(R.id.switch_habits);
+        switchHabits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickButton(view);
+            }
+        });
+        switchTodayHabits = findViewById(R.id.switch_today);
+        switchTodayHabits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickButton(view);
+            }
+        });
+    }
+
+    public void onClickButton(View view){
+        boolean isSelected = ((AppCompatRadioButton)view).isChecked();
+        switch(view.getId()){
+            case R.id.switch_habits:
+                if(isSelected){
+                    switchHabits.setTextColor(Color.WHITE);
+                    switchTodayHabits.setTextColor(Color.BLACK);
+                    if(myFragment != null){
+                        HomeActivity.this.getFragmentManager().popBackStack();
+                        Toast.makeText(getApplicationContext(), "all habits", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                break;
+            case R.id.switch_today:
+                if(isSelected){
+                    switchTodayHabits.setTextColor(Color.WHITE);
+                    switchHabits.setTextColor(Color.BLACK);
+                    myFragment = TodayFilterFragment.newInstance();
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.replace(R.id.container, myFragment);
+                    transaction.commit();
+                    Toast.makeText(getApplicationContext(), "Today filter", Toast.LENGTH_SHORT).show();
+                }
+        }
     }
 
 

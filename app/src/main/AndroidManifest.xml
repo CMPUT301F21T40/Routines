@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Routines">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TodayFilterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TodayActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity

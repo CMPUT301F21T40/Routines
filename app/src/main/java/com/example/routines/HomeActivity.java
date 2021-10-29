@@ -47,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
 
     CollectionReference userHabitCollection;
 
-    BottomNavigationView BottomNavigator;
+    BottomNavigationView bottomNavigator;
 
 
     @Override
@@ -147,8 +147,8 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
 
     public void switchActivity(){
         // The bottom Navigation bar
-        BottomNavigator = findViewById(R.id.bottom_navigation);
-        BottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        bottomNavigator = findViewById(R.id.bottom_navigation);
+        bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -172,7 +172,6 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
             }
         });
     }
-
 
 
 }

@@ -28,13 +28,13 @@ public class LoginActivity extends AppCompatActivity {
 
     final String TAG = "Login";
 
-    private TextView LogInText;
-    private TextView LoginEmailText;
-    private TextView LoginPasswordText;
-    private EditText LoginEmail;
-    private EditText LoginPassword;
-    private Button LoginButton;
-    private FloatingActionButton LoginExit;
+    private TextView loginText;
+    private TextView loginEmailText;
+    private TextView loginPasswordText;
+    private EditText loginEmail;
+    private EditText loginPassword;
+    private Button loginButton;
+    private FloatingActionButton loginExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +47,11 @@ public class LoginActivity extends AppCompatActivity {
         collectionReference = db.collection("Users");
         myAuth = FirebaseAuth.getInstance();
 
-        LoginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String InputEmail = LoginEmail.getText().toString();
-                String InputPassword = LoginPassword.getText().toString();
+                String InputEmail = loginEmail.getText().toString();
+                String InputPassword = loginPassword.getText().toString();
                 if (InputEmail.length() == 0|| InputPassword.length() == 0){
                     Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT ).show();
                 }else{
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        LoginExit.setOnClickListener(new View.OnClickListener() {
+        loginExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -74,15 +74,15 @@ public class LoginActivity extends AppCompatActivity {
 
     public void initializeView(){
 
-        LogInText = findViewById(R.id.text_login_page);
-        LoginEmailText = findViewById(R.id.text_email_login);
-        LoginPasswordText = findViewById(R.id.text_password_login);
+        loginText = findViewById(R.id.text_login_page);
+        loginEmailText = findViewById(R.id.text_email_login);
+        loginPasswordText = findViewById(R.id.text_password_login);
 
-        LoginEmail = findViewById(R.id.editText_email);
-        LoginPassword = findViewById(R.id.editText_password_login);
+        loginEmail = findViewById(R.id.editText_email);
+        loginPassword = findViewById(R.id.editText_password_login);
 
-        LoginButton = findViewById(R.id.button_login_page);
-        LoginExit = findViewById(R.id.floatingButton_login);
+        loginButton = findViewById(R.id.button_login_page);
+        loginExit = findViewById(R.id.floatingButton_login);
 
     }
 

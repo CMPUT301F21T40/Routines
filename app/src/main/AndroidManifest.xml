@@ -10,13 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Routines">
         <activity
-            android:name=".MainActivity"
+            android:name=".EventListActivity"
             android:exported="false" />
         <activity
-            android:name=".TodayFilterActivity"
+            android:name=".AddEventActivity"
             android:exported="false" />
         <activity
-            android:name=".TodayActivity"
+            android:name=".ViewHabitActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"

@@ -36,8 +36,7 @@ public class AddHabitFragment extends DialogFragment {
 
     Outstanding Issues:
     -XML formatting, need to make it look better
-    -Several text formatting errors, need to format text properly, rushed through it
-    -need date picker to choose the date (just have normal text right now)
+    -Several text formatting errors, need to format text properly, find out how to do it
 
      */
     private EditText habitName;

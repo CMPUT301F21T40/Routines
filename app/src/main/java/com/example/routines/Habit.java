@@ -9,28 +9,31 @@ import java.util.List;
  */
 public class Habit {
     /*
-                Purpose:
-                    A basic habit event that can be added to a user when we have functionality for
-                    unique users
-                 Outstanding Issues:
-                    None
-                 */
+    Purpose:
+        A basic habit event that can be added to a user when we have functionality for
+        unique users
+     Outstanding Issues:
+        None
+     */
     public String name;
     public String reason;
     public String date;
     public ArrayList<String> frequency;
+    public String privacy;
 
     /**
      * Initializer for the habit
      * @param name
      * @param reason
      * @param date
+     * @param privacy
      */
-    public Habit(String name, String reason, String date, ArrayList<String> frequency) {
+    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy) {
         this.name = name;
         this.reason = reason;
         this.date = date;
         this.frequency = frequency;
+        this.privacy = privacy;
     }
 
 
@@ -47,6 +50,13 @@ public class Habit {
         this.date = date;
     }
 
+    /**
+     * sets the privacy attribute of a habit
+     * @param privacy
+     */
+    public void setPrivacy(String privacy){
+        this.privacy = privacy;
+    }
 
     /**
      * Gets the name of the habit
@@ -82,5 +92,13 @@ public class Habit {
      */
     public List<String> getFrequency() {
         return this.frequency;
+    }
+
+    /**
+     * returns the current setting of privacy
+     * @return
+     */
+    public String getPrivacy(){
+        return this.privacy;
     }
 }

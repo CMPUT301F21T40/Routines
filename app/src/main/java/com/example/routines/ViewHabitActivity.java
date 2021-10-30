@@ -42,7 +42,7 @@ public class ViewHabitActivity extends AppCompatActivity {
             }
         });
 
-        name = (String) getIntent().getStringExtra("habitName");
+        name = (String) "Name:  "+getIntent().getStringExtra("habitName");
         nameView = findViewById(R.id.add_event_name);
         reasonView = findViewById(R.id.add_event_description);
         dateView = findViewById(R.id.habit_date);
@@ -61,8 +61,9 @@ public class ViewHabitActivity extends AppCompatActivity {
                         if (task.isSuccessful()){
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
-                                date = (String) document.getData().get("Start Date");
-                                   reason = (String) document.getData().get("Habit Reason");
+                                // concatenated strings we should to this in the XML later
+                                date = (String) "Date Started:  "+document.getData().get("Start Date");
+                                reason = (String) "Reason:  "+document.getData().get("Habit Reason");
                                 nameView.setText(name);
                                 reasonView.setText(reason);
                                 dateView.setText(date);

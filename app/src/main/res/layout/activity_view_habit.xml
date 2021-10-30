@@ -23,10 +23,10 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
+
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="1dp"
-                android:layout_marginLeft="1dp"
+
                 android:layout_marginTop="4dp"
                 android:clickable="true"
                 android:contentDescription="back_button"
@@ -39,16 +39,12 @@
                 android:layout_width="168dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="116dp"
-                android:layout_marginLeft="116dp"
+                android:layout_marginStart="100dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginEnd="111dp"
-                android:layout_marginRight="111dp"
-                android:text="Habit"
+                android:layout_marginEnd="110dp"
+                android:text="Habit Details"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
 
@@ -64,18 +60,21 @@
             android:id="@+id/add_event_name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:textSize="20sp"
             android:text="Name" />
 
         <TextView
             android:id="@+id/add_event_description"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:textSize="20sp"
             android:text="Reason" />
 
         <TextView
             android:id="@+id/habit_date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:textSize="20sp"
             android:text="Date" />
 
         <Button

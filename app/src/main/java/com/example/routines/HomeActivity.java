@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -44,7 +45,7 @@ import java.util.HashMap;
 /**
  * Main Activity
  */
-public class HomeActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity  implements AddHabitFragment.OnFragmentInteractionListener{
 
     private ArrayAdapter<Habit> habitAdapter;
     private ArrayList<Habit> habitDataList;
@@ -56,6 +57,15 @@ public class HomeActivity extends AppCompatActivity{
 
     BottomNavigationView bottomNavigator;
 
+    FirebaseFirestore db;
+    String userId;
+    FirebaseAuth myAuth;
+
+    CollectionReference habitCollection;
+    DocumentReference userDocument;
+    CollectionReference currentUserHabitCol;
+    DocumentReference userHabitDoc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,16 +74,25 @@ public class HomeActivity extends AppCompatActivity{
 
         fragmentLayout = findViewById(R.id.container);
 
+        //        Get user ID
+        myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        userId = user.getUid();
+
+//        Create a separate Habits collection
+        db = FirebaseFirestore.getInstance();
+        habitCollection = db.collection("Habits");
+        userDocument = habitCollection.document(userId);
+//        Sub-collection of Habit under the current user
+        currentUserHabitCol = userDocument.collection("Habits");
+
         switchActivity();
         switchRadioButton();
-
-        switchHabits.setTextColor(Color.WHITE);
-        switchTodayHabits.setTextColor(Color.BLACK);
+        homeFragment = HomeFragment.newInstance();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container, homeFragment);
         transaction.commit();
-
 
         // when the + at the bottom of the screen is pressed it will call AddHabitFragment
         final FloatingActionButton addHabitButton = findViewById(R.id.addHabitButton);
@@ -84,9 +103,44 @@ public class HomeActivity extends AppCompatActivity{
             }
         });
 
+    }
 
+    // this is called from the AddHabitFragment so we can add a new Habit to the list
+    /**
+     * This is called when the + button is pressed and the info from the pop up fragment
+     * is filled out. This will add the newly created habit into the medList
+     * @param newHabit
+     */
+    public void onOkPressed(Habit newHabit){
+        String habitName = newHabit.getName();
+        String habitReason = newHabit.getReason();
+        String habitDate = newHabit.getDate();
+        ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
+        if (frequencyList.isEmpty()) {
+            frequencyList.add("Null");
+        }
+
+//        Add new habit to Firestore
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("Habit Name", habitName);
+        data.put("Habit Reason", habitReason);
+        data.put("Start Date", habitDate);
+        data.put("Frequency", frequencyList);
+        currentUserHabitCol.document(habitName)
+                .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.w("Update Successfully", "Error on writing documentation on Firebase");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Update Failed", "Error on writing documentation on Firebase");
+            }
+        });
 
     }
+
 
     public void switchActivity(){
         // The bottom Navigation bar
@@ -140,21 +194,31 @@ public class HomeActivity extends AppCompatActivity{
                 if(isSelected) {
                     switchHabits.setTextColor(Color.WHITE);
                     switchTodayHabits.setTextColor(Color.BLACK);
+                    if(homeFragment == null){
+                        homeFragment = HomeFragment.newInstance();
+                    }
                     FragmentManager manager = getSupportFragmentManager();
                     FragmentTransaction transaction = manager.beginTransaction();
+                    if(filterFragment != null && filterFragment.isVisible()){
+                        transaction.hide(filterFragment);
+                    }
                     transaction.replace(R.id.container, homeFragment);
                     transaction.commit();
                     Toast.makeText(getApplicationContext(), "all habits", Toast.LENGTH_SHORT).show();
-
                 }
                 break;
             case R.id.switch_today:
                 if(isSelected){
                     switchTodayHabits.setTextColor(Color.WHITE);
                     switchHabits.setTextColor(Color.BLACK);
-                    filterFragment = TodayFilterFragment.newInstance();
+                    if(filterFragment==null) {
+                        filterFragment = TodayFilterFragment.newInstance();
+                    }
                     FragmentManager manager = getSupportFragmentManager();
                     FragmentTransaction transaction = manager.beginTransaction();
+                    if(homeFragment != null && homeFragment.isVisible()){
+                        transaction.hide(homeFragment);
+                    }
                     transaction.replace(R.id.container, filterFragment);
                     transaction.commit();
                     Toast.makeText(getApplicationContext(), "Today filter", Toast.LENGTH_SHORT).show();

@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
         fragmentLayout = rootView.findViewById(R.id.container);
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
-        ListView habitList = rootView.findViewById(R.id.fragment_habitList);
+        ListView habitList = rootView.findViewById(R.id.home_fragment_habitList);
 
         ArrayList<Habit> habitDataList = new ArrayList<>();
         habitAdapter = new HabitList(getContext(), habitDataList);
@@ -117,6 +117,8 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+
         habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -129,44 +131,5 @@ public class HomeFragment extends Fragment {
 
     }
 
-    // this is called from the AddHabitFragment so we can add a new Habit to the list
-    /**
-     * This is called when the + button is pressed and the info from the pop up fragment
-     * is filled out. This will add the newly created habit into the medList
-     * @param newHabit
-     */
-    public void onOkPressed(Habit newHabit){
-        String habitName = newHabit.getName();
-        String habitReason = newHabit.getReason();
-        String habitDate = newHabit.getDate();
-        ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
-        if (frequencyList.isEmpty()) {
-            frequencyList.add("Null");
-        }
-
-//        Add new habit to Firestore
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("Habit Name", habitName);
-        data.put("Habit Reason", habitReason);
-        data.put("Start Date", habitDate);
-        data.put("Frequency", frequencyList);
-        currentUserHabitCol.document(habitName)
-                .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.w("Update Successfully", "Error on writing documentation on Firebase");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("Update Failed", "Error on writing documentation on Firebase");
-            }
-        });
-
-//        Add to local habit list
-        habitAdapter.add(newHabit);
-
-
-    }
 
 }

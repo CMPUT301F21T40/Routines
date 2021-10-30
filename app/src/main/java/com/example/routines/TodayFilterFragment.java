@@ -32,7 +32,6 @@ import java.util.List;
 public class TodayFilterFragment extends Fragment {
 
     final String TAG = "Today filter fragment";
-    //private ArrayAdapter<Habit> habitAdapter;
     private View rootView;
     ListView fragmentHabitsList;
     String dayWeek;

@@ -89,6 +89,7 @@
             android:focusable="true"
             app:srcCompat="@android:drawable/ic_input_add"
             tools:ignore="SpeakableTextPresentCheck" />
+
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

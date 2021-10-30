@@ -1,36 +1,29 @@
 package com.example.routines;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
-import android.view.MenuItem;
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -42,17 +35,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Main Activity
+ * A simple {@link Fragment} subclass.
+ * Use the {@link HomeFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class HomeActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
+public class HomeFragment extends Fragment {
 
+    private View rootView;
     private ArrayAdapter<Habit> habitAdapter;
     private ArrayList<Habit> habitDataList;
-    AppCompatRadioButton switchHabits;
-    AppCompatRadioButton switchTodayHabits;
     FrameLayout fragmentLayout;
-    TodayFilterFragment myFragment;
-
     FirebaseFirestore db;
     String userId;
     FirebaseAuth myAuth;
@@ -62,15 +54,29 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
     CollectionReference currentUserHabitCol;
     DocumentReference userHabitDoc;
 
-    BottomNavigationView bottomNavigator;
+    public HomeFragment() {
+        // Required empty public constructor
+    }
 
+
+    public static HomeFragment newInstance(String param1, String param2) {
+        HomeFragment fragment = new HomeFragment();
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        rootView = inflater.inflate(R.layout.fragment_home, container, false);
+        return rootView;
+    }
 
-//        Get user ID
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        //        Get user ID
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
         userId = user.getUid();
@@ -83,16 +89,13 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         currentUserHabitCol = userDocument.collection("Habits");
 
 
-        fragmentLayout = findViewById(R.id.container);
-
-        switchActivity();
-        switchRadioButton();
+        fragmentLayout = rootView.findViewById(R.id.container);
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
-        ListView habitList = findViewById(R.id.habitList);
+        ListView habitList = rootView.findViewById(R.id.habitList);
 
         ArrayList<Habit> habitDataList = new ArrayList<>();
-        habitAdapter = new HabitList(this, habitDataList);
+        habitAdapter = new HabitList(getContext(), habitDataList);
 
         habitList.setAdapter(habitAdapter);
 
@@ -114,19 +117,10 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         });
 
 
-        // when the + at the bottom of the screen is pressed it will call AddHabitFragment
-        final FloatingActionButton addHabitButton = findViewById(R.id.addHabitButton);
-        addHabitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AddHabitFragment().show(getSupportFragmentManager(), "ADD_HABIT");
-            }
-        });
-
         habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HomeActivity.this, ViewHabitActivity.class);
+                Intent intent = new Intent(getContext(), ViewHabitActivity.class);
                 String habitName = habitDataList.get(i).getName();
                 intent.putExtra("habitName", habitName);
                 startActivity(intent);
@@ -134,7 +128,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         });
 
     }
-    
+
     // this is called from the AddHabitFragment so we can add a new Habit to the list
     /**
      * This is called when the + button is pressed and the info from the pop up fragment
@@ -172,85 +166,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
 //        Add to local habit list
         habitAdapter.add(newHabit);
 
+
     }
-
-    public void switchActivity(){
-        // The bottom Navigation bar
-        bottomNavigator = findViewById(R.id.bottom_navigation);
-        bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                switch(id){
-
-                    case R.id.home:
-                        return true;
-
-                    case R.id.search:
-                        startActivity(new Intent(getApplicationContext(),SearchActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-
-                    case R.id.profile:
-                        startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
-                        overridePendingTransition(0,0);
-                        return true;
-
-                }
-                return true;
-            }
-        });
-    }
-
-    public void switchRadioButton(){
-        switchHabits = findViewById(R.id.switch_habits);
-        switchHabits.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickButton(view);
-            }
-        });
-        switchTodayHabits = findViewById(R.id.switch_today);
-        switchTodayHabits.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickButton(view);
-            }
-        });
-    }
-
-    public void onClickButton(View view){
-        boolean isSelected = ((AppCompatRadioButton)view).isChecked();
-        switch(view.getId()){
-            case R.id.switch_habits:
-                if(isSelected){
-                    switchHabits.setTextColor(Color.WHITE);
-                    switchTodayHabits.setTextColor(Color.BLACK);
-                    if(myFragment != null){
-                        //HomeActivity.this.getFragmentManager().popBackStack();
-                        FragmentManager manager = getSupportFragmentManager();
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        transaction.remove(myFragment).commit();
-                        Toast.makeText(getApplicationContext(), "all habits", Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-                break;
-            case R.id.switch_today:
-                if(isSelected){
-                    switchTodayHabits.setTextColor(Color.WHITE);
-                    switchHabits.setTextColor(Color.BLACK);
-                    myFragment = TodayFilterFragment.newInstance();
-                    FragmentManager manager = getSupportFragmentManager();
-                    FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.container, myFragment);
-                    transaction.commit();
-                    Toast.makeText(getApplicationContext(), "Today filter", Toast.LENGTH_SHORT).show();
-                }
-        }
-    }
-
-
-
 
 }

@@ -16,6 +16,13 @@ public class Habit {
                     None
                  */
     public String name;
+
+    public Habit(String name, String reason, String date) {
+        this.name = name;
+        this.reason = reason;
+        this.date = date;
+    }
+
     public String reason;
     public String date;
     public ArrayList<String> frequency;

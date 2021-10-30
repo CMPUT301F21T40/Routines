@@ -10,15 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Routines">
         <activity
-            android:name=".EventListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".AddEventActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ViewHabitActivity"
-            android:exported="false" />
-        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity

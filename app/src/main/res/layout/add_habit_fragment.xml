@@ -1,10 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingTop="15dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <DatePicker
+        android:id="@+id/date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner">
+
+    </DatePicker>
+
+
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:text="Confirm Date">
+
+    </Button>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/reason_float"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/habitDateEditText"
+            android:ems="10"
+            android:hint="Press Confirm Button To Select Date"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_float"
@@ -14,6 +57,7 @@
             android:id="@+id/habitNameEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:maxLength="20"
             android:ems="10"
             android:hint="Habit Name"
             android:inputType="textPersonName" />
@@ -28,26 +72,111 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/habitReasonEditText"
+            android:maxLength="30"
             android:ems="10"
             android:hint="Habit Reason"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/reason_float"
+        android:id="@+id/privacy_float"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:id="@+id/habitDateEditText"
+            android:id="@+id/habitPrivacyEditText"
+            android:maxLength="30"
             android:ems="10"
-            android:hint="Date Started"
+            android:hint="Privacy Setting"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <Switch
+        android:id="@+id/mon_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Monday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
 
+
+
+    <Switch
+        android:id="@+id/tue_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Tuesday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
+
+    <Switch
+        android:id="@+id/wed_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Wednesday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
+
+
+    <Switch
+        android:id="@+id/thur_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Thursday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
+
+
+    <Switch
+        android:id="@+id/fri_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Friday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
+
+
+    <Switch
+        android:id="@+id/sat_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Saturday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
+
+
+    <Switch
+        android:id="@+id/sun_switch"
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="Sunday"
+        android:paddingLeft="15dp"
+        android:paddingRight="20dp"
+        >
+    </Switch>
 
 
 </LinearLayout>
+
+
+</ScrollView>

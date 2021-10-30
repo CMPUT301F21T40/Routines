@@ -109,8 +109,8 @@ public class HomeFragment extends Fragment {
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
                     ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");
-
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency));
+                    String privacy = (String) doc.getData().get("Privacy"); // recently added
+                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy));
                     habitAdapter.notifyDataSetChanged();
                 }
             }

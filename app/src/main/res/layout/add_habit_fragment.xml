@@ -57,6 +57,7 @@
             android:id="@+id/habitNameEditText"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:maxLength="20"
             android:ems="10"
             android:hint="Habit Name"
             android:inputType="textPersonName" />
@@ -71,11 +72,25 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:id="@+id/habitReasonEditText"
+            android:maxLength="30"
             android:ems="10"
             android:hint="Habit Reason"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/privacy_float"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/habitPrivacyEditText"
+            android:maxLength="30"
+            android:ems="10"
+            android:hint="Privacy Setting"
+            android:inputType="textPersonName" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Switch
         android:id="@+id/mon_switch"

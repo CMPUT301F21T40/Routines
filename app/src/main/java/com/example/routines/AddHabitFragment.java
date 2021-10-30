@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -35,13 +36,13 @@ public class AddHabitFragment extends DialogFragment {
 
     Outstanding Issues:
     -XML formatting, need to make it look better
-    -Several text formatting errors, need to format text properly, rushed through it
-    -need date picker to choose the date (just have normal text right now)
+    -Several text formatting errors, need to format text properly, find out how to do it
 
      */
     private EditText habitName;
     private EditText habitDate;
     private EditText habitReason;
+    private EditText habitPrivacy;
     private DatePicker datePicker;
     private Button confirmDateButton;
     private TextView frequencySelector;
@@ -91,6 +92,8 @@ public class AddHabitFragment extends DialogFragment {
         habitName = view.findViewById(R.id.habitNameEditText);
         habitDate = view.findViewById(R.id.habitDateEditText);
         habitReason = view.findViewById(R.id.habitReasonEditText);
+        habitReason.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        habitPrivacy = view.findViewById(R.id.habitPrivacyEditText);
 
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
@@ -224,8 +227,8 @@ public class AddHabitFragment extends DialogFragment {
                         name = check(name);
                         String reason = habitReason.getText().toString();
                         reason = check(reason);
-
-                        listener.onOkPressed(new Habit(name, reason, date, frequencyList));
+                        String privacy = habitPrivacy.getText().toString();
+                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
                     }
                 }).create();
     }

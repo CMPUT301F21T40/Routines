@@ -6,18 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private TextView AppName;
-    private TextView WelcomeText;
-    private TextView QuoteText;
-    private TextView QuoteWriter;
+    private TextView appName;
+    private TextView welcomeText;
+    private TextView quoteText;
+    private TextView quoteWriter;
 
-    private Button LoginButton;
-    private Button SignupButton;
+    private Button loginButton;
+    private Button signupButton;
 
 
     @Override
@@ -25,15 +24,15 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        AppName = findViewById(R.id.text_project_name);
-        WelcomeText = findViewById(R.id.text_welcome);
-        QuoteText = findViewById(R.id.text_quote);
-        QuoteWriter = findViewById(R.id.text_quote_writer);
+        appName = findViewById(R.id.text_project_name);
+        welcomeText = findViewById(R.id.text_welcome);
+        quoteText = findViewById(R.id.text_quote);
+        quoteWriter = findViewById(R.id.text_quote_writer);
 
-        LoginButton = findViewById(R.id.button_login);
-        SignupButton = findViewById(R.id.button_signup);
+        loginButton = findViewById(R.id.button_login);
+        signupButton = findViewById(R.id.button_signup);
 
-        LoginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
@@ -41,7 +40,7 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
-        SignupButton.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(WelcomeActivity.this, SignupActivity.class);

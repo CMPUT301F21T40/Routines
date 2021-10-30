@@ -94,8 +94,8 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
                     ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");
-
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency));
+                    String privacy = (String) doc.getData().get("Privacy"); // recently added
+                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy));
                     habitAdapter.notifyDataSetChanged();
                 }
             }
@@ -133,6 +133,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         String habitName = newHabit.getName();
         String habitReason = newHabit.getReason();
         String habitDate = newHabit.getDate();
+        String habitPrivacy = newHabit.getPrivacy();
         ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
         if (frequencyList.isEmpty()) {
             frequencyList.add("Null");
@@ -144,6 +145,7 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
         data.put("Habit Reason", habitReason);
         data.put("Start Date", habitDate);
         data.put("Frequency", frequencyList);
+        data.put("Privacy", habitPrivacy);
         currentUserHabitCol.document(habitName)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

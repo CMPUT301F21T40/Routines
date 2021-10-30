@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
         fragmentLayout = rootView.findViewById(R.id.container);
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
-        ListView habitList = rootView.findViewById(R.id.habitList);
+        ListView habitList = rootView.findViewById(R.id.fragment_habitList);
 
         ArrayList<Habit> habitDataList = new ArrayList<>();
         habitAdapter = new HabitList(getContext(), habitDataList);

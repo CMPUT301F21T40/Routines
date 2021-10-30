@@ -51,16 +51,8 @@ public class HomeActivity extends AppCompatActivity{
     AppCompatRadioButton switchHabits;
     AppCompatRadioButton switchTodayHabits;
     FrameLayout fragmentLayout;
-    TodayFilterFragment myFragment;
-
-    FirebaseFirestore db;
-    String userId;
-    FirebaseAuth myAuth;
-
-    CollectionReference habitCollection;
-    DocumentReference userDocument;
-    CollectionReference currentUserHabitCol;
-    DocumentReference userHabitDoc;
+    TodayFilterFragment filterFragment;
+    HomeFragment homeFragment;
 
     BottomNavigationView bottomNavigator;
 
@@ -74,6 +66,13 @@ public class HomeActivity extends AppCompatActivity{
 
         switchActivity();
         switchRadioButton();
+
+        switchHabits.setTextColor(Color.WHITE);
+        switchTodayHabits.setTextColor(Color.BLACK);
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container, homeFragment);
+        transaction.commit();
 
 
         // when the + at the bottom of the screen is pressed it will call AddHabitFragment
@@ -138,16 +137,14 @@ public class HomeActivity extends AppCompatActivity{
         boolean isSelected = ((AppCompatRadioButton)view).isChecked();
         switch(view.getId()){
             case R.id.switch_habits:
-                if(isSelected){
+                if(isSelected) {
                     switchHabits.setTextColor(Color.WHITE);
                     switchTodayHabits.setTextColor(Color.BLACK);
-                    if(myFragment != null){
-                        //HomeActivity.this.getFragmentManager().popBackStack();
-                        FragmentManager manager = getSupportFragmentManager();
-                        FragmentTransaction transaction = manager.beginTransaction();
-                        transaction.remove(myFragment).commit();
-                        Toast.makeText(getApplicationContext(), "all habits", Toast.LENGTH_SHORT).show();
-                    }
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.replace(R.id.container, homeFragment);
+                    transaction.commit();
+                    Toast.makeText(getApplicationContext(), "all habits", Toast.LENGTH_SHORT).show();
 
                 }
                 break;
@@ -155,10 +152,10 @@ public class HomeActivity extends AppCompatActivity{
                 if(isSelected){
                     switchTodayHabits.setTextColor(Color.WHITE);
                     switchHabits.setTextColor(Color.BLACK);
-                    myFragment = TodayFilterFragment.newInstance();
+                    filterFragment = TodayFilterFragment.newInstance();
                     FragmentManager manager = getSupportFragmentManager();
                     FragmentTransaction transaction = manager.beginTransaction();
-                    transaction.replace(R.id.container, myFragment);
+                    transaction.replace(R.id.container, filterFragment);
                     transaction.commit();
                     Toast.makeText(getApplicationContext(), "Today filter", Toast.LENGTH_SHORT).show();
                 }

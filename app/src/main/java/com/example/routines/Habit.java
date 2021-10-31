@@ -17,11 +17,6 @@ public class Habit {
      */
     public String name;
 
-    public Habit(String name, String reason, String date) {
-        this.name = name;
-        this.reason = reason;
-        this.date = date;
-    }
 
     public String reason;
     public String date;
@@ -43,8 +38,15 @@ public class Habit {
         this.privacy = privacy;
     }
 
+    public Habit(String name, String reason, String date) {
+        this.name = name;
+        this.reason = reason;
+        this.date = date;
+    }
 
-//    Setters
+
+
+    //    Setters
     public void setName(String name) {
         this.name = name;
     }

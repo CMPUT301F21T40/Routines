@@ -2,6 +2,7 @@ package com.example.routines;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,11 +19,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Response when the user clicks edit after selecting a habit.
@@ -30,13 +33,17 @@ import java.util.Date;
  */
 
 public class EditHabitFragment extends DialogFragment {
+    private Habit originalHabit;
+    private String currentName;
+    private String currentDate;
+    private String currentReason;
+    private String currentPrivacy;
     private EditText habitName;
     private EditText habitDate;
     private EditText habitReason;
     private EditText habitPrivacy;
     private DatePicker datePicker;
     private Button confirmDateButton;
-    private TextView frequencySelector;
 
     private int day;
     private int month;
@@ -57,7 +64,19 @@ public class EditHabitFragment extends DialogFragment {
     //private OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener {
-        void onEditPressed(Habit habit, String name, String date, String reason, ArrayList frequencyList, String privacy);
+        //void onOkPressed(Habit habit);
+        void onEditPressed(Habit habit, Habit newHabit);
+    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        if (context instanceof EditHabitFragment.OnFragmentInteractionListener) {
+            listener = (EditHabitFragment.OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+        }
     }
 
     /**
@@ -79,14 +98,13 @@ public class EditHabitFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_habit_fragment, null);
         Bundle bundle = getArguments();
-        Habit originalHabit = (Habit) bundle.getSerializable("habit");
-        String currentName = originalHabit.getName();
-        String currentDate = originalHabit.getDate();
-        String currentReason = originalHabit.getReason();
-        String currentPrivacy = originalHabit.getPrivacy();
+        originalHabit = (Habit) bundle.getSerializable("habit");
+        currentName = originalHabit.getName();
+        currentDate = originalHabit.getDate();
+        currentReason = originalHabit.getReason();
+        currentPrivacy = originalHabit.getPrivacy();
 
-        //view = LayoutInflater.from(getActivity()).inflate(R.layout.edit_habit_fragment, null);
-
+//      Set the attributes to their actual values
         habitName = view.findViewById(R.id.habitNameEditText);
         habitDate = view.findViewById(R.id.habitDateEditText);
         habitReason = view.findViewById(R.id.habitReasonEditText);
@@ -99,14 +117,39 @@ public class EditHabitFragment extends DialogFragment {
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
 
-        frequencyList = originalHabit.frequency;
+//      Set the Frequency details to their actual values
+        frequencyList = (ArrayList<String>) originalHabit.getFrequency();
+        if (frequencyList == null) {
+            frequencyList = new ArrayList<String>();
+        }
         monSwitch = view.findViewById(R.id.mon_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Monday")) {
+            monSwitch.setChecked(true);
+        }
         tueSwitch = view.findViewById(R.id.tue_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Tuesday")) {
+            tueSwitch.setChecked(true);
+        }
         wedSwitch = view.findViewById(R.id.wed_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Wednesday")) {
+            wedSwitch.setChecked(true);
+        }
         thurSwitch = view.findViewById(R.id.thur_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Thursday")) {
+            thurSwitch.setChecked(true);
+        }
         friSwitch = view.findViewById(R.id.fri_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Friday")) {
+            friSwitch.setChecked(true);
+        }
         satSwitch = view.findViewById(R.id.sat_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Saturday")) {
+            satSwitch.setChecked(true);
+        }
         sunSwitch = view.findViewById(R.id.sun_switch);
+        if (frequencyList.size() != 0 && frequencyList.contains("Sunday")) {
+            sunSwitch.setChecked(true);
+        }
 
 //        Set current date as default
         Calendar c = Calendar.getInstance();
@@ -229,7 +272,7 @@ public class EditHabitFragment extends DialogFragment {
                         newReason = check(newReason);
                         String newPrivacy = habitPrivacy.getText().toString();
                         newPrivacy = check(newPrivacy);
-                        listener.onEditPressed(originalHabit, newName, newDate, newReason, frequencyList, newPrivacy);
+                        listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy));
                     }
                 }).create();
     }

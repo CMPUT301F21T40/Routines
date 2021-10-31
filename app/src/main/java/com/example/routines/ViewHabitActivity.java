@@ -15,14 +15,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Source;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class ViewHabitActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener {
+public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener {
     private ImageView backImage;
     TextView nameView;
     TextView dateView;
@@ -53,6 +56,7 @@ public class ViewHabitActivity extends AppCompatActivity implements AddHabitFrag
         });
 
         name = (String) "Name:  "+getIntent().getStringExtra("habitName");
+        habitName = getIntent().getStringExtra("habitName");
         nameView = findViewById(R.id.add_event_name);
         reasonView = findViewById(R.id.add_event_description);
         dateView = findViewById(R.id.habit_date);
@@ -63,7 +67,9 @@ public class ViewHabitActivity extends AppCompatActivity implements AddHabitFrag
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
                 .collection("Habits")
-                .document("test");
+                .document("cYmtJKnsyeZOoTdNGNOzFxJPgnU2")
+                .collection("Habits")
+                .document(habitName);
         habitRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -77,7 +83,6 @@ public class ViewHabitActivity extends AppCompatActivity implements AddHabitFrag
                                 reason = (String) "Reason:  "+document.getData().get("Habit Reason");
                                 habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
                                 habitPrivacy = (String) document.getData().get("Privacy");
-                                habitName = getIntent().getStringExtra("habitName");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
                                 nameView.setText(name);
@@ -131,15 +136,33 @@ public class ViewHabitActivity extends AppCompatActivity implements AddHabitFrag
         });
 
     }
-    @Override
-    public void onOkPressed(Habit habit) {
 
-    }
+    public void onEditPressed(Habit habit, Habit newHabit) {
+        String habitName = newHabit.getName();
+        String habitReason = newHabit.getReason();
+        String habitDate = newHabit.getDate();
+        String habitPrivacy = newHabit.getPrivacy();
+        ArrayList<String> habitFrequency = (ArrayList<String>) newHabit.getFrequency();
+        if (habitFrequency.isEmpty()) {
+            habitFrequency.add("Null");
+        }
 
-    public void onEditPressed(Habit habit, String name, String date, String reason) {
-        habit.setName(name);
-        habit.setDate(date);
-        habit.setReason(reason);
+//      Update habit in Firestore
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference reference = db.collection("Habits")
+                .document("cYmtJKnsyeZOoTdNGNOzFxJPgnU2")
+                .collection("Habits")
+                .document(habit.getName());
+        reference.update(
+                "Habit Name", habitName,
+                "Privacy", habitPrivacy,
+                "Start Date", habitDate,
+                "Habit Reason", habitReason,
+                "Frequency", habitFrequency
+        );
+
+
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.routines;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Initial Habit class to store various information about a habit
  */
-public class Habit {
+public class Habit implements Serializable {
     /*
     Purpose:
         A basic habit event that can be added to a user when we have functionality for

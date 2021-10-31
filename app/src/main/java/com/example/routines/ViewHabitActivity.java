@@ -14,11 +14,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 
-public class ViewHabitActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class ViewHabitActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener {
     private ImageView backImage;
     TextView nameView;
     TextView dateView;
@@ -26,8 +30,14 @@ public class ViewHabitActivity extends AppCompatActivity {
     String name;
     String date;
     String reason;
+    String habitName;
+    String habitDate;
+    String habitReason;
+    ArrayList<String> habitFrequency;
+    String habitPrivacy;
     Button add;
     Button view;
+    FloatingActionButton edit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +58,7 @@ public class ViewHabitActivity extends AppCompatActivity {
         dateView = findViewById(R.id.habit_date);
         add = findViewById(R.id.add_event_button);
         view = findViewById(R.id.view_event_button);
+        edit = findViewById(R.id.edit_habit_button);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
@@ -64,6 +75,11 @@ public class ViewHabitActivity extends AppCompatActivity {
                                 // concatenated strings we should to this in the XML later
                                 date = (String) "Date Started:  "+document.getData().get("Start Date");
                                 reason = (String) "Reason:  "+document.getData().get("Habit Reason");
+                                habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
+                                habitPrivacy = (String) document.getData().get("Privacy");
+                                habitName = getIntent().getStringExtra("habitName");
+                                habitDate = (String) document.getData().get("Start Date");
+                                habitReason = (String) document.getData().get("Habit Reason");
                                 nameView.setText(name);
                                 reasonView.setText(reason);
                                 dateView.setText(date);
@@ -97,5 +113,34 @@ public class ViewHabitActivity extends AppCompatActivity {
             }
         });
 
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /**
+                Bundle bundle = getIntent().getExtras();
+                Habit habit = (Habit) bundle.getSerializable();
+
+                name =  getIntent().getStringExtra("habitName");
+                reason = getIntent().getStringExtra("habitReason");
+                date = getIntent().getStringExtra("habitDate");
+                frequency = getIntent().getExtra("habitReason");
+                 */
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "EDIT_MEDICINE");
+
+            }
+        });
+
     }
+    @Override
+    public void onOkPressed(Habit habit) {
+
+    }
+
+    public void onEditPressed(Habit habit, String name, String date, String reason) {
+        habit.setName(name);
+        habit.setDate(date);
+        habit.setReason(reason);
+    }
+
+
 }

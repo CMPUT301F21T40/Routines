@@ -50,12 +50,12 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String InputEmail = loginEmail.getText().toString();
-                String InputPassword = loginPassword.getText().toString();
-                if (InputEmail.length() == 0|| InputPassword.length() == 0){
+                String inputEmail = loginEmail.getText().toString();
+                String inputPassword = loginPassword.getText().toString();
+                if (inputEmail.length() == 0|| inputPassword.length() == 0){
                     Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT ).show();
                 }else{
-                    Login(InputEmail, InputPassword);
+                    Login(inputEmail, inputPassword);
                 }
             }
         });

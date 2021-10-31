@@ -10,4 +10,9 @@
     <color name="color_signup">#81D4FA</color>
     <color name="yellow">#EDBE46</color>
     <color name="light_blie">#81D4FA</color>
+    <color name="grey">#B0BEC5</color>
+    <color name="blue">#FF018786</color>
+    <color name="lightBlue">#ff6691c4</color>
+    <color name="lighterBlue">#ffcdd8ec</color>
+    <color name="controlBackground">#ffffffff</color>
 </resources>

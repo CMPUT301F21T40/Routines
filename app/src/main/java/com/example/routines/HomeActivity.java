@@ -3,16 +3,23 @@ package com.example.routines;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,15 +41,21 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Main Activity
  */
-public class HomeActivity extends AppCompatActivity implements AddHabitFragment.OnFragmentInteractionListener{
+public class HomeActivity extends AppCompatActivity  implements AddHabitFragment.OnFragmentInteractionListener{
 
     private ArrayAdapter<Habit> habitAdapter;
     private ArrayList<Habit> habitDataList;
+    AppCompatRadioButton switchHabits;
+    AppCompatRadioButton switchTodayHabits;
+    FrameLayout fragmentLayout;
+    TodayFilterFragment filterFragment;
+    HomeFragment homeFragment;
+
+    BottomNavigationView bottomNavigator;
 
     FirebaseFirestore db;
     String userId;
@@ -53,15 +66,15 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
     CollectionReference currentUserHabitCol;
     DocumentReference userHabitDoc;
 
-    BottomNavigationView bottomNavigator;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-//        Get user ID
+        fragmentLayout = findViewById(R.id.container);
+
+        //        Get user ID
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
         userId = user.getUid();
@@ -73,34 +86,13 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
 //        Sub-collection of Habit under the current user
         currentUserHabitCol = userDocument.collection("Habits");
 
-
         switchActivity();
-
-        // creating a listview and the adapter so we can store all the habits in a list on the home screen
-        ListView habitList = findViewById(R.id.habitList);
-
-        ArrayList<Habit> habitDataList = new ArrayList<>();
-        habitAdapter = new HabitList(this, habitDataList);
-
-        habitList.setAdapter(habitAdapter);
-
-//        Add habits from Firestore to local habit list
-        currentUserHabitCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                habitAdapter.clear();
-                for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    String habitName = doc.getId();
-                    String habitReason = (String)doc.getData().get("Habit Reason");
-                    String habitDate = (String)doc.getData().get("Start Date");
-                    ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");
-                    String privacy = (String) doc.getData().get("Privacy"); // recently added
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy));
-                    habitAdapter.notifyDataSetChanged();
-                }
-            }
-        });
-
+        switchRadioButton();
+        homeFragment = HomeFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container, homeFragment);
+        transaction.commit();
 
         // when the + at the bottom of the screen is pressed it will call AddHabitFragment
         final FloatingActionButton addHabitButton = findViewById(R.id.addHabitButton);
@@ -111,18 +103,8 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
             }
         });
 
-        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(HomeActivity.this, ViewHabitActivity.class);
-                String habitName = habitDataList.get(i).getName();
-                intent.putExtra("habitName", habitName);
-                startActivity(intent);
-            }
-        });
-
     }
-    
+
     // this is called from the AddHabitFragment so we can add a new Habit to the list
     /**
      * This is called when the + button is pressed and the info from the pop up fragment
@@ -159,10 +141,8 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
             }
         });
 
-//        Add to local habit list
-        habitAdapter.add(newHabit);
-
     }
+
 
     public void switchActivity(){
         // The bottom Navigation bar
@@ -190,6 +170,62 @@ public class HomeActivity extends AppCompatActivity implements AddHabitFragment.
                 return true;
             }
         });
+    }
+
+    public void switchRadioButton(){
+        switchHabits = findViewById(R.id.switch_habits);
+        switchHabits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickButton(view);
+            }
+        });
+        switchTodayHabits = findViewById(R.id.switch_today);
+        switchTodayHabits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickButton(view);
+            }
+        });
+    }
+
+    public void onClickButton(View view){
+        boolean isSelected = ((AppCompatRadioButton)view).isChecked();
+        switch(view.getId()){
+            case R.id.switch_habits:
+                if(isSelected) {
+                    switchHabits.setTextColor(Color.WHITE);
+                    switchTodayHabits.setTextColor(Color.BLACK);
+                    if(homeFragment == null){
+                        homeFragment = HomeFragment.newInstance();
+                    }
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    if(filterFragment != null && filterFragment.isVisible()){
+                        transaction.hide(filterFragment);
+                    }
+                    transaction.replace(R.id.container, homeFragment);
+                    transaction.commit();
+                    Toast.makeText(getApplicationContext(), "all habits", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.switch_today:
+                if(isSelected){
+                    switchTodayHabits.setTextColor(Color.WHITE);
+                    switchHabits.setTextColor(Color.BLACK);
+                    if(filterFragment==null) {
+                        filterFragment = TodayFilterFragment.newInstance();
+                    }
+                    FragmentManager manager = getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    if(homeFragment != null && homeFragment.isVisible()){
+                        transaction.hide(homeFragment);
+                    }
+                    transaction.replace(R.id.container, filterFragment);
+                    transaction.commit();
+                    Toast.makeText(getApplicationContext(), "Today filter", Toast.LENGTH_SHORT).show();
+                }
+        }
     }
 
 

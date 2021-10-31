@@ -3,6 +3,7 @@ plugins {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.android.application'
 
 android {
     compileSdk 31
@@ -10,12 +11,11 @@ android {
     defaultConfig {
         applicationId "com.example.routines"
         //Firebase: Targets API level 16 (Jelly Bean) or higher
-        minSdk 21
+        minSdk 16
         multiDexEnabled true
         targetSdk 31
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,9 +29,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    testOptions {
+        unitTests.all{
+            useJUnitPlatform()
+        }
+    }
     buildFeatures {
         viewBinding true
     }
+    compileSdkVersion 31
+    buildToolsVersion '31.0.0'
 }
 
 dependencies {
@@ -47,8 +54,20 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+
+
+
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
+    testImplementation 'org.testng:testng:6.9.6'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.0.1'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
     implementation 'com.google.firebase:firebase-analytics'

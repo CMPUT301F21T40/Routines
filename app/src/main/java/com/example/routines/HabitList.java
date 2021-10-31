@@ -54,4 +54,7 @@ public class HabitList extends ArrayAdapter<Habit> {
         return view;
     }
 
+    public int habitCount(){
+        return habits.size();
+    }
 }

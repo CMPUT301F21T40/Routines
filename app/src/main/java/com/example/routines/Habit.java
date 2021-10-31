@@ -44,17 +44,28 @@ public class Habit {
         this.date = date;
     }
 
-
-
     //    Setters
+
+    /**
+     * set the name of the habit
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * set the reason of the habit
+     * @param reason
+     */
     public void setReason(String reason) {
         this.reason = reason;
     }
 
+    /**
+     * sets the date of the habit
+     * @param date
+     */
     public void setDate(String date) {
         this.date = date;
     }
@@ -67,6 +78,13 @@ public class Habit {
         this.privacy = privacy;
     }
 
+    /**
+     * sets the frequency of the habit
+     * @param freq
+     */
+    public void setFrequency(ArrayList<String> freq){
+        this.frequency = freq;
+    }
     /**
      * Gets the name of the habit
      * @return
@@ -95,7 +113,7 @@ public class Habit {
     }
 
     /**
-     * Gets the Date started of the habit
+     * Gets the days the habit occurs on
      * @return
      * ArrayList frequency
      */

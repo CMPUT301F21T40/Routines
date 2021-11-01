@@ -88,5 +88,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="View Events" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_habit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_marginLeft="12dp"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
     </LinearLayout>
 </LinearLayout>

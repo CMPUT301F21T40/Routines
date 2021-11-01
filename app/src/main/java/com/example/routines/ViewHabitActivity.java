@@ -1,5 +1,7 @@
 package com.example.routines;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +15,23 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Source;
 
-public class ViewHabitActivity extends AppCompatActivity {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener {
     private ImageView backImage;
     TextView nameView;
     TextView dateView;
@@ -26,8 +39,17 @@ public class ViewHabitActivity extends AppCompatActivity {
     String name;
     String date;
     String reason;
+    String habitName;
+    String habitDate;
+    String habitReason;
+    ArrayList<String> habitFrequency;
+    String habitPrivacy;
     Button add;
     Button view;
+    FloatingActionButton edit;
+    FirebaseAuth myAuth;
+    String userId;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,17 +64,25 @@ public class ViewHabitActivity extends AppCompatActivity {
             }
         });
 
+
         name = (String) "Name:  "+getIntent().getStringExtra("habitName");
+        myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        userId = user.getUid();
+        habitName = getIntent().getStringExtra("habitName");
         nameView = findViewById(R.id.add_event_name);
         reasonView = findViewById(R.id.add_event_description);
         dateView = findViewById(R.id.habit_date);
         add = findViewById(R.id.add_event_button);
         view = findViewById(R.id.view_event_button);
+        edit = findViewById(R.id.edit_habit_button);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
                 .collection("Habits")
-                .document("test");
+                .document(userId)
+                .collection("Habits")
+                .document(habitName);
         habitRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -64,6 +94,10 @@ public class ViewHabitActivity extends AppCompatActivity {
                                 // concatenated strings we should to this in the XML later
                                 date = (String) "Date Started:  "+document.getData().get("Start Date");
                                 reason = (String) "Reason:  "+document.getData().get("Habit Reason");
+                                habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
+                                habitPrivacy = (String) document.getData().get("Privacy");
+                                habitDate = (String) document.getData().get("Start Date");
+                                habitReason = (String) document.getData().get("Habit Reason");
                                 nameView.setText(name);
                                 reasonView.setText(reason);
                                 dateView.setText(date);
@@ -97,5 +131,86 @@ public class ViewHabitActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Response when the edit button is clicked, it sends the user
+         * to a page to edit a given habits details
+         */
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "EDIT_MEDICINE");
+
+            }
+        });
+
     }
+
+    /**
+     * When user clicks "OK" from EditFragment, this function runs.
+     * It deletes the habit that was edited, and creates a new one
+     * with the updated parameters
+     * @param habit
+     * @param newHabit
+     */
+    public void onEditPressed(Habit habit, Habit newHabit) {
+        String habitName = newHabit.getName();
+        String habitReason = newHabit.getReason();
+        String habitDate = newHabit.getDate();
+        String habitPrivacy = newHabit.getPrivacy();
+        ArrayList<String> habitFrequency = (ArrayList<String>) newHabit.getFrequency();
+        if (habitFrequency.isEmpty()) {
+            habitFrequency.add("Null");
+        }
+
+//      Update habit in Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collRef = db.collection("Habits")
+                .document(userId)
+                .collection("Habits");
+        DocumentReference docRef = collRef.document(habit.getName());
+
+//      Delete old habit
+        docRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+
+//      Replace with new/updated habit
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("Habit Name", habitName);
+        data.put("Habit Reason", habitReason);
+        data.put("Start Date", habitDate);
+        data.put("Frequency", habitFrequency);
+        data.put("Privacy", habitPrivacy);
+        collRef.document(habitName)
+                .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.w("Update Successfully", "Error on writing documentation on Firebase");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Update Failed", "Error on writing documentation on Firebase");
+            }
+        });
+
+        Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
+        intent.putExtra("habitName", newHabit.getName());
+        startActivity(intent);
+
+
+    }
+
+
 }

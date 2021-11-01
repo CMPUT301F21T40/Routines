@@ -69,11 +69,7 @@ public class SignupActivity extends AppCompatActivity {
         collectionReference = db.collection("Users");
         userNames = db.collection("User Names");
 
-
         initializeView();
-
-
-
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,11 +90,11 @@ public class SignupActivity extends AppCompatActivity {
                 if(inputName.length()==0 || inputEmail.length()==0|| inputPassword.length()==0|| inputConfirm.length()==0){
                     Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT).show();
                 }else if(!(inputPassword.equals(inputConfirm))) {
-                    Toast.makeText(getApplicationContext(), "Password doesn't match", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
                     signConfirm.setText("");
                     signPassword.setText("");
                 }else if(inputPassword.length() < 6){
-                    Toast.makeText(getApplicationContext(),"Password should be at least 6 digits", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Password must be at least 6 digits", Toast.LENGTH_SHORT).show();
                     signPassword.setText("");
 
                 }else{
@@ -158,7 +154,7 @@ public class SignupActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Toast.makeText(getApplicationContext(),"User name used", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"User name already exists.", Toast.LENGTH_SHORT).show();
                         flag = 1;
                     } else {
                         assert true;
@@ -222,7 +218,7 @@ public class SignupActivity extends AppCompatActivity {
                             });
                         }else{
                             Log.w(TAG,"createUserWithEmail:failure" );
-                            Toast.makeText(getApplicationContext(), "Authentication failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Authentication failed, user not added.", Toast.LENGTH_SHORT).show();
                             signConfirm.setText("");
                             signPassword.setText("");
                             signEmail.setText("");

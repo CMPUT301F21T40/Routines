@@ -54,7 +54,29 @@ public class HabitList extends ArrayAdapter<Habit> {
         return view;
     }
 
+    /**
+     * Gets the total count of habits in the Habit List
+     * @return
+     */
     public int habitCount(){
         return habits.size();
     }
+
+    /**
+     * adds a new habit to the HabitList
+     * @param habit
+     */
+    public void addHabit(Habit habit){
+        habits.add(habit);
+    }
+
+    /**
+     * checks if a habit exists in the habit list
+     * @param habit
+     * @return
+     */
+    public boolean containsHabit(Habit habit){
+        return habits.contains(habit);
+    }
 }
+

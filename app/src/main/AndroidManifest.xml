@@ -18,6 +18,7 @@
             android:exported="false" />
         <activity
             android:name=".ViewHabitActivity"
+            android:parentActivityName=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"

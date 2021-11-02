@@ -96,5 +96,14 @@
             android:clickable="true"
             android:layout_marginLeft="12dp"
             app:srcCompat="@android:drawable/ic_menu_edit" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/delete_habit_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_marginLeft="340dp"
+            android:layout_marginTop="-60dp"
+            app:srcCompat="@android:drawable/ic_delete" />
     </LinearLayout>
 </LinearLayout>

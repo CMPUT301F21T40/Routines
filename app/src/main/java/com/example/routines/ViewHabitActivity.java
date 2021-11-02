@@ -36,6 +36,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     TextView nameView;
     TextView dateView;
     TextView reasonView;
+    Habit habit;
     String name;
     String date;
     String reason;
@@ -46,6 +47,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String habitPrivacy;
     Button add;
     Button view;
+    Button delete;
     FloatingActionButton edit;
     FirebaseAuth myAuth;
     String userId;
@@ -76,6 +78,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         add = findViewById(R.id.add_event_button);
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
+        delete = findViewById(R.id.delete_habit_button);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
@@ -140,6 +143,33 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             public void onClick(View view) {
                 EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "EDIT_MEDICINE");
 
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference collRef = db.collection("Habits")
+                        .document(userId)
+                        .collection("Habits");
+                DocumentReference docRef = collRef.document(habit.getName());
+
+//      Delete old habit
+                docRef
+                        .delete()
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error deleting document", e);
+                            }
+                        });
             }
         });
 

@@ -5,9 +5,11 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,20 +27,18 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Source;
 
-import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener {
-    private ImageView backImage;
     TextView nameView;
     TextView dateView;
     TextView reasonView;
-    String name;
-    String date;
-    String reason;
+    TextView privacyView;
+    TextView frequencyView;
+    String frequency;
     String habitName;
     String habitDate;
     String habitReason;
@@ -56,23 +56,19 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_habit);
 
-        backImage = (ImageView) findViewById(R.id.add_event_backImage);
-        backImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        name = (String) "Name:  "+getIntent().getStringExtra("habitName");
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
         userId = user.getUid();
+
         habitName = getIntent().getStringExtra("habitName");
-        nameView = findViewById(R.id.add_event_name);
-        reasonView = findViewById(R.id.add_event_description);
-        dateView = findViewById(R.id.habit_date);
+        nameView = findViewById(R.id.view_habit_name);
+        reasonView = findViewById(R.id.view_habit_reason);
+        dateView = findViewById(R.id.view_habit_date);
+        privacyView = findViewById(R.id.view_habit_privacy);
+        frequencyView = findViewById(R.id.view_habit_frequency);
         add = findViewById(R.id.add_event_button);
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
@@ -92,15 +88,19 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
                                 // concatenated strings we should to this in the XML later
-                                date = (String) "Date Started:  "+document.getData().get("Start Date");
-                                reason = (String) "Reason:  "+document.getData().get("Habit Reason");
-                                habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
-                                habitPrivacy = (String) document.getData().get("Privacy");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
-                                nameView.setText(name);
-                                reasonView.setText(reason);
-                                dateView.setText(date);
+                                habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
+                                habitPrivacy = (String) document.getData().get("Privacy");
+                                for (int i = 0; i < habitFrequency.size(); i++){
+                                    frequency += habitFrequency.get(i) + " ";
+                                }
+
+                                nameView.setText("Name:  " + habitName);
+                                reasonView.setText("Reason:  " + habitReason);
+                                dateView.setText("Date:  " + habitDate);
+                                privacyView.setText("Privacy:  " + habitPrivacy);
+                                frequencyView.setText("Frequency:  " + frequency);
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }
                             else {
@@ -116,8 +116,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ViewHabitActivity.this, AddEventActivity.class);
-                intent.putExtra("habitName", name);
+                Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
+                intent.putExtra("habitName", habitName);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });
@@ -126,7 +127,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ViewHabitActivity.this, EventListActivity.class);
-                intent.putExtra("habitName", name);
+                intent.putExtra("habitName", habitName);
                 startActivity(intent);
             }
         });
@@ -210,6 +211,17 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         startActivity(intent);
 
 
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

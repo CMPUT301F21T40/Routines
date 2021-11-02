@@ -12,13 +12,16 @@
 
         <activity
             android:name=".EventListActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ViewHabitActivity"/>
         <activity
             android:name=".AddEventActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".ViewHabitActivity"/>
         <activity
             android:name=".ViewHabitActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".HomeActivity"/>
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />

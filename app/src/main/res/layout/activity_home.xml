@@ -27,7 +27,7 @@
             android:button="@android:color/transparent"
             android:checked="true"
             android:gravity="center"
-            android:text="Habits"
+            android:text="All Habits"
             android:textColor="@color/white" />
 
         <androidx.appcompat.widget.AppCompatRadioButton

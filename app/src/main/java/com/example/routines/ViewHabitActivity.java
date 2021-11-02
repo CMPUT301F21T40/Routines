@@ -3,6 +3,7 @@ package com.example.routines;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +31,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener {
@@ -38,7 +44,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     TextView reasonView;
     TextView privacyView;
     TextView frequencyView;
-    String frequency;
+    String frequency = "";
     String habitName;
     String habitDate;
     String habitReason;
@@ -91,6 +97,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
                                 habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
+                                Collections.sort(habitFrequency,comparator);
                                 habitPrivacy = (String) document.getData().get("Privacy");
                                 for (int i = 0; i < habitFrequency.size(); i++){
                                     frequency += habitFrequency.get(i) + " ";
@@ -224,5 +231,14 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         return super.onOptionsItemSelected(item);
     }
 
+    Comparator<String> comparator = new Comparator<String>() {
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public int compare(String day1, String day2) {
+            return Integer.compare(DayOfWeek.valueOf(day1.toUpperCase()).getValue(),
+                    DayOfWeek.valueOf(day2.toUpperCase()).getValue());
+        }
+    };
 
 }

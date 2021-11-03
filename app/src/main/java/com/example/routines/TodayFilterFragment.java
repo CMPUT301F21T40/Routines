@@ -30,7 +30,6 @@ import java.util.Calendar;
 import java.util.List;
 
 public class TodayFilterFragment extends Fragment {
-
     final String TAG = "Today filter fragment";
     private View rootView;
     ListView fragmentHabitsList;
@@ -40,13 +39,9 @@ public class TodayFilterFragment extends Fragment {
     FirebaseAuth myAuth;
     String userId;
 
-
-
-
     public TodayFilterFragment() {
         // Required empty public constructor
     }
-
 
     public static TodayFilterFragment newInstance() {
         TodayFilterFragment fragment = new TodayFilterFragment();
@@ -64,8 +59,6 @@ public class TodayFilterFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
 
         fragmentHabitsList = (ListView) rootView.findViewById(R.id.fragment_habitList);
         ArrayList<Habit> habitsList = new ArrayList<Habit>();

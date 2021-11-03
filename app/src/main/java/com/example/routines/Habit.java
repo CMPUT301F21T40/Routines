@@ -17,8 +17,6 @@ public class Habit implements Serializable {
         None
      */
     public String name;
-
-
     public String reason;
     public String date;
     public ArrayList<String> frequency;

@@ -109,7 +109,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     // this is called from the AddHabitFragment so we can add a new Habit to the list
     /**
      * This is called when the + button is pressed and the info from the pop up fragment
-     * is filled out. This will add the newly created habit into the medList
+     * is filled out. This will add the newly created habit into the habit list and to firestore
      * @param newHabit
      */
     public void onOkPressed(Habit newHabit){

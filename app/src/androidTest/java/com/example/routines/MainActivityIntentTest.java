@@ -92,8 +92,9 @@ public class MainActivityIntentTest {
         solo.clickOnButton("CONFIRM DATE");
         solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "TEST HABIT");
         solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "TEST REASON");
-        solo.enterText((EditText) solo.getView(R.id.habitPrivacyEditText), "Private");
+        //solo.enterText((EditText) solo.getView(R.id.habitPrivacyEditText), "Private"); // outdated
         // test all the date switch's
+        solo.clickOnButton("Private Habit");
         solo.clickOnButton("Monday");
         solo.clickOnButton("Tuesday");
         solo.clickOnButton("Wednesday");

@@ -13,6 +13,12 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+
+/**
+ * A custom list to add the event info
+ * Purpose: To create the list that all the events will be stored in
+ * Outstanding Issues: None
+ */
 public class EventCustomList extends ArrayAdapter<Event> {
 
     private ArrayList<Event> events;
@@ -33,7 +39,7 @@ public class EventCustomList extends ArrayAdapter<Event> {
         if(view==null){
             view = LayoutInflater.from(context).inflate(R.layout.event_custom_list, parent, false);
         }
-        // a habit list to store the habits
+        // a event list to store the event
         Event event = events.get(position);
         TextView eventName = view.findViewById(R.id.event_name);
         TextView eventDate = view.findViewById(R.id.event_date);

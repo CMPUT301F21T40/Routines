@@ -43,7 +43,6 @@ public class HomeFragment extends Fragment {
 
     private View rootView;
     private ArrayAdapter<Habit> habitAdapter;
-    private ArrayList<Habit> habitDataList;
     FrameLayout fragmentLayout;
     FirebaseFirestore db;
     String userId;
@@ -95,6 +94,7 @@ public class HomeFragment extends Fragment {
         ListView habitList = rootView.findViewById(R.id.home_fragment_habitList);
 
         ArrayList<Habit> habitDataList = new ArrayList<>();
+        ArrayList<String> habitIdList = new ArrayList<>();
         habitAdapter = new HabitList(getContext(), habitDataList);
 
         habitList.setAdapter(habitAdapter);
@@ -105,11 +105,13 @@ public class HomeFragment extends Fragment {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 habitAdapter.clear();
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    String habitName = doc.getId();
+                    String habitName = (String)doc.getData().get("Habit Name");
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
                     ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");
                     String privacy = (String) doc.getData().get("Privacy"); // recently added
+                    String id = (String) doc.getId();
+                    habitIdList.add(id);
                     habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy));
                     habitAdapter.notifyDataSetChanged();
                 }
@@ -123,8 +125,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getContext(), ViewHabitActivity.class);
-                String habitName = habitDataList.get(i).getName();
-                intent.putExtra("habitName", habitName);
+                String habitId = habitIdList.get(i);
+                intent.putExtra("habitId", habitId);
                 startActivity(intent);
             }
         });

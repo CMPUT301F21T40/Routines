@@ -69,7 +69,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         FirebaseUser user = myAuth.getCurrentUser();
         userId = user.getUid();
 
-        habitName = getIntent().getStringExtra("habitName");
+        String habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
         reasonView = findViewById(R.id.view_habit_reason);
         dateView = findViewById(R.id.view_habit_date);
@@ -84,7 +84,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 .collection("Habits")
                 .document(userId)
                 .collection("Habits")
-                .document(habitName);
+                .document(habitId);
         habitRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -94,6 +94,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
                                 // concatenated strings we should to this in the XML later
+                                habitName = (String) document.getData().get("Habit Name");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
                                 habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
@@ -124,7 +125,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AddEventActivity.class);
-                intent.putExtra("habitName", habitName);
+                intent.putExtra("habitId", habitId);
                 intent.putExtra("userId", userId);
                 startActivity(intent);
             }
@@ -134,7 +135,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ViewHabitActivity.this, EventListActivity.class);
-                intent.putExtra("habitName", habitName);
+                intent.putExtra("habitId", habitId);
                 startActivity(intent);
             }
         });
@@ -214,7 +215,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         });
 
         Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
-        intent.putExtra("habitName", newHabit.getName());
+        intent.putExtra("habitId", newHabit.getName());
         startActivity(intent);
 
 

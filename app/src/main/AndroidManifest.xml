@@ -10,6 +10,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Routines">
 
+
+        <activity
+            android:name=".SearchProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".SearchActivity"/>
         <activity
             android:name=".EventListActivity"
             android:exported="false"

@@ -185,51 +185,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 "Start Date", habitDate,
                 "Frequency", habitFrequency,
                 "Privacy", habitPrivacy);
-        //Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
-        //intent.putExtra("habitId", newHabit.getName());
-        //startActivity(intent);
-
-//      Delete old habit
-        /**
-        docRef
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
-*/
-        /**
-//      Replace with new/updated habit
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("Habit Name", habitName);
-        data.put("Habit Reason", habitReason);
-        data.put("Start Date", habitDate);
-        data.put("Frequency", habitFrequency);
-        data.put("Privacy", habitPrivacy);
-        collRef.document(habitName)
-                .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.w("Update Successfully", "Error on writing documentation on Firebase");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.w("Update Failed", "Error on writing documentation on Firebase");
-            }
-        });
-*/
-        //Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
-        //intent.putExtra("habitId", newHabit.getName());
-        //startActivity(intent);
+        finish();
+        Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
+        intent.putExtra("habitId", habitId);
+        startActivity(intent);
 
 
     }

@@ -47,7 +47,7 @@ public class AddEventActivity extends AppCompatActivity {
         addButton = findViewById(R.id.add_event_button);
 
 
-        habitId = (String) getIntent().getStringExtra("habitName");
+        habitId = (String) getIntent().getStringExtra("habitId");
         userId = (String) getIntent().getStringExtra("userId");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

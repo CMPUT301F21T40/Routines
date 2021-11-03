@@ -53,7 +53,7 @@ public class EventListActivity extends AppCompatActivity {
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
-        String habitName = (String) getIntent().getStringExtra("habitName");
+        String habitId = (String) getIntent().getStringExtra("habitId");
 
 
         //fetch all the events which stores corresponding habit id
@@ -61,7 +61,7 @@ public class EventListActivity extends AppCompatActivity {
                 .collection("Events");
 
         eventRef
-                .whereEqualTo("habitId", habitName)
+                .whereEqualTo("habitId", habitId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

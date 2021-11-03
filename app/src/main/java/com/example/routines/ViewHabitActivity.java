@@ -55,6 +55,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FloatingActionButton edit;
     FirebaseAuth myAuth;
     String userId;
+    String habitId;
 
 
     @Override
@@ -69,7 +70,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         FirebaseUser user = myAuth.getCurrentUser();
         userId = user.getUid();
 
-        String habitId = getIntent().getStringExtra("habitId");
+        habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
         reasonView = findViewById(R.id.view_habit_reason);
         dateView = findViewById(R.id.view_habit_date);
@@ -147,7 +148,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "EDIT_MEDICINE");
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "EDIT_HABIT");
 
             }
         });
@@ -176,9 +177,20 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         CollectionReference collRef = db.collection("Habits")
                 .document(userId)
                 .collection("Habits");
-        DocumentReference docRef = collRef.document(habit.getName());
+        DocumentReference docRef = collRef.document(habitId);
+
+        docRef.update(
+                "Habit Name", habitName,
+                "Habit Reason", habitReason,
+                "Start Date", habitDate,
+                "Frequency", habitFrequency,
+                "Privacy", habitPrivacy);
+        //Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
+        //intent.putExtra("habitId", newHabit.getName());
+        //startActivity(intent);
 
 //      Delete old habit
+        /**
         docRef
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -193,7 +205,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
-
+*/
+        /**
 //      Replace with new/updated habit
         HashMap<String, Object> data = new HashMap<>();
         data.put("Habit Name", habitName);
@@ -213,10 +226,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 Log.w("Update Failed", "Error on writing documentation on Firebase");
             }
         });
-
-        Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
-        intent.putExtra("habitId", newHabit.getName());
-        startActivity(intent);
+*/
+        //Intent intent = new Intent(ViewHabitActivity.this, ViewHabitActivity.class);
+        //intent.putExtra("habitId", newHabit.getName());
+        //startActivity(intent);
 
 
     }

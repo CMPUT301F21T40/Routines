@@ -3,6 +3,7 @@ package com.example.routines;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -28,13 +29,14 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * This activity display a list of historical events of a habits
+ * It allows user to check the details of an event
+ */
 public class EventListActivity extends AppCompatActivity {
-    private ImageView backImage;
     ListView eventList;
     ArrayAdapter<Event> eventArrayAdapter;
     ArrayList<Event> eventArrayList;
-    ArrayList<String> habitIDList;
-    private String habitID = null;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -43,13 +45,7 @@ public class EventListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_list);
 
 
-        backImage = (ImageView) findViewById(R.id.event_list_backImage);
-        backImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Log.d("tag","event list displayed");
         eventList = findViewById(R.id.event_list_view);
@@ -60,12 +56,12 @@ public class EventListActivity extends AppCompatActivity {
         String habitName = (String) getIntent().getStringExtra("habitName");
 
 
+        //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db
                 .collection("Events");
 
-
         eventRef
-                .whereEqualTo("habitID", habitName)
+                .whereEqualTo("habitId", habitName)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -75,7 +71,7 @@ public class EventListActivity extends AppCompatActivity {
                                 Log.d("Success", document.getId() + " => " + document.getData());
                                 String name = (String) document.getData().get("name");
                                 String date = (String) document.getData().get("date");
-                                String habitID = (String) document.getData().get("habitID");
+                                String habitID = (String) document.getData().get("habitId");
                                 String description = (String) document.getData().get("description");
                                 eventArrayList.add(new Event(name, description, habitID, date));
                                 eventArrayAdapter.notifyDataSetChanged();
@@ -86,32 +82,22 @@ public class EventListActivity extends AppCompatActivity {
                     }
                 });
 
-/*
-        habitRef
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()){
-                            Log.d("Success", "Task is successful");
-                            DocumentSnapshot document = task.getResult();
-                            if (document != null){
-                                Log.d("Success","Document is not empty : "+task.getResult().getData());
-                                habitIDList = (ArrayList<String>) document.get("eventList");
-                                Log.d("aaaaaaaaaaaa", habitIDList.get(1));
-                            }
-                            else
-                                Log.d("Fail", "Document is empty");
-                        }
-                        else
-                            Log.d("Fail", "Task is failed");
-                    }
-                });
 
- */
+    }
 
+    /**
+     * This is called when the up button is pressed. It changes the original
+     * functionality of up button. It let user back to the last activity
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
 
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
 
+        return super.onOptionsItemSelected(item);
     }
 
 }

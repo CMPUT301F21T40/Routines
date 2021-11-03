@@ -41,7 +41,6 @@ public class EditHabitFragment extends DialogFragment {
     private EditText habitName;
     private EditText habitDate;
     private EditText habitReason;
-    private EditText habitPrivacy;
     private DatePicker datePicker;
     private Button confirmDateButton;
 
@@ -49,6 +48,7 @@ public class EditHabitFragment extends DialogFragment {
     private int month;
     private int year;
 
+    private Switch privacySwtich;
     private Switch monSwitch;
     private Switch tueSwitch;
     private Switch wedSwitch;
@@ -108,14 +108,18 @@ public class EditHabitFragment extends DialogFragment {
         habitName = view.findViewById(R.id.habitNameEditText);
         habitDate = view.findViewById(R.id.habitDateEditText);
         habitReason = view.findViewById(R.id.habitReasonEditText);
-        habitPrivacy = view.findViewById(R.id.habitPrivacyEditText);
         habitName.setText(currentName);
         habitDate.setText(currentDate);
         habitReason.setText(currentReason);
-        habitPrivacy.setText(currentPrivacy);
 
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
+
+//        Set Privacy switch to its acutal value
+        privacySwtich = view.findViewById(R.id.private_switch);
+        if (currentPrivacy == "Private") {
+            privacySwtich.setChecked(true);
+        }
 
 //      Set the Frequency details to their actual values
         frequencyList = (ArrayList<String>) originalHabit.getFrequency();
@@ -167,6 +171,20 @@ public class EditHabitFragment extends DialogFragment {
                 year = datePicker.getYear();
 //                Format entered date
                 habitDate.setText(String.format("%d-%02d-%d", year, month, day));
+            }
+        });
+
+
+//        Create Privacy switch
+        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !currentPrivacy.equals("Private")) {
+                    currentPrivacy = "Private";
+                }
+                else if (!isChecked && !currentPrivacy.equals("Public")) {
+                    currentPrivacy = "Public";
+                }
             }
         });
 
@@ -270,7 +288,7 @@ public class EditHabitFragment extends DialogFragment {
                         newDate = check(newDate);
                         String newReason = habitReason.getText().toString();
                         newReason = check(newReason);
-                        String newPrivacy = habitPrivacy.getText().toString();
+                        String newPrivacy = currentPrivacy;
                         newPrivacy = check(newPrivacy);
                         listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy));
                     }

@@ -78,26 +78,39 @@
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/privacy_float"
+
+    <Switch
+        android:id="@+id/private_switch"
+        android:background="#E4E4E4"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/habitPrivacyEditText"
-            android:maxLength="30"
-            android:ems="10"
-            android:hint="Privacy Setting"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
+        android:layout_height="wrap_content"
+        android:text="Private Habit"
+        android:textSize="17dp"
+        android:textColor="#5C5C5C"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="20dp">
+
+    </Switch>
+
+
+    <TextView
+        android:background="#E4E4E4"
+        android:layout_width="match_parent"
+        android:layout_height="19dp"
+        android:text="______________________________________________________________"
+        android:textSize="17dp">
+
+    </TextView>
+
 
     <Switch
         android:id="@+id/mon_switch"
         android:background="#E4E4E4"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="30dp"
         android:text="Monday"
+        android:paddingTop="5dp"
         android:paddingLeft="15dp"
         android:paddingRight="20dp"
         >

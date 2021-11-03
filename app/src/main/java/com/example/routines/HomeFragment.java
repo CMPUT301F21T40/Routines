@@ -105,7 +105,7 @@ public class HomeFragment extends Fragment {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 habitAdapter.clear();
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    String habitName = doc.getId();
+                    String habitName = (String)doc.getData().get("Habit Name");
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
                     ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");

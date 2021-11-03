@@ -60,6 +60,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     FirebaseFirestore db;
     String userId;
     FirebaseAuth myAuth;
+    String habitId;
 
     CollectionReference habitCollection;
     DocumentReference userDocument;
@@ -121,6 +122,8 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
             frequencyList.add("Null");
         }
 
+        habitId = db.collection(String.valueOf(currentUserHabitCol)).document().getId();
+
 //        Add new habit to Firestore
         HashMap<String, Object> data = new HashMap<>();
         data.put("Habit Name", habitName);
@@ -128,7 +131,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         data.put("Start Date", habitDate);
         data.put("Frequency", frequencyList);
         data.put("Privacy", habitPrivacy);
-        currentUserHabitCol.document(habitName)
+        currentUserHabitCol.document(habitId)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {

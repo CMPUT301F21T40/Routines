@@ -42,7 +42,6 @@ public class AddHabitFragment extends DialogFragment {
     private EditText habitName;
     private EditText habitDate;
     private EditText habitReason;
-    private EditText habitPrivacy;
     private DatePicker datePicker;
     private Button confirmDateButton;
     private TextView frequencySelector;
@@ -51,6 +50,7 @@ public class AddHabitFragment extends DialogFragment {
     private int month;
     private int year;
 
+    private Switch privacySwtich;
     private Switch monSwitch;
     private Switch tueSwitch;
     private Switch wedSwitch;
@@ -59,6 +59,7 @@ public class AddHabitFragment extends DialogFragment {
     private Switch satSwitch;
     private Switch sunSwitch;
 
+    private String privacy;
     private ArrayList<String> frequencyList;
 
     private OnFragmentInteractionListener listener;
@@ -93,7 +94,7 @@ public class AddHabitFragment extends DialogFragment {
         habitDate = view.findViewById(R.id.habitDateEditText);
         habitReason = view.findViewById(R.id.habitReasonEditText);
         habitReason.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        habitPrivacy = view.findViewById(R.id.habitPrivacyEditText);
+        privacySwtich = view.findViewById(R.id.private_switch);
 
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
@@ -125,6 +126,21 @@ public class AddHabitFragment extends DialogFragment {
                 habitDate.setText(String.format("%d-%02d-%d", year, month, day));
             }
         });
+
+        privacy = "Public";
+//        Create Privacy switch
+        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !privacy.equals("Private")) {
+                    privacy = "Private";
+                }
+                else if (!isChecked && !privacy.equals("Public")) {
+                    privacy = "Public";
+                }
+            }
+        });
+
 
 
 //        Create Frequency switches
@@ -227,7 +243,6 @@ public class AddHabitFragment extends DialogFragment {
                         name = check(name);
                         String reason = habitReason.getText().toString();
                         reason = check(reason);
-                        String privacy = habitPrivacy.getText().toString();
                         listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
                     }
                 }).create();

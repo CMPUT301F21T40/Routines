@@ -43,24 +43,24 @@ public class HabitListUnitTest {
 
     }
 
-    private Habit mockHabit(){
+    private Habit stubHabit(){
         frequency.add("Monday");
         frequency.add("Thursday");
         return new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private");
     }
     public void addHabit(){
-        habitList.addHabit(mockHabit());
+        habitList.addHabit(stubHabit());
     }
 
     @Test
     public void addHabitTest(){
-        habitList.addHabit(mockHabit());
+        habitList.addHabit(stubHabit());
         assertEquals(1, habitList.habitCount()); // count will be 1 if the add worked
     }
 
     @Test
     public void hasHabitTest(){
-        Habit newHabit = mockHabit();
+        Habit newHabit = stubHabit();
         assertFalse(habitList.containsHabit(newHabit)); // should be false
         habitList.addHabit(newHabit);
         assertTrue(habitList.containsHabit(newHabit)); // should be true
@@ -69,7 +69,7 @@ public class HabitListUnitTest {
     @Test
     public void countHabitTest(){
         int before = habitList.habitCount(); // should be 0
-        habitList.addHabit(mockHabit());
+        habitList.addHabit(stubHabit());
         int after = habitList.habitCount(); // should be 1
         assertEquals(0, before); // check if it equals 0
         assertEquals(1, after); // check if it equals 1
@@ -81,7 +81,7 @@ public class HabitListUnitTest {
         addHabit(); // add a habit to the habit list
         View view = habitList.getView(0, mockView, mockViewGroup);
 
-        // so now when we call findViewById we always get a returned mockTextView which will have no attributes? 
+        // so now when we call findViewById we always get a returned mockTextView which will have no attributes?
         TextView name = (TextView) view.findViewById(R.id.habitName);
         TextView reason = (TextView) view.findViewById(R.id.habitReason);
         TextView startingDate = (TextView) view.findViewById(R.id.habitDate);

@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,15 +32,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
-public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener {
+public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener , DeleteHabitFragment.OnFragmentInteractionListener{
     TextView nameView;
     TextView dateView;
     TextView reasonView;
@@ -53,9 +52,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     Button add;
     Button view;
     FloatingActionButton edit;
+    FloatingActionButton delete;
     FirebaseAuth myAuth;
     String userId;
     String habitId;
+    HomeFragment homeFragment;
+
 
 
     @Override
@@ -79,6 +81,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         add = findViewById(R.id.add_event_button);
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
+        delete = findViewById(R.id.delete_habit_button);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
@@ -153,12 +156,60 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             }
         });
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "DELETE_HABIT");
+            }
+        });
+
+    }
+
+    /**
+     * When the user confirms to delete the habit, this function runs.
+     * It takes the habit as a parameter then deletes it from the firebase
+     * @param habit
+     */
+    public void onDeletePressed(Habit habit) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        CollectionReference collRef = db.collection("Habits")
+                .document(userId)
+                .collection("Habits");
+        DocumentReference docRef = collRef.document(habitId);
+
+//      Delete old habit
+        docRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+        finish();
+        //updateFragment();
+    }
+
+    public void updateFragment(){
+        homeFragment = HomeFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        setContentView(R.layout.activity_home);
+        transaction.replace(R.id.container, homeFragment);
+        transaction.commit();
+
     }
 
     /**
      * When user clicks "OK" from EditFragment, this function runs.
-     * It deletes the habit that was edited, and creates a new one
-     * with the updated parameters
+     * It updates the habit that was selected with the newly provided details
      * @param habit
      * @param newHabit
      */
@@ -171,6 +222,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
         }
+        if (!(habitFrequency.isEmpty()) && habitFrequency.contains("Null")) {
+            habitFrequency.remove("Null");
+        }
 
 //      Update habit in Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -179,17 +233,32 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 .collection("Habits");
         DocumentReference docRef = collRef.document(habitId);
 
+        nameView = findViewById(R.id.view_habit_name);
+        reasonView = findViewById(R.id.view_habit_reason);
+        dateView = findViewById(R.id.view_habit_date);
+        privacyView = findViewById(R.id.view_habit_privacy);
+        frequencyView = findViewById(R.id.view_habit_frequency);
+
+        String extendedName = "Name: "+habitName;
+        nameView.setText(extendedName);
+        String extendedReason = "Reason: " + habitReason;
+        reasonView.setText(extendedReason);
+        String extendedDate = "Date: " + habitDate;
+        dateView.setText(extendedDate);
+        String extendedPrivacy = "Privacy: " + habitPrivacy;
+        privacyView.setText(extendedPrivacy);
+        String extendedFrequency = "Frequency: ";
+        for (int i = 0; i < habitFrequency.size(); i++){
+            extendedFrequency += habitFrequency.get(i) + " ";
+        }
+        frequencyView.setText(extendedFrequency);
+
         docRef.update(
                 "Habit Name", habitName,
                 "Habit Reason", habitReason,
                 "Start Date", habitDate,
                 "Frequency", habitFrequency,
                 "Privacy", habitPrivacy);
-        finish();
-        Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
-        intent.putExtra("habitId", habitId);
-        startActivity(intent);
-
 
     }
 

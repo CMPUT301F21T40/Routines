@@ -45,6 +45,10 @@
             android:name=".LoginActivity"
             android:exported="true" />
         <activity
+            android:name=".DeleteHabitFragment"
+            android:exported="true"
+            />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="true">
             <intent-filter>

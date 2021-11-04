@@ -167,15 +167,16 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * @param newHabit
      */
     public void onEditPressed(Habit habit, Habit newHabit) {
-        String habitName = newHabit.getName();
-        String habitReason = newHabit.getReason();
-        String habitDate = newHabit.getDate();
-        String habitPrivacy = newHabit.getPrivacy();
-        ArrayList<String> habitFrequency = (ArrayList<String>) newHabit.getFrequency();
+        habitName = newHabit.getName();
+        habitReason = newHabit.getReason();
+        habitDate = newHabit.getDate();
+        habitPrivacy = newHabit.getPrivacy();
+        habitFrequency = (ArrayList<String>) newHabit.getFrequency();
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
         }
-        if (!(habitFrequency.isEmpty()) && habitFrequency.contains("Null")) {
+
+        if ((habitFrequency.size() > 1) && habitFrequency.contains("Null")) {
             habitFrequency.remove("Null");
         }
 
@@ -192,6 +193,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         privacyView = findViewById(R.id.view_habit_privacy);
         frequencyView = findViewById(R.id.view_habit_frequency);
 
+//      Update the Details Screen
         String extendedName = "Name: "+habitName;
         nameView.setText(extendedName);
         String extendedReason = "Reason: " + habitReason;

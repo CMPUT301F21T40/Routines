@@ -2,16 +2,16 @@ package com.example.routines;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,17 +24,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.HashMap;
 
-
 public class SignupActivity extends AppCompatActivity {
-
     FirebaseFirestore db;
     CollectionReference collectionReference;
     CollectionReference userNames;
     FirebaseAuth myAuth;
-
 
     private String UserId;
     final String TAG = "SignUp";
@@ -62,31 +58,32 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
 
+        // hide the title bar on welcome, login, signup
+        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+        getSupportActionBar().hide(); // hide the title bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
+
+        setContentView(R.layout.activity_signup);
         myAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Users");
         userNames = db.collection("User Names");
-
         initializeView();
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 inputName = signUser.getText().toString();
                 inputEmail = signEmail.getText().toString();
                 inputPassword = signPassword.getText().toString();
                 inputConfirm = signConfirm.getText().toString();
-
 
                 boolean isValid = isValidEmail(signEmail.getText().toString());
                 if(!(isValid)){
                     signEmail.setText("");
                     Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
                 }
-
                 if(inputName.length()==0 || inputEmail.length()==0|| inputPassword.length()==0|| inputConfirm.length()==0){
                     Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT).show();
                 }else if(!(inputPassword.equals(inputConfirm))) {
@@ -103,20 +100,16 @@ public class SignupActivity extends AppCompatActivity {
                     }else{
                         signUser.setText("");
                     }
-
                 }
 
             }
         });
-
         signUpExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
-
     }
 
     public void initializeView(){
@@ -134,7 +127,6 @@ public class SignupActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.button_signup_page);
         signUpExit = findViewById(R.id.floatingButton_Signup);
     }
-
 
     // Resource: https://www.javatpoint.com/java-email-validation
     public static boolean isValidEmail(String inputEmail){
@@ -171,8 +163,6 @@ public class SignupActivity extends AppCompatActivity {
         }
 
     }
-
-
 
     public void buildFile(String UserEmail, String UserPassword){
         myAuth.createUserWithEmailAndPassword(UserEmail, UserPassword)
@@ -222,13 +212,8 @@ public class SignupActivity extends AppCompatActivity {
                             signConfirm.setText("");
                             signPassword.setText("");
                             signEmail.setText("");
-
                         }
                     }
                 });
-
-
     }
-
-
 }

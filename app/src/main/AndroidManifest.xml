@@ -18,7 +18,6 @@
         <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
-
             android:theme="@android:style/Theme.Black.NoTitleBar"
             tools:ignore="Instantiatable,MissingClass">
             <intent-filter>
@@ -26,7 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <activity
             android:name=".SearchProfileActivity"
@@ -44,12 +42,15 @@
             android:exported="true" />
         <activity
             android:name=".ProfileActivity"
+            android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".SearchActivity"
+            android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".HomeActivity"
+            android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".SignupActivity"

@@ -88,7 +88,7 @@
         android:layout_marginStart="52dp"
         android:layout_marginLeft="52dp"
         android:layout_marginTop="92dp"
-        android:text="Signup tp"
+        android:text="Signup to"
         android:textSize="40sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

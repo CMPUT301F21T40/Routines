@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/project_white"
     android:layout_height="match_parent" >
 
 
@@ -9,6 +10,7 @@
     android:orientation="vertical"
     android:paddingTop="15dp"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent">
 
 
@@ -16,6 +18,7 @@
         android:id="@+id/date_picker"
         android:layout_width="match_parent"
         android:layout_height="82dp"
+        android:background="@color/project_white"
         android:calendarViewShown="false"
         android:datePickerMode="spinner">
 
@@ -41,6 +44,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@color/project_white"
             android:id="@+id/habitDateEditText"
             android:ems="10"
             android:hint="Press Confirm Button To Select Date"
@@ -56,6 +60,7 @@
         <EditText
             android:id="@+id/habitNameEditText"
             android:layout_width="match_parent"
+            android:background="@color/project_white"
             android:layout_height="50dp"
             android:maxLength="20"
             android:ems="10"
@@ -71,6 +76,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@color/project_white"
             android:id="@+id/habitReasonEditText"
             android:maxLength="30"
             android:ems="10"
@@ -81,9 +87,10 @@
 
     <Switch
         android:id="@+id/private_switch"
-        android:background="#E4E4E4"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/project_white"
         android:text="Private Habit"
         android:textSize="17dp"
         android:textColor="#5C5C5C"
@@ -95,7 +102,7 @@
 
 
     <TextView
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="19dp"
         android:text="______________________________________________________________"
@@ -106,7 +113,7 @@
 
     <Switch
         android:id="@+id/mon_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:text="Monday"
@@ -120,7 +127,7 @@
 
     <Switch
         android:id="@+id/tue_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Tuesday"
@@ -131,7 +138,7 @@
 
     <Switch
         android:id="@+id/wed_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Wednesday"
@@ -143,7 +150,7 @@
 
     <Switch
         android:id="@+id/thur_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Thursday"
@@ -155,7 +162,7 @@
 
     <Switch
         android:id="@+id/fri_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Friday"
@@ -167,7 +174,7 @@
 
     <Switch
         android:id="@+id/sat_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Saturday"
@@ -179,7 +186,7 @@
 
     <Switch
         android:id="@+id/sun_switch"
-        android:background="#E4E4E4"
+        android:background="@color/project_white"
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:text="Sunday"

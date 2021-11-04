@@ -14,6 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Routines">
 
+        <!-- Splash screen -->
+        <activity
+            android:name=".SplashScreen"
+            android:label="@string/app_name"
+
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            tools:ignore="Instantiatable,MissingClass">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
 
         <activity
             android:name=".SearchProfileActivity"
@@ -47,10 +60,6 @@
         <activity
             android:name=".WelcomeActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

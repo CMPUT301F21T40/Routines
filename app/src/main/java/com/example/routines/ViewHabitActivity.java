@@ -2,6 +2,7 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,7 +58,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FirebaseAuth myAuth;
     String userId;
     String habitId;
+
     HomeFragment homeFragment;
+
+
+    ViewHabitActivity viewActivity;
+    Object ViewHabitActivity;
 
 
 
@@ -67,7 +73,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         setContentView(R.layout.activity_view_habit);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -219,15 +225,19 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * @param newHabit
      */
     public void onEditPressed(Habit habit, Habit newHabit) {
-        String habitName = newHabit.getName();
-        String habitReason = newHabit.getReason();
-        String habitDate = newHabit.getDate();
-        String habitPrivacy = newHabit.getPrivacy();
-        ArrayList<String> habitFrequency = (ArrayList<String>) newHabit.getFrequency();
+        habitName = newHabit.getName();
+        habitReason = newHabit.getReason();
+        habitDate = newHabit.getDate();
+        habitPrivacy = newHabit.getPrivacy();
+        habitFrequency = (ArrayList<String>) newHabit.getFrequency();
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
         }
         if (!(habitFrequency.isEmpty()) && habitFrequency.contains("Null")) {
+            habitFrequency.remove("Null");
+        }
+
+        if ((habitFrequency.size() > 1) && habitFrequency.contains("Null")) {
             habitFrequency.remove("Null");
         }
 
@@ -243,6 +253,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         dateView = findViewById(R.id.view_habit_date);
         privacyView = findViewById(R.id.view_habit_privacy);
         frequencyView = findViewById(R.id.view_habit_frequency);
+
+
+
+//      Update the Details Screen
 
         String extendedName = "Name: "+habitName;
         nameView.setText(extendedName);
@@ -265,7 +279,14 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 "Frequency", habitFrequency,
                 "Privacy", habitPrivacy);
 
+        Intent intent = getIntent();
+        intent.putExtra("Habit Name", habitName);
+        intent.putExtra("Start Date", habitDate);
+        intent.putExtra("Habit Reason", habitReason);
+        intent.putExtra("Frequency", habitFrequency);
+        intent.putExtra("Privacy", habitPrivacy);
     }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

@@ -72,7 +72,6 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         fragmentLayout = findViewById(R.id.container);
 
         //        Get user ID

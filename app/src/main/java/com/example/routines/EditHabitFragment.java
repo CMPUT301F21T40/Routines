@@ -110,8 +110,10 @@ public class EditHabitFragment extends DialogFragment {
         habitReason = view.findViewById(R.id.habitReasonEditText);
         habitName.setText(currentName);
         habitDate.setText(currentDate);
+        if (currentReason == "Null") {
+            currentReason = "";
+        }
         habitReason.setText(currentReason);
-
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
 
@@ -160,7 +162,6 @@ public class EditHabitFragment extends DialogFragment {
         day = c.get(Calendar.DAY_OF_MONTH);
         month = c.get(Calendar.MONTH) + 1;
         year = c.get(Calendar.YEAR);
-        habitDate.setText(String.format("%d-%02d-%d", year, month, day));
 
 //        Create Date picker
         confirmDateButton.setOnClickListener(new View.OnClickListener() {
@@ -302,7 +303,7 @@ public class EditHabitFragment extends DialogFragment {
      * @return
      */
     public String check(String str) {
-        if (str.length() == 0) {
+        if (str.length() == 0){
             str = "Null";
         }
         return str;

@@ -14,12 +14,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
+/**
+ * This activity display the details of a user
+ * Outstanding issues: allows user to follow all the habit
+ *
+ */
 public class SearchProfileActivity extends AppCompatActivity {
+    //initialize the layout
     ListView habitList;
     TextView userName;
     Button followButton;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,19 +32,22 @@ public class SearchProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_profile);
 
-
+        //enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         habitList= findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
 
+        //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
 
+        //get user document by the given user id
         DocumentReference userRef = db
                 .collection("Users")
                 .document(id);
 
+        //fetch field from the document and set text to text view
         userRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

@@ -27,17 +27,23 @@ import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
+/**
+ * This activity allow user to search other users by enter the username
+ * Outstanding issues: search users bu user name
+ *
+ */
 public class SearchActivity extends AppCompatActivity {
+    //initialize the layout
     BottomNavigationView bottomNavigator;
     EditText inputUserName;
     ListView userList;
     ArrayAdapter<String> userArrayAdapter;
-    ArrayList<String> userArrayList;
-    ArrayList<String> userIdArrayList;
+
+    ArrayList<String> userArrayList; //array list stores username
+    ArrayList<String> userIdArrayList;////array list stores userid
     Button searchButton;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();//connect firebase
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         switchActivity();
 
+        //initial array list
         userArrayList = new ArrayList<>();
         userIdArrayList = new ArrayList<>();
 
@@ -52,9 +59,16 @@ public class SearchActivity extends AppCompatActivity {
         inputUserName = findViewById(R.id.search_text);
         userList = findViewById(R.id.search_list);
         searchButton = findViewById(R.id.search_user_button);
+
+        //set a simple array list adapter
         userArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, userArrayList);
         userList.setAdapter(userArrayAdapter);
 
+        /**
+         * after click search button, get text from edittext and search
+         * all matching result from user collection in firebase
+         * put all results in arraylist
+         */
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +101,7 @@ public class SearchActivity extends AppCompatActivity {
         });
 
 
+        //view the details of a user after click any user from user list
         userList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -102,8 +117,8 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    // The bottom Navigation bar allow user switch activity
     public void switchActivity(){
-        // The bottom Navigation bar
         bottomNavigator = findViewById(R.id.bottom_navigation);
         bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

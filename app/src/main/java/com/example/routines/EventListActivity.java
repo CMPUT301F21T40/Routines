@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,6 +38,7 @@ public class EventListActivity extends AppCompatActivity {
     ListView eventList;
     ArrayAdapter<Event> eventArrayAdapter;
     ArrayList<Event> eventArrayList;
+    ArrayList<String> eventIdList;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -47,9 +49,10 @@ public class EventListActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Log.d("tag","event list displayed");
+
         eventList = findViewById(R.id.event_list_view);
         eventArrayList = new ArrayList<>();
+        eventIdList = new ArrayList<>();
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
@@ -71,9 +74,12 @@ public class EventListActivity extends AppCompatActivity {
                                 Log.d("Success", document.getId() + " => " + document.getData());
                                 String name = (String) document.getData().get("name");
                                 String date = (String) document.getData().get("date");
-                                String habitID = (String) document.getData().get("habitId");
+                                String habitId = (String) document.getData().get("habitId");
                                 String description = (String) document.getData().get("description");
-                                eventArrayList.add(new Event(name, description, habitID, date));
+                                String eventId = (String) document.getId();
+
+                                eventArrayList.add(new Event(name, description, habitId, date));
+                                eventIdList.add(eventId);
                                 eventArrayAdapter.notifyDataSetChanged();
                             }
                         } else {
@@ -81,6 +87,16 @@ public class EventListActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
+                String eventId = eventIdList.get(i);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
+            }
+        });
 
 
     }

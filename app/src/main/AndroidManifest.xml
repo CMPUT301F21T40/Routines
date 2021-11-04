@@ -12,12 +12,12 @@
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:label="@string/app_name"
         android:theme="@style/Theme.Routines">
 
         <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
-            android:label="@string/app_name"
 
             android:theme="@android:style/Theme.Black.NoTitleBar"
             tools:ignore="Instantiatable,MissingClass">
@@ -53,9 +53,11 @@
             android:exported="true" />
         <activity
             android:name=".SignupActivity"
+            android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
+            android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".WelcomeActivity"

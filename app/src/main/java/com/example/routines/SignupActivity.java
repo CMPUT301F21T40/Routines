@@ -120,7 +120,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     public void initializeView(){
-        signUpText = findViewById(R.id.text_signup_page);
+        //signUpText = findViewById(R.id.text_signup_page);
         signUserText = findViewById(R.id.text_user);
         signEmailText = findViewById(R.id.text_Email_signup);
         signPasswordText = findViewById(R.id.text_password_signup);

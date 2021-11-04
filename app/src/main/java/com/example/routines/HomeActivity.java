@@ -89,11 +89,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
 
         switchActivity();
         switchRadioButton();
-        homeFragment = HomeFragment.newInstance();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container, homeFragment);
-        transaction.commit();
+        updateFragment();
 
         // when the + at the bottom of the screen is pressed it will call AddHabitFragment
         final FloatingActionButton addHabitButton = findViewById(R.id.addHabitButton);
@@ -143,7 +139,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
                 Log.w("Update Failed", "Error on writing documentation on Firebase");
             }
         });
-
+        updateFragment();
     }
 
 
@@ -231,6 +227,14 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         }
     }
 
+    public void updateFragment(){
+        homeFragment = HomeFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container, homeFragment);
+        transaction.commit();
+
+    }
 
 
 

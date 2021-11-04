@@ -61,7 +61,7 @@ public class EditHabitTest {
     }
 
     @Test
-    public void changeHabitTest(){
+    public void editHabit(){
         login();
         // have to add a habit every time to make sure there is one to edit, no need for this till deleteHabit is implemented
         //addHabit();

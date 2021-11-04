@@ -9,6 +9,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -56,5 +57,13 @@ public class LogoutTest {
         // after logging out we should be back at welcome activity
         solo.assertCurrentActivity("Activity needs to be welcome activity", WelcomeActivity.class);
         solo.sleep(500);
+    }
+    /**
+     * Closes the activity after every test
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
     }
 }

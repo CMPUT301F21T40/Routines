@@ -1,6 +1,7 @@
 package com.example.routines;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -13,7 +14,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class todaySwitchTest {
+/**
+ * INTENT TESTING FOR US
+ */
+public class SearchTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -42,15 +46,21 @@ public class todaySwitchTest {
     }
 
     @Test
-    public void todaySwitchTest(){
+    public void searchTest(){
         login(); // login
         solo.sleep(500);
-        // test the switch at the top of the screen
-        solo.clickOnButton("Today");
-        solo.clickOnButton("All Habits");
-        solo.clickOnButton("Today");
-        solo.clickOnButton("All Habits");
+        // get the profile button from the bottom menu
+        View bottomBar= solo.getCurrentActivity().findViewById(R.id.bottom_navigation); // get the button inside the frame layout
+        View search = bottomBar.findViewById(R.id.search);
+        solo.clickOnView(search);
         solo.sleep(500);
+        solo.assertCurrentActivity("Activity needs to be search activity", SearchActivity.class);
+        solo.enterText((EditText) solo.getView(R.id.search_text), "testUserName");
+        solo.clickOnButton("SEARCH");
+        solo.sleep(1000);
+        solo.clickInList(0);
+        solo.assertCurrentActivity("Activity needs to be SearchProfileActivity", SearchProfileActivity.class);
+        solo.sleep(1000);
     }
     /**
      * Closes the activity after every test
@@ -60,5 +70,4 @@ public class todaySwitchTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
-
 }

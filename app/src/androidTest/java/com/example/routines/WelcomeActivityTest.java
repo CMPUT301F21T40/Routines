@@ -7,6 +7,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,5 +40,13 @@ public class WelcomeActivityTest {
         // testing when you start the app it is opens to the welcome page like intended
         solo.assertCurrentActivity("Wrong activity", WelcomeActivity.class);
         solo.sleep(1000);
+    }
+    /**
+     * Closes the activity after every test
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
     }
 }

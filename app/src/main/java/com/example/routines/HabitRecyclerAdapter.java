@@ -1,21 +1,40 @@
 package com.example.routines;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdapter.MyViewHolder>
 implements ReorderHabits.RecyclerTouchHelper {
     private ArrayList<Habit> habits;
     private OnHabitClickListener onHabitClickListener;
+    int start;
+    int end;
+    int loopNum;
 
     public HabitRecyclerAdapter(ArrayList<Habit> habits, OnHabitClickListener onHabitClickListener) {
         this.habits = habits;
@@ -34,7 +53,6 @@ implements ReorderHabits.RecyclerTouchHelper {
             habitDateText = view.findViewById(R.id.habitDate);
             this.onHabitClickListener = onHabitClickListener;
             view.setOnClickListener(this);
-
         }
 
         @Override
@@ -74,13 +92,19 @@ implements ReorderHabits.RecyclerTouchHelper {
         if(from < to){
             for(int i = from; i < to; i++){
                 Collections.swap(habits, i, i+1);
+
             }
         }else{
             for(int i = from; i > to; i--){
                 Collections.swap(habits, i, i-1);
+
             }
         }
         notifyItemMoved(from, to);
+        updateDocIndex();
+        Log.d("Reorder Begin", Integer.toString(from));
+        Log.d("Reorder End", Integer.toString(to));
+
     }
 
     @Override
@@ -91,6 +115,39 @@ implements ReorderHabits.RecyclerTouchHelper {
     @Override
     public void onRowClear(MyViewHolder myViewHolder) {
         myViewHolder.itemView.setBackgroundColor(Color.WHITE);
+    }
+
+    public void updateDocIndex() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        CollectionReference collectionReference = FirebaseFirestore.getInstance()
+                .collection("Habits")
+                .document(userId)
+                .collection("Habits");
+        int length = habits.size();
+        int i;
+        for (i = 0; i < length; i++) {
+            String habitName = habits.get(i).getName();
+            //Map<String, Object> data = new HashMap<>();
+            //data.put("Index", i);
+            int finalI = i;
+            collectionReference
+                    .whereEqualTo("Habit Name", habitName)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()){
+                                for (QueryDocumentSnapshot document : task.getResult()){
+                                    collectionReference.document(document.getId())
+                                            .update("Index", finalI);
+                                }
+                            }
+                        }
+                    });
+
+
+        }
+        Log.d("Using", "Function index");
 
     }
 }

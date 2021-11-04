@@ -40,7 +40,6 @@ public class AddHabitTest {
     public void login(){
         solo.assertCurrentActivity("Wrong activity, needs to be Welcome", WelcomeActivity.class);
         solo.clickOnButton("LOGIN");
-
         solo.assertCurrentActivity("Activity needs to be loginActivity", LoginActivity.class);
         solo.enterText((EditText) solo.getView(R.id.editText_email), "testEmail@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.editText_password_login), "testPassword123456");
@@ -75,6 +74,17 @@ public class AddHabitTest {
         solo.sleep(500);
     }
 
+    @Test
+    public void addHabitFragmentBackButton(){ // test canceling adding a habit
+        login();
+        // click floating action button
+        View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.container); // get the frame layout
+        View fab= floatingButtonView.findViewById(R.id.addHabitButton); // get the button inside the frame layout
+        solo.clickOnView(fab);  // press the button
+        solo.sleep(500);
+        solo.clickOnButton("Cancel");
+        solo.sleep(500);
+    }
 
     /**
      * Closes the activity after every test

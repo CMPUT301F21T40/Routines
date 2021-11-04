@@ -14,8 +14,11 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * US
- * Testing logging in to a unique ID
+ * INTENT TESTING US
+ * THIS WILL USE A TEST SPECIFIC USER DEFINED AS
+ * username: testUserName
+ * email: testEmail@gmail.com
+ * password: testPassword123456
  */
 public class LoginTest {
     private Solo solo;
@@ -41,8 +44,8 @@ public class LoginTest {
         solo.clickOnButton("LOGIN");
         solo.sleep(500);
         solo.assertCurrentActivity("Activity needs to be loginActivity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editText_email), "a@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "123456");
+        solo.enterText((EditText) solo.getView(R.id.editText_email), "testEmail@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "testPassword123456");
         solo.sleep(500);
         solo.clickOnButton("LOGIN");
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);

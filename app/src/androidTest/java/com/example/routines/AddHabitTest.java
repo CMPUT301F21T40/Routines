@@ -7,6 +7,8 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -15,8 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * US
- * Testing adding a habit
+ * INTENT TESTING US
  */
 public class AddHabitTest {
     private Solo solo;
@@ -39,14 +40,12 @@ public class AddHabitTest {
     public void login(){
         solo.assertCurrentActivity("Wrong activity, needs to be Welcome", WelcomeActivity.class);
         solo.clickOnButton("LOGIN");
-        solo.sleep(500);
+
         solo.assertCurrentActivity("Activity needs to be loginActivity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editText_email), "a@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "123456");
-        solo.sleep(500);
+        solo.enterText((EditText) solo.getView(R.id.editText_email), "testEmail@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "testPassword123456");
         solo.clickOnButton("LOGIN");
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
-        solo.sleep(500);
     }
 
     @Test
@@ -75,6 +74,7 @@ public class AddHabitTest {
         solo.clickOnButton("OK");
         solo.sleep(500);
     }
+
 
     /**
      * Closes the activity after every test

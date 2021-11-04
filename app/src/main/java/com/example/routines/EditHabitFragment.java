@@ -102,6 +102,9 @@ public class EditHabitFragment extends DialogFragment {
         currentName = originalHabit.getName();
         currentDate = originalHabit.getDate();
         currentReason = originalHabit.getReason();
+        if (currentReason == "Null") {
+            currentReason = "";
+        }
         currentPrivacy = originalHabit.getPrivacy();
 
 //      Set the attributes to their actual values

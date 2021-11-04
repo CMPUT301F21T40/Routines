@@ -157,8 +157,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
     /**
      * When user clicks "OK" from EditFragment, this function runs.
-     * It deletes the habit that was edited, and creates a new one
-     * with the updated parameters
+     * It updates the habit that was selected with the newly provided details
      * @param habit
      * @param newHabit
      */
@@ -171,6 +170,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
         }
+        if (!(habitFrequency.isEmpty()) && habitFrequency.contains("Null")) {
+            habitFrequency.remove("Null");
+        }
 
 //      Update habit in Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -179,17 +181,32 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 .collection("Habits");
         DocumentReference docRef = collRef.document(habitId);
 
+        nameView = findViewById(R.id.view_habit_name);
+        reasonView = findViewById(R.id.view_habit_reason);
+        dateView = findViewById(R.id.view_habit_date);
+        privacyView = findViewById(R.id.view_habit_privacy);
+        frequencyView = findViewById(R.id.view_habit_frequency);
+
+        String extendedName = "Name: "+habitName;
+        nameView.setText(extendedName);
+        String extendedReason = "Reason: " + habitReason;
+        reasonView.setText(extendedReason);
+        String extendedDate = "Date: " + habitDate;
+        dateView.setText(extendedDate);
+        String extendedPrivacy = "Privacy: " + habitPrivacy;
+        privacyView.setText(extendedPrivacy);
+        String extendedFrequency = "Frequency: ";
+        for (int i = 0; i < habitFrequency.size(); i++){
+            extendedFrequency += habitFrequency.get(i) + " ";
+        }
+        frequencyView.setText(extendedFrequency);
+
         docRef.update(
                 "Habit Name", habitName,
                 "Habit Reason", habitReason,
                 "Start Date", habitDate,
                 "Frequency", habitFrequency,
                 "Privacy", habitPrivacy);
-        finish();
-        Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
-        intent.putExtra("habitId", habitId);
-        startActivity(intent);
-
 
     }
 

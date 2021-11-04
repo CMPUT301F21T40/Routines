@@ -102,9 +102,7 @@ public class EditHabitFragment extends DialogFragment {
         currentName = originalHabit.getName();
         currentDate = originalHabit.getDate();
         currentReason = originalHabit.getReason();
-        if (currentReason == "Null") {
-            currentReason = "";
-        }
+
         currentPrivacy = originalHabit.getPrivacy();
 
 //      Set the attributes to their actual values
@@ -113,8 +111,11 @@ public class EditHabitFragment extends DialogFragment {
         habitReason = view.findViewById(R.id.habitReasonEditText);
         habitName.setText(currentName);
         habitDate.setText(currentDate);
-        habitReason.setText(currentReason);
-
+        if (currentReason != "Null") {
+            habitReason.setText(currentReason);
+        } else {
+            habitReason.setText(" ");
+        }
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
 

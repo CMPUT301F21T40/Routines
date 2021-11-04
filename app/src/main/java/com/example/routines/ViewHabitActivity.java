@@ -2,6 +2,7 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,6 +59,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FirebaseAuth myAuth;
     String userId;
     String habitId;
+    ViewHabitActivity viewActivity;
+    Object ViewHabitActivity;
 
 
     @Override
@@ -208,7 +213,14 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 "Frequency", habitFrequency,
                 "Privacy", habitPrivacy);
 
+        Intent intent = getIntent();
+        intent.putExtra("Habit Name", habitName);
+        intent.putExtra("Start Date", habitDate);
+        intent.putExtra("Habit Reason", habitReason);
+        intent.putExtra("Frequency", habitFrequency);
+        intent.putExtra("Privacy", habitPrivacy);
     }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

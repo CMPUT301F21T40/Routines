@@ -141,6 +141,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         ItemTouchHelper.Callback callback = new ReorderHabits(habitAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(habitView);
+        habitAdapter.updateDocIndex();
     }
 
 

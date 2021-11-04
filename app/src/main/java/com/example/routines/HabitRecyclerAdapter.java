@@ -20,6 +20,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -101,7 +102,7 @@ implements ReorderHabits.RecyclerTouchHelper {
             }
         }
         notifyItemMoved(from, to);
-        updateDocIndex();
+
         Log.d("Reorder Begin", Integer.toString(from));
         Log.d("Reorder End", Integer.toString(to));
 
@@ -147,7 +148,8 @@ implements ReorderHabits.RecyclerTouchHelper {
 
 
         }
-        Log.d("Using", "Function index");
+        collectionReference.orderBy("Index", Query.Direction.ASCENDING);
+
 
     }
 }

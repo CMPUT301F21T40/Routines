@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,6 +93,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         habitAdapter = new HabitRecyclerAdapter(habitDataList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         habitView.setLayoutManager(layoutManager);
+        initHabitOrder();
         habitView.setAdapter(habitAdapter);
 
 
@@ -132,5 +134,12 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         String habitId = habitIdList.get(position);
         intent.putExtra("habitId", habitId);
         startActivity(intent);
+    }
+
+    public void initHabitOrder(){
+        ItemTouchHelper.Callback callback = new ReorderHabits(habitAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(habitView);
+
     }
 }

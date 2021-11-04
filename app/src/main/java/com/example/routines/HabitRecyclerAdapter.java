@@ -1,5 +1,6 @@
 package com.example.routines;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdapter.MyViewHolder> {
+public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdapter.MyViewHolder>
+implements ReorderHabits.RecyclerTouchHelper {
     private ArrayList<Habit> habits;
     private OnHabitClickListener onHabitClickListener;
 
@@ -64,5 +67,30 @@ public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdap
 
     public interface OnHabitClickListener {
         void onItemClick(int position);
+    }
+
+    @Override
+    public void onRowMoved(int from, int to) {
+        if(from < to){
+            for(int i = from; i < to; i++){
+                Collections.swap(habits, i, i+1);
+            }
+        }else{
+            for(int i = from; i > to; i--){
+                Collections.swap(habits, i, i-1);
+            }
+        }
+        notifyItemMoved(from, to);
+    }
+
+    @Override
+    public void onRowSelected(MyViewHolder myViewHolder) {
+        myViewHolder.itemView.setBackgroundColor(Color.GRAY);
+    }
+
+    @Override
+    public void onRowClear(MyViewHolder myViewHolder) {
+        myViewHolder.itemView.setBackgroundColor(Color.WHITE);
+
     }
 }

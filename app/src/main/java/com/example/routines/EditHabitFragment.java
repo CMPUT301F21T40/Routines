@@ -48,7 +48,7 @@ public class EditHabitFragment extends DialogFragment {
     private int month;
     private int year;
 
-    private Switch privacySwtich;
+    private Switch privacySwitch;
     private Switch monSwitch;
     private Switch tueSwitch;
     private Switch wedSwitch;
@@ -115,10 +115,10 @@ public class EditHabitFragment extends DialogFragment {
         datePicker = view.findViewById(R.id.date_picker);
         confirmDateButton = view.findViewById(R.id.confirm_button);
 
-//        Set Privacy switch to its acutal value
-        privacySwtich = view.findViewById(R.id.private_switch);
-        if (currentPrivacy == "Private") {
-            privacySwtich.setChecked(true);
+//        Set Privacy switch to its actual value
+        privacySwitch = view.findViewById(R.id.private_switch);
+        if (currentPrivacy.contentEquals("Private")) {
+            privacySwitch.setChecked(true);
         }
 
 //      Set the Frequency details to their actual values
@@ -176,7 +176,7 @@ public class EditHabitFragment extends DialogFragment {
 
 
 //        Create Privacy switch
-        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        privacySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked && !currentPrivacy.equals("Private")) {

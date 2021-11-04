@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.validateMockitoUsage;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.Context;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.testng.reporters.jq.TestNgXmlPanel;
 
 
@@ -76,29 +79,16 @@ public class HabitListUnitTest {
     }
     @Test
     public void getViewTest(){
+        // whenever view is called just return a Textview (mock)
         when(mockView.findViewById(anyInt())).thenReturn(mockTextView);
-
-        addHabit(); // add a habit to the habit list
-        View view = habitList.getView(0, mockView, mockViewGroup);
-
-        // so now when we call findViewById we always get a returned mockTextView which will have no attributes?
-        TextView name = (TextView) view.findViewById(R.id.habitName);
-        TextView reason = (TextView) view.findViewById(R.id.habitReason);
-        TextView startingDate = (TextView) view.findViewById(R.id.habitDate);
-
-        // don't get how to compare the 2, a mock cant have a value, is always null pointer
-
-        // assertEquals("Soccer", name.getText().toString()); // cannot actually compare a mock to a string
-
-        // we can check IF at least something was added to the list using assert nulls?
-        assertNotNull(name, "Name TextView is null ");
-        assertNotNull(reason, "Reason TextView is null ");
-        assertNotNull(startingDate, "Date TextView is null ");
-
-        // can check if they are mockTextViews
-        assertThat(name, is(mockTextView));
-        assertThat(reason, is(mockTextView));
-        assertThat(startingDate, is(mockTextView));
+        // add a habit to the list
+        habitList.addHabit(stubHabit());
+        // get the view of the added habit using the mockView and mockViewGroup
+        habitList.getView(0,mockView,mockViewGroup);
+        // check if we can set the textView with the habit data
+        verify(mockTextView, Mockito.times(1)).setText("Soccer");
+        verify(mockTextView, Mockito.times(1)).setText("2020-01-01");
+        verify(mockTextView, Mockito.times(1)).setText("It is fun");
     }
 
 

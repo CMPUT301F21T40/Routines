@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_pink"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RadioGroup
@@ -99,10 +100,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
-        app:itemBackground="@color/white"
-        app:itemIconTint="@color/yellow"
-        app:itemTextColor="@color/yellow"
+        android:background="@color/project_lightPink"
+        app:itemBackground="@color/project_purple"
+        app:itemIconTint="@color/project_pink"
+        app:itemTextColor="@color/project_pink"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

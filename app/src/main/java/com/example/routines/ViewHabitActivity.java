@@ -69,7 +69,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         setContentView(R.layout.activity_view_habit);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();

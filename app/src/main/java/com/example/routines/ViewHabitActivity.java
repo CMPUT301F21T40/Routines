@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -194,7 +195,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                     }
                 });
         finish();
+        Intent intent = getIntent();
+        intent.setClass(ViewHabitActivity.this, HomeActivity.class);
+        startActivity(intent);
         //updateFragment();
+        ViewGroup vg = findViewById(R.id.container);
     }
 
     public void updateFragment(){

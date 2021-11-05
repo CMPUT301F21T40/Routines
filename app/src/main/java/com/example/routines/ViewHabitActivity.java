@@ -40,6 +40,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener , DeleteHabitFragment.OnFragmentInteractionListener{
     TextView nameView;
@@ -62,8 +63,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String habitId;
 
     HomeFragment homeFragment;
-
-
     ViewHabitActivity viewActivity;
     Object ViewHabitActivity;
 
@@ -91,6 +90,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
@@ -314,19 +314,33 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
     public void deleteEvent(){
         CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Events");
-        collectionReference.whereEqualTo("HabitId", habitId)
+        collectionReference.whereEqualTo("habitId", habitId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
-                                collectionReference.document(document.getId())
-                                        .delete();
+                                collectionReference
+                                        .document(document.getId())
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d("Delete Events", "Succeed");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w("Delete Events", "Failure");
+                                            }
+                                        });
                             }
                         }
                     }
                 });
+
     }
 
 }

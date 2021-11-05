@@ -117,6 +117,9 @@ public class AddHabitFragment extends DialogFragment {
 
 //        Create Frequency switches
         createFrequencySwitch();
+        
+//        Create Privacy Switch
+        createPrivacySwitch();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -150,6 +153,27 @@ public class AddHabitFragment extends DialogFragment {
             str = "Null";
         }
         return str;
+    }
+    
+    /**
+     * create privacy switch
+     * @return void
+     * @author yyang13
+     */
+    public void createPrivacySwitch() {
+        privacy = "Public";
+//        Create Privacy switch
+        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !privacy.equals("Private")) {
+                    privacy = "Private";
+                }
+                else if (!isChecked && !privacy.equals("Public")) {
+                    privacy = "Public";
+                }
+            }
+        });
     }
 
     /**

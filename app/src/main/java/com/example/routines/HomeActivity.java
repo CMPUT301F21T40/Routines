@@ -44,7 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Main Activity
+ * This is mainly a container for HomeFragment and TodayFilterFragment
+ * The radio button will help to switch between two fragments
  */
 public class HomeActivity extends AppCompatActivity  implements AddHabitFragment.OnFragmentInteractionListener{
 
@@ -145,6 +146,10 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     }
 
 
+    /**
+     * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity
+     * @author Shanshan Wei/swei3
+     */
     public void switchActivity(){
         // The bottom Navigation bar
         bottomNavigator = findViewById(R.id.bottom_navigation);
@@ -173,6 +178,10 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         });
     }
 
+    /**
+     * This will help to switch between HomeFragment and TodayFilterFragment
+     * @author Shanshan Wei/swei3
+     */
     public void switchRadioButton(){
         switchHabits = findViewById(R.id.switch_habits);
         switchHabits.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +199,12 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         });
     }
 
+    /**
+     * If the user click on "Habits" of radio button, it will ask fragment manager to attach the HomeFragment.
+     * If the user click on "Today" of radio button, it will ask fragment manager to attach the TodayFilterFragment.
+     * @author Shanshan Wei/swei3
+     * @param view
+     */
     public void onClickButton(View view){
         boolean isSelected = ((AppCompatRadioButton)view).isChecked();
         switch(view.getId()){

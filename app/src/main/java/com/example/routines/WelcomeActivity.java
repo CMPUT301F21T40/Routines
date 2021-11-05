@@ -11,6 +11,12 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * This activity allows the user to decide whether he/she wants to sign up or log in.
+ * Then the button will direct the user to SignupActivity/LoginActivity
+ * @author Shanshan Wei/swei3
+ */
+
 public class WelcomeActivity extends AppCompatActivity {
 
     private TextView appName;
@@ -20,7 +26,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private Button loginButton;
     private Button signupButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,10 @@ public class WelcomeActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.button_login);
         signupButton = findViewById(R.id.button_signup);
 
+        /**
+         * This sets the button listener and it will direct the user to LoginActivity if the user click on it
+         */
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,6 +59,9 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * This sets the button listener and it will direct the user to SignupActivity if the user click on it
+         */
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

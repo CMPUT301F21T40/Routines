@@ -41,6 +41,11 @@ import com.google.firebase.storage.UploadTask;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+/**
+ * This activity will allows the user to see their profile information, upload a photo for the profile
+ * It also allows user to exit the app and direct the user back to WelcomeActivity
+ * @author Shanshan Wei/swei3
+ */
 public class ProfileActivity extends AppCompatActivity {
 
     final String TAG = "Profile";
@@ -89,7 +94,9 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     }
-
+    /**
+     * This will initialize views for all components like textview, buttons
+     */
     public void initializeData(){
         emailText = findViewById(R.id.text_email_lable_profile);
         nameText = findViewById(R.id.text_user_lable_profile);
@@ -106,6 +113,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * This sets the image clickable. It will open the photo gallery
+         */
         userPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,8 +125,11 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity
+     * @author Shanshan Wei
+     */
     public void switchActivity(){
-        // The bottom Navigation bar
         bottomNavigator = findViewById(R.id.bottom_navigation);
         bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -143,6 +156,10 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This reads the user's profile photo from Firebase Storage and shows on imageview
+     * @author Shanshan Wei/swei3
+     */
     public void showImage(){
         StorageReference imageRef = storageRef.child(userId);
         imageRef.getBytes(1024*1024)
@@ -155,6 +172,10 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This will reads the user's profile information and shows in textview
+     * @author Shanshan Wei
+     */
     public void showInformation(){
         FirebaseUser User = myAuth.getCurrentUser();
         if(User != null){
@@ -184,6 +205,10 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This allows the user to pick a photo from the photo gallery
+     * @author Shanshan Wei/swie3
+     */
     public void photoPicker(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
@@ -208,8 +233,11 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This will upload the user's picked photo to Storage on firebase
+     * @author Shanshan Wei/swei3
+     */
     public void uploadImage(){
-
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading");
         pd.show();

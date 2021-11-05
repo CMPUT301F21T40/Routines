@@ -26,6 +26,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
+/**
+ * This activity allows the users to sign up the app with an email and a password.
+ * It will checks whether the user name is unique, the email is in correct format
+ * and whether the confirmed password is same to the input password
+ * If all the conditions satisfied, firebase auth will create an account for this user with email and password
+ * Then, it will upload the user's information to a firebase document
+ * @author Shanshan Wei/swei3
+ */
+
 public class SignupActivity extends AppCompatActivity {
     FirebaseFirestore db;
     CollectionReference collectionReference;
@@ -71,6 +80,14 @@ public class SignupActivity extends AppCompatActivity {
         collectionReference = db.collection("Users");
         userNames = db.collection("User Names");
         initializeView();
+
+        /**
+         * This sets a button listener. If all the conditions are satisfied, this will direct the user
+         * to HomeActivity
+         * It will check whether there is a required input missed, whether the confirm password doesn't match with the password,
+         * whether the password is 6 digits and whether the email is signed up.
+         *
+         */
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +121,10 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+
+        /**
+         * This sets a button listener, it will directs the user back to WelcomeActivity
+         */
         signUpExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +133,9 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This will initialize views for all components like textview, buttons
+     */
     public void initializeView(){
         //signUpText = findViewById(R.id.text_signup_page);
         signUserText = findViewById(R.id.text_user);
@@ -128,7 +152,13 @@ public class SignupActivity extends AppCompatActivity {
         signUpExit = findViewById(R.id.floatingButton_Signup);
     }
 
-    // Resource: https://www.javatpoint.com/java-email-validation
+    /**
+     * This method checks whether the input email is in right format.
+     * @author Shanshan Wei
+     * @param inputEmail
+     * @return boolean
+     * Resource: https://www.javatpoint.com/java-email-validation
+     */
     public static boolean isValidEmail(String inputEmail){
         String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         if (inputEmail.matches(regex)){
@@ -138,6 +168,12 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method checks whether the input user name is unique and used by another user
+     * @author Shanshan Wei
+     * @param strName
+     * @return boolean
+     */
     public boolean isValidUserName(String strName){
         DocumentReference docRef = userNames.document(strName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -164,6 +200,12 @@ public class SignupActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method allows firebase auth to create the user's account with his/her input email and password
+     * @author Shanshan Wei
+     * @param UserEmail
+     * @param UserPassword
+     */
     public void buildFile(String UserEmail, String UserPassword){
         myAuth.createUserWithEmailAndPassword(UserEmail, UserPassword)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

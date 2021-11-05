@@ -14,6 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * This fragment shows the event details with its name and comment
+ * The user can also edit the event by inputting a new name and a new comment
+ * @author Shanshan Wei/swei3
+ */
+
 public class EditEventFragment extends DialogFragment {
 
     private Event event;
@@ -25,6 +31,11 @@ public class EditEventFragment extends DialogFragment {
         void onOkPressed(Event event);
     }
 
+    /**
+     * This is used to transfer data of the object Event from ViewEventActivity
+     * @param event
+     * @return fragment
+     */
     public static EditEventFragment newInstance(Event event){
         Bundle args = new Bundle();
         args.putSerializable("Event", event);
@@ -33,6 +44,11 @@ public class EditEventFragment extends DialogFragment {
         return fragment;
     }
 
+    /**
+     * The start of fragments' lifecycle
+     * It attaches the fragment
+     * @param context
+     */
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
@@ -44,6 +60,11 @@ public class EditEventFragment extends DialogFragment {
         }
     }
 
+    /**
+     * This builds a dialog fragment to show details of the event and allows them to edit the details.
+     * @param saveInstanceState
+     * @return Dialog
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle saveInstanceState){

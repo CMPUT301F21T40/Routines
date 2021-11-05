@@ -90,6 +90,8 @@ public class HabitList extends ArrayAdapter<Habit> {
         habits.add(habit);
     }
 
+    public void removeHabit(Habit habit) { habits.remove(habit);}
+
     /**
      * checks if a habit exists in the habit list
      * @param habit Habit

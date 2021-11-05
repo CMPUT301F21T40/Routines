@@ -103,10 +103,6 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         showList();
         habitView.setAdapter(habitAdapter);
 
-
-
-
-
     }
 
     public void clear() {
@@ -139,6 +135,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     /**
      * Add habits from Firestore to local habit list
      * @return void
+     * @author yyang13
      */
     public void showList(){
         Query currentUserCol = currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);

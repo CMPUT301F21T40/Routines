@@ -108,12 +108,6 @@ public class AddHabitFragment extends DialogFragment {
         satSwitch = view.findViewById(R.id.sat_switch);
         sunSwitch = view.findViewById(R.id.sun_switch);
 
-//        Set current date as default
-        Calendar c = Calendar.getInstance();
-        day = c.get(Calendar.DAY_OF_MONTH);
-        month = c.get(Calendar.MONTH) + 1;
-        year = c.get(Calendar.YEAR);
-        habitDate.setText(String.format("%d-%02d-%d", year, month, day));
 
 //        Create Date picker
         createDatePicker();

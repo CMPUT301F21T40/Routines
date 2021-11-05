@@ -7,8 +7,6 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
 
 import org.junit.After;
@@ -17,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING US 01.01.01, US 01.02.01, 01.06.01,
+ * INTENT TESTING FOR US.02.04.01, US 02.05.01
  */
-public class AddHabitTest {
+public class EditHabitEventTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -47,44 +45,28 @@ public class AddHabitTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    @Test
-    public void addHabitTest(){
-        login(); // login
-        solo.sleep(500);
+    public void addHabit(){
         // click the floating action button
         View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.container); // get the frame layout
         View fab= floatingButtonView.findViewById(R.id.addHabitButton); // get the button inside the frame layout
         solo.clickOnView(fab);  // press the button
         // inside the fragment
-        solo.sleep(500);
         solo.clickOnButton("CONFIRM DATE");
-        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "12345678901234567890");
-        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "123456789012345678901234567890");
+        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "TEST HABIT");
+        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "TEST REASON");
         // test all the date switch's
         solo.clickOnButton("Private Habit");
         solo.clickOnButton("Monday");
-        solo.clickOnButton("Tuesday");
-        solo.clickOnButton("Wednesday");
-        solo.clickOnButton("Thursday");
-        solo.clickOnButton("Friday");
-        solo.clickOnButton("Saturday");
-        solo.clickOnButton("Sunday");
         solo.clickOnButton("OK");
-        solo.sleep(500);
+        solo.sleep(1000);
     }
-
     @Test
-    public void addHabitFragmentBackButton(){ // test canceling adding a habit
+    public void viewHabitEventTest(){
         login();
-        // click floating action button
-        View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.container); // get the frame layout
-        View fab= floatingButtonView.findViewById(R.id.addHabitButton); // get the button inside the frame layout
-        solo.clickOnView(fab);  // press the button
-        solo.sleep(500);
-        solo.clickOnButton("Cancel");
-        solo.sleep(500);
+        addHabit();
+        solo.clickOnText("TEST HABIT");
+        solo.sleep(1000);
     }
-
     /**
      * Closes the activity after every test
      * @throws Exception

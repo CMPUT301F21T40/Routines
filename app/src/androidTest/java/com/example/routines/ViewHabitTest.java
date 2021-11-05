@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * INTENT TESTING FOR US 01.03.01
+ */
 public class ViewHabitTest {
     private Solo solo;
     @Rule // start testing on welcome page

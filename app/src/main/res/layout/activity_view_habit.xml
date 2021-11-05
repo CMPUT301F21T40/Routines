@@ -99,14 +99,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
-            android:text="Add Event" />
+            android:text="ADD EVENT" />
 
         <Button
             android:id="@+id/view_event_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="View Events" />
+            android:text="VIEW EVENTS" />
 
     </LinearLayout>
 </LinearLayout>

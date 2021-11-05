@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+/**
+ * INTENT TESTING US 03.01.01
+ */
 public class LogoutTest {
     private Solo solo;
     @Rule // start testing on welcome page

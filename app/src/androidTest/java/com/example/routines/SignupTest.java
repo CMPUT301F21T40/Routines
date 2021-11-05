@@ -25,7 +25,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING US
+ * INTENT TESTING US 03.01.01
  */
 public class SignupTest {
     FirebaseFirestore db;

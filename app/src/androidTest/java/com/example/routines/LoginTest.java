@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING US
+ * INTENT TESTING US 03.01.01
  * THIS WILL USE A TEST SPECIFIC USER DEFINED AS
  * username: testUserName
  * email: testEmail@gmail.com

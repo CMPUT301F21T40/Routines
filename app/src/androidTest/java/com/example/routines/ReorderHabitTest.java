@@ -15,7 +15,8 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * NYI 
+ * NYI: CANNOT GET ROBOTIUM TO LONG PRESS -> DRAG
+ * US 01.08.02
  */
 public class ReorderHabitTest {
     private Solo solo;

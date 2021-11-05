@@ -9,8 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,15 +34,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 
-public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener {
+public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener , DeleteHabitFragment.OnFragmentInteractionListener{
     TextView nameView;
     TextView dateView;
     TextView reasonView;
@@ -56,11 +54,17 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     Button add;
     Button view;
     FloatingActionButton edit;
+    FloatingActionButton delete;
     FirebaseAuth myAuth;
     String userId;
     String habitId;
+
+    HomeFragment homeFragment;
+
+
     ViewHabitActivity viewActivity;
     Object ViewHabitActivity;
+
 
 
     @Override
@@ -84,6 +88,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         add = findViewById(R.id.add_event_button);
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
+        delete = findViewById(R.id.delete_habit_button);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
@@ -158,6 +163,59 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             }
         });
 
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "DELETE_HABIT");
+            }
+        });
+
+    }
+
+    /**
+     * When the user confirms to delete the habit, this function runs.
+     * It takes the habit as a parameter then deletes it from the firebase
+     * @param habit
+     */
+    public void onDeletePressed(Habit habit) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        CollectionReference collRef = db.collection("Habits")
+                .document(userId)
+                .collection("Habits");
+        DocumentReference docRef = collRef.document(habitId);
+
+//      Delete old habit
+        docRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+        finish();
+        Intent intent = getIntent();
+        intent.setClass(ViewHabitActivity.this, HomeActivity.class);
+        startActivity(intent);
+        //updateFragment();
+        ViewGroup vg = findViewById(R.id.container);
+    }
+
+    public void updateFragment(){
+        homeFragment = HomeFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        setContentView(R.layout.activity_home);
+        transaction.replace(R.id.container, homeFragment);
+        transaction.commit();
+
     }
 
     /**
@@ -174,6 +232,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         habitFrequency = (ArrayList<String>) newHabit.getFrequency();
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
+        }
+        if (!(habitFrequency.isEmpty()) && habitFrequency.contains("Null")) {
+            habitFrequency.remove("Null");
         }
 
         if ((habitFrequency.size() > 1) && habitFrequency.contains("Null")) {
@@ -193,7 +254,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         privacyView = findViewById(R.id.view_habit_privacy);
         frequencyView = findViewById(R.id.view_habit_frequency);
 
+
+
 //      Update the Details Screen
+
         String extendedName = "Name: "+habitName;
         nameView.setText(extendedName);
         String extendedReason = "Reason: " + habitReason;

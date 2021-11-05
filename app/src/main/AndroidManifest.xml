@@ -68,6 +68,10 @@
             android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
+            android:name=".DeleteHabitFragment"
+            android:exported="true"
+            />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="true">
         </activity>

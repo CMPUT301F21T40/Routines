@@ -27,6 +27,8 @@ import java.util.List;
  *     To respond to the user clicking the + button at the bottom of the screen.
  *     This will pop up a fragment where the user can add all the habit info and it will
  *     add the habit to the habit list on the home page
+ * @see HomeActivity class
+ * @author lwaschuk 
  */
 public class AddHabitFragment extends DialogFragment {
     /*

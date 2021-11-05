@@ -116,8 +116,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
     }
-
-    // The bottom Navigation bar allow user switch activity
+    /**
+     * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity
+     * @author Shanshan Wei/swei3
+     */
     public void switchActivity(){
         bottomNavigator = findViewById(R.id.bottom_navigation);
         bottomNavigator.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {

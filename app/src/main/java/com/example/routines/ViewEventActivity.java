@@ -48,7 +48,10 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         showInfo();
 
 
-
+        /**
+         * This sets a button listener and pops a fragment for the user to edit the event details
+         * @author Shanshan Wei/swei3
+         */
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +75,13 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This overrides the listener onOkPressed.
+     * If the user edits the event details on EditEventFragment and clicks OK, this will start to work
+     * It will update the local event and update the event doc on the firebase
+     * @param event
+     * @author Shanshan Wei/swei3
+     */
     @Override
     public void onOkPressed(Event event) {
         String nameEdited = event.getEventName();
@@ -79,12 +89,13 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         Log.d("Edited event", nameEdited+descriptionEdited);
         db.collection("Events").document(eventId)
                 .update("name", nameEdited, "description", descriptionEdited);
-        //eventName.setText(name);
-        //eventComment.setText(description);
         showInfo();
 
     }
 
+    /**
+     * This shows the information of the event
+     */
     public void showInfo(){
         //fetch document from firebase with given event id
         DocumentReference eventRef = db

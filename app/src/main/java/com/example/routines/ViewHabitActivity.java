@@ -309,6 +309,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         }
     };
 
+    /**
+     * This method delete all the events of a habit
+     * @author Shanshan Wei/swei3
+     */
     public void deleteEvent(){
         CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Events");
         collectionReference.whereEqualTo("habitId", habitId)

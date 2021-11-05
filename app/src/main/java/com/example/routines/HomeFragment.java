@@ -32,9 +32,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
+ * The fragment is used to show all the habits of the user
  * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * create an instance of this fragment
+ * it implements HabitRecyclerAdapter.OnHabitClickListener
+ * @author Shanshan Wei/swei3
  */
 public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener {
 
@@ -53,16 +55,29 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     CollectionReference currentUserHabitCol;
     DocumentReference userHabitDoc;
 
+    /**
+     * This is the constructor
+     */
     public HomeFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * It is used to create an instance of fragment
+     * @return HomeFragment
+     */
     public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         return fragment;
     }
 
+    /**
+     * It inflates the fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return rootView
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +85,12 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         return rootView;
     }
+
+    /**
+     * This creates the fragment view
+     * @param view
+     * @param savedInstanceState
+     */
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -109,6 +130,10 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
 
     }
 
+    /**
+     * This helps to clear the adapter
+     * @author Shanshan Wei/swei3
+     */
     public void clear() {
         int size = habitDataList.size();
         if (size > 0) {
@@ -119,7 +144,11 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         }
     }
 
-
+    /**
+     * This overrides the onItemClick method in HabitRecyclerAdapter
+     * When the user clicks on the item, it will direct the user to ViewHabitActivity
+     * @param position
+     */
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(getContext(), ViewHabitActivity.class);
@@ -129,6 +158,11 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         startActivity(intent);
     }
 
+    /**
+     * This attaches the ReorderHabits which is a subclass of ItemTouchHelper to the Recyclerview
+     * It will show all the habits of the user
+     * @author Shanshan Wei
+     */
     public void initHabitOrder(){
         ItemTouchHelper.Callback callback = new ReorderHabits(habitAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -136,6 +170,9 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
         showList();
     }
 
+    /**
+     * This shows all the habits in RecyclerView
+     */
     public void showList(){
         //        Add habits from Firestore to local habit list
         Query currentUserCol = currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);

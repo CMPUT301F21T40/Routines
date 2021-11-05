@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * This activity display the details of a given event
  * It allows user to edit the details of the event
+ * @author Zezhou Xiong
+ * @see Event
  */
 public class ViewEventActivity extends AppCompatActivity implements EditEventFragment.OnFragmentInteractionalListener{
 

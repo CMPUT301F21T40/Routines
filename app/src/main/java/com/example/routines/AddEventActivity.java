@@ -25,6 +25,7 @@ import java.util.HashMap;
 /**
  * Purpose: An activity to allow user to complete a habit event of a habit
  * Outstanding Issues:None
+ * @author Zezhou Xiong
  */
 public class AddEventActivity extends AppCompatActivity {
     EditText eventName;

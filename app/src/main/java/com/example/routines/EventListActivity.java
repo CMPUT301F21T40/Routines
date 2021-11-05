@@ -33,6 +33,8 @@ import java.util.Collection;
 /**
  * This activity display a list of historical events of a habits
  * It allows user to check the details of an event
+ * @author Zezhou Xiong
+ * @see Event
  */
 public class EventListActivity extends AppCompatActivity {
     ListView eventList;

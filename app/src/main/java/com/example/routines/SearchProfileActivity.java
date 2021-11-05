@@ -14,10 +14,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
+
 /**
  * This activity display the details of a user
  * Outstanding issues: allows user to follow all the habit
- *
+ * @author Zezhou Xiong
+ * @see User
  */
 public class SearchProfileActivity extends AppCompatActivity {
     //initialize the layout

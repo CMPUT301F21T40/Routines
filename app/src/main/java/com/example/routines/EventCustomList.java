@@ -18,6 +18,8 @@ import java.util.ArrayList;
  * A custom list to add the event info
  * Purpose: To create the list that all the events will be stored in
  * Outstanding Issues: None
+ * @author zezhou Xiong
+ * @see Event
  */
 public class EventCustomList extends ArrayAdapter<Event> {
 

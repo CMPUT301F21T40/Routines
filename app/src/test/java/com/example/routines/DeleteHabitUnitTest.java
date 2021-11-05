@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Unit Test for US 01.05.01
  * Tests the DeleteHabit Story
  * Issue: Test events were not received
+ * @author ipaterso
  */
 
 public class DeleteHabitUnitTest {

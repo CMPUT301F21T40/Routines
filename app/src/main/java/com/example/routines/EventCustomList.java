@@ -52,5 +52,26 @@ public class EventCustomList extends ArrayAdapter<Event> {
         return view;
     }
 
+    /**
+     *
+     * @param event
+     */
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+
+    /**
+     *
+     * @param event
+     * @return boolean
+     */
+    public boolean containsEvent(Event event){
+        return events.contains(event);
+    }
+
+    public int eventCount(){
+        return events.size();
+    }
+
 }
 

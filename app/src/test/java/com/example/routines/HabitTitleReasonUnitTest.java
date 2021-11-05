@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-public class HabitTitleReasonTest {
+public class HabitTitleReasonUnitTest {
     private Habit habit;
     private ArrayList<String> frequency = new ArrayList<>();
 

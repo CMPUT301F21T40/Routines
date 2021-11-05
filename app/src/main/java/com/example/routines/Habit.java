@@ -123,15 +123,24 @@ public class Habit implements Serializable {
     /**
      * returns the current setting of privacy
      * @return
+     * String Privacy
      */
     public String getPrivacy(){
         return this.privacy;
     }
 
+    /**
+     * check if name is under 20 characters
+     * @return boolean
+     */
     public boolean underNameLimit() {
         return name.replace(" ", "").length() <= 20;
     }
 
+    /**
+     * check if reason is under 30 characters
+     * @return boolean
+     */
     public boolean underReasonLimit() {
         return reason.replace(" ", "").length() <= 30;
     }

@@ -108,6 +108,8 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
      * This is called when the + button is pressed and the info from the pop up fragment
      * is filled out. This will add the newly created habit into the habit list and to firestore
      * @param newHabit
+     * @ruturn void
+     * @author Yi Yang
      */
     public void onOkPressed(Habit newHabit){
         String habitName = newHabit.getName();

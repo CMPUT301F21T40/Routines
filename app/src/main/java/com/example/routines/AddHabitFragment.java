@@ -116,6 +116,58 @@ public class AddHabitFragment extends DialogFragment {
         habitDate.setText(String.format("%d-%02d-%d", year, month, day));
 
 //        Create Date picker
+        createDatePicker();
+
+//        Create Frequency switches
+        createFrequencySwitch();
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        return builder
+                .setView(view)
+                .setTitle("Add New Habit")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String date = habitDate.getText().toString();
+                        date = check(date);
+                        String name = habitName.getText().toString();
+                        name = check(name);
+                        String reason = habitReason.getText().toString();
+                        reason = check(reason);
+                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
+                    }
+                }).create();
+    }
+    // to check if the user entered anything, if he entered nothing it will add NULL
+
+    /**
+     * If the string len is 0 set the string to NULL and return
+     * @param str
+     * @return str
+     * returns either the original string or the NULL
+     */
+    public String check(String str){
+        if (str.length() == 0){
+            str = "Null";
+        }
+        return str;
+    }
+
+    /**
+     * create DatePicker
+     * @return void
+     */
+    public void createDatePicker() {
+        //        Set current date as default
+        Calendar c = Calendar.getInstance();
+        day = c.get(Calendar.DAY_OF_MONTH);
+        month = c.get(Calendar.MONTH) + 1;
+        year = c.get(Calendar.YEAR);
+        habitDate.setText(String.format("%d-%02d-%d", year, month, day));
+
+//        Create Date picker
         confirmDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,24 +178,13 @@ public class AddHabitFragment extends DialogFragment {
                 habitDate.setText(String.format("%d-%02d-%d", year, month, day));
             }
         });
+    }
 
-        privacy = "Public";
-//        Create Privacy switch
-        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked && !privacy.equals("Private")) {
-                    privacy = "Private";
-                }
-                else if (!isChecked && !privacy.equals("Public")) {
-                    privacy = "Public";
-                }
-            }
-        });
-
-
-
-//        Create Frequency switches
+    /**
+     * create Frequency Switches
+     * @return void
+     */
+    public void createFrequencySwitch() {
         monSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -227,38 +268,7 @@ public class AddHabitFragment extends DialogFragment {
                 }
             }
         });
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        return builder
-                .setView(view)
-                .setTitle("Add New Habit")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String date = habitDate.getText().toString();
-                        date = check(date);
-                        String name = habitName.getText().toString();
-                        name = check(name);
-                        String reason = habitReason.getText().toString();
-                        reason = check(reason);
-                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
-                    }
-                }).create();
     }
-    // to check if the user entered anything, if he entered nothing it will add NULL
 
-    /**
-     * If the string len is 0 set the string to NULL and return
-     * @param str
-     * @return str
-     * returns either the original string or the NULL
-     */
-    public String check(String str){
-        if (str.length() == 0){
-            str = "Null";
-        }
-        return str;
-    }
+
 }

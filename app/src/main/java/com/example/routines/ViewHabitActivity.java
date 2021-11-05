@@ -2,6 +2,7 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -56,6 +59,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FirebaseAuth myAuth;
     String userId;
     String habitId;
+    ViewHabitActivity viewActivity;
+    Object ViewHabitActivity;
 
 
     @Override
@@ -64,7 +69,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         setContentView(R.layout.activity_view_habit);
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -157,19 +162,22 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
     /**
      * When user clicks "OK" from EditFragment, this function runs.
-     * It deletes the habit that was edited, and creates a new one
-     * with the updated parameters
+     * It updates the habit that was selected with the newly provided details
      * @param habit
      * @param newHabit
      */
     public void onEditPressed(Habit habit, Habit newHabit) {
-        String habitName = newHabit.getName();
-        String habitReason = newHabit.getReason();
-        String habitDate = newHabit.getDate();
-        String habitPrivacy = newHabit.getPrivacy();
-        ArrayList<String> habitFrequency = (ArrayList<String>) newHabit.getFrequency();
+        habitName = newHabit.getName();
+        habitReason = newHabit.getReason();
+        habitDate = newHabit.getDate();
+        habitPrivacy = newHabit.getPrivacy();
+        habitFrequency = (ArrayList<String>) newHabit.getFrequency();
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
+        }
+
+        if ((habitFrequency.size() > 1) && habitFrequency.contains("Null")) {
+            habitFrequency.remove("Null");
         }
 
 //      Update habit in Firestore
@@ -179,19 +187,42 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 .collection("Habits");
         DocumentReference docRef = collRef.document(habitId);
 
+        nameView = findViewById(R.id.view_habit_name);
+        reasonView = findViewById(R.id.view_habit_reason);
+        dateView = findViewById(R.id.view_habit_date);
+        privacyView = findViewById(R.id.view_habit_privacy);
+        frequencyView = findViewById(R.id.view_habit_frequency);
+
+//      Update the Details Screen
+        String extendedName = "Name: "+habitName;
+        nameView.setText(extendedName);
+        String extendedReason = "Reason: " + habitReason;
+        reasonView.setText(extendedReason);
+        String extendedDate = "Date: " + habitDate;
+        dateView.setText(extendedDate);
+        String extendedPrivacy = "Privacy: " + habitPrivacy;
+        privacyView.setText(extendedPrivacy);
+        String extendedFrequency = "Frequency: ";
+        for (int i = 0; i < habitFrequency.size(); i++){
+            extendedFrequency += habitFrequency.get(i) + " ";
+        }
+        frequencyView.setText(extendedFrequency);
+
         docRef.update(
                 "Habit Name", habitName,
                 "Habit Reason", habitReason,
                 "Start Date", habitDate,
                 "Frequency", habitFrequency,
                 "Privacy", habitPrivacy);
-        finish();
-        Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
-        intent.putExtra("habitId", habitId);
-        startActivity(intent);
 
-
+        Intent intent = getIntent();
+        intent.putExtra("Habit Name", habitName);
+        intent.putExtra("Start Date", habitDate);
+        intent.putExtra("Habit Reason", habitReason);
+        intent.putExtra("Frequency", habitFrequency);
+        intent.putExtra("Privacy", habitPrivacy);
     }
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

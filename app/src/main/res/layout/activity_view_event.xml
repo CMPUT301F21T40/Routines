@@ -4,11 +4,10 @@
     android:id="@+id/date"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_pink"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/event_list_toolbar"
+        android:id="@+id/view_event_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -20,7 +19,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/add_event_title"
+                android:id="@+id/view_event_title"
                 android:layout_width="168dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -34,7 +33,7 @@
                 android:textSize="28sp" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/edit_habit_button"
+                android:id="@+id/edit_event_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -52,53 +51,28 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/view_habit_name"
+            android:id="@+id/view_event_name"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Name:"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/view_habit_reason"
+            android:id="@+id/view_event_comment"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Reason:"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/view_habit_date"
+            android:id="@+id/view_event_date"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Date:"
+            android:hint="Complete Date:"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/view_habit_privacy"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Privacy:"
-            android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/view_habit_frequency"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Frequency:"
-            android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/add_event_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="bottom"
-            android:text="Add Event" />
-
-        <Button
-            android:id="@+id/view_event_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="View Events" />
 
     </LinearLayout>
 </LinearLayout>

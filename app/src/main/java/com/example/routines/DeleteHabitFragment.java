@@ -32,6 +32,7 @@ import org.w3c.dom.Document;
  * This prompts the user to confirm whether they want to delete the
  * habit. If yes, the selected habit is deleted. If no, the user is returned
  * to previous screen.
+ * @author Isaiah Paterson, Temiloluwa Osinjolu
  */
 
 

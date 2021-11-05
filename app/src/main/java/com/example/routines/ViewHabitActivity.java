@@ -33,6 +33,8 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.time.DayOfWeek;
 import java.util.ArrayList;
@@ -200,6 +202,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
+        deleteEvent();
         finish();
         Intent intent = getIntent();
         intent.setClass(ViewHabitActivity.this, HomeActivity.class);
@@ -308,5 +311,22 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                     DayOfWeek.valueOf(day2.toUpperCase()).getValue());
         }
     };
+
+    public void deleteEvent(){
+        CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Events");
+        collectionReference.whereEqualTo("HabitId", habitId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                collectionReference.document(document.getId())
+                                        .delete();
+                            }
+                        }
+                    }
+                });
+    }
 
 }

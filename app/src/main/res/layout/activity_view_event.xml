@@ -26,9 +26,9 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="100dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="110dp"
-                android:text="Habit Details"
+                android:text="Event Details"
                 android:textColor="@color/white"
                 android:textSize="28sp" />
 

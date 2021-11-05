@@ -1,10 +1,12 @@
 package com.example.routines;
 
 
+import java.io.Serializable;
+
 /**
  * Initial Event class to store various information about a event
  */
-public class Event {
+public class Event implements Serializable {
 
     /*
     Purpose:
@@ -30,6 +32,18 @@ public class Event {
         this.habitID = habitID;
         this.eventDate = eventDate;
     }
+
+    /**
+     * Constructor for the habit to initialize the Event object
+     * @param eventName
+     * @param description
+     */
+    public Event(String eventName, String description) {
+        this.eventName = eventName;
+        this.description = description;
+        this.eventDate = eventDate;
+    }
+
     /**
      * get the name of a event
      * @return eventName

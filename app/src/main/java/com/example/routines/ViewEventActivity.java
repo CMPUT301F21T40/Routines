@@ -3,6 +3,8 @@ package com.example.routines;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,13 +21,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * This activity display the details of a given event
  * It allows user to edit the details of the event
  */
-public class ViewEventActivity extends AppCompatActivity {
+public class ViewEventActivity extends AppCompatActivity implements EditEventFragment.OnFragmentInteractionalListener{
 
     //Text views for the details of given event
     TextView eventName;
     TextView eventComment;
     TextView eventDate;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); //connect to firebase
+    FloatingActionButton editButton;
+    String eventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +39,57 @@ public class ViewEventActivity extends AppCompatActivity {
         eventName = findViewById(R.id.view_event_name);
         eventComment = findViewById(R.id.view_event_comment);
         eventDate = findViewById(R.id.view_event_date);
+        editButton = findViewById(R.id.edit_event_button);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
-        String eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
+        eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
 
+        showInfo();
+
+
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String nameShowed = eventName.getText().toString();
+                String commentShowed = eventComment.getText().toString();
+                Event eventNow = new Event(nameShowed, commentShowed);
+                EditEventFragment.newInstance(eventNow).show(getSupportFragmentManager(), "Edit_Event");
+            }
+        });
+
+
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onOkPressed(Event event) {
+        String nameEdited = event.getEventName();
+        String descriptionEdited = event.getDescription();
+        Log.d("Edited event", nameEdited+descriptionEdited);
+        db.collection("Events").document(eventId)
+                .update("name", nameEdited, "description", descriptionEdited);
+        //eventName.setText(name);
+        //eventComment.setText(description);
+        showInfo();
+
+    }
+
+    public void showInfo(){
         //fetch document from firebase with given event id
         DocumentReference eventRef = db
                 .collection("Events")
                 .document(eventId);
-
         //get fields of document and set the text to text view
         eventRef
                 .get()
@@ -70,17 +116,5 @@ public class ViewEventActivity extends AppCompatActivity {
                     }
 
                 });
-
-
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

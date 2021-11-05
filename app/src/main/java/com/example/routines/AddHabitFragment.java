@@ -68,6 +68,8 @@ public class AddHabitFragment extends DialogFragment {
 
     /**
      * A interface to connect the fragment with Main activity
+     * @see HomeActivity class
+     * @author lwaschuk
      */
     public interface OnFragmentInteractionListener {
         void onOkPressed(Habit habit);
@@ -76,7 +78,6 @@ public class AddHabitFragment extends DialogFragment {
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
         } else {

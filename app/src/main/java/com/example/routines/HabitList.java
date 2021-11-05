@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 /**
  * A custom list to add the habits into
+ * @see HomeActivity class
+ * @author lwaschuk
  */
 public class HabitList extends ArrayAdapter<Habit> {
     /*
@@ -25,12 +27,28 @@ public class HabitList extends ArrayAdapter<Habit> {
     private ArrayList<Habit> habits;
     private Context context;
 
+    /**
+     * constructor for the habit list
+     * @param context Context
+     * @param habits Habit
+     * @see HabitList Class
+     * @author lwaschuk
+     */
     public HabitList(Context context, ArrayList<Habit> habits){
         super(context, 0, habits);
         this.habits = habits;
         this.context = context;
     }
 
+    /**
+     * gets the view of the habitlist to add habits into
+     * @param position int
+     * @param convertView View
+     * @param parent View
+     * @see HomeActivity class
+     * @author lwaschuk
+     * @return view View
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
@@ -54,7 +72,9 @@ public class HabitList extends ArrayAdapter<Habit> {
 
     /**
      * Gets the total count of habits in the Habit List
-     * @return
+     * @return habits.size() int
+     * @see HabitList class
+     * @author lwaschuk
      */
     public int habitCount(){
         return habits.size();
@@ -62,7 +82,9 @@ public class HabitList extends ArrayAdapter<Habit> {
 
     /**
      * adds a new habit to the HabitList
-     * @param habit
+     * @param habit Habit
+     * @see HabitList class
+     * @author lwsachuk
      */
     public void addHabit(Habit habit){
         habits.add(habit);
@@ -70,8 +92,10 @@ public class HabitList extends ArrayAdapter<Habit> {
 
     /**
      * checks if a habit exists in the habit list
-     * @param habit
-     * @return
+     * @param habit Habit
+     * @return boolean
+     * @see HabitList class
+     * @author lwaschuk
      */
     public boolean containsHabit(Habit habit){
         return habits.contains(habit);

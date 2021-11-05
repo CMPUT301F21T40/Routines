@@ -61,10 +61,8 @@ public class EditHabitFragment extends DialogFragment {
 
     private EditHabitFragment.OnFragmentInteractionListener listener;
 
-    //private OnFragmentInteractionListener listener;
 
     public interface OnFragmentInteractionListener {
-        //void onOkPressed(Habit habit);
         void onEditPressed(Habit habit, Habit newHabit);
     }
 

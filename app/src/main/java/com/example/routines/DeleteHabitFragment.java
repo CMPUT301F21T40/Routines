@@ -27,6 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Document;
 
+/**
+ * Response when the user clicks the delete button, will
+ * prompt the user to confirm whether they want to delete or not
+ */
 public class DeleteHabitFragment extends DialogFragment {
     Habit habit;
 

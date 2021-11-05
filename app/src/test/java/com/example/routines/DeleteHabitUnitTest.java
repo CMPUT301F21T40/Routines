@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class DeleteHabitUnitTest {
     private HabitList habitList;
-    private Habit mockHabit;
+    private Habit studHabit;
     private ArrayList<String> frequency = new ArrayList<>();
     private Context mockContext = mock(Context.class);
 
@@ -38,13 +38,13 @@ public class DeleteHabitUnitTest {
         habitList = new HabitList(mockContext, new ArrayList<>());
         frequency.add("Monday");
         frequency.add("Thursday");
-        mockHabit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private");
-        habitList.add(mockHabit);
+        studHabit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private");
+        habitList.addHabit(studHabit);
     }
 
     @Test
     public void deleteHabitTest() {
-        habitList.remove(mockHabit);
-        assertEquals(0, habitList.habitCount());
+        habitList.removeHabit(studHabit);
+        assertEquals(false, habitList.containsHabit(studHabit));
     }
 }

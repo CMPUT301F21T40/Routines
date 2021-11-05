@@ -127,4 +127,13 @@ public class Habit implements Serializable {
     public String getPrivacy(){
         return this.privacy;
     }
+
+    public boolean underNameLimit() {
+        return name.replace(" ", "").length() <= 20;
+    }
+
+    public boolean underReasonLimit() {
+        return reason.replace(" ", "").length() <= 30;
+    }
+
 }

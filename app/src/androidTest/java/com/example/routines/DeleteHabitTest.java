@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING FOR US
+ * INTENT TESTING FOR US 01.05.01
  */
 public class DeleteHabitTest {
     private Solo solo;

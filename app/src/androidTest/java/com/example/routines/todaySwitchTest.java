@@ -13,7 +13,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class todaySwitchTest {
+/**
+ * INTENT TESTING FOR US 01.07.01, US 01.08.01
+ */
+public class TodaySwitchTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =

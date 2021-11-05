@@ -128,7 +128,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         data.put("Start Date", habitDate);
         data.put("Frequency", frequencyList);
         data.put("Privacy", habitPrivacy);
-        data.put("Index", habitAdapter.getItemCount()+1);
+        data.put("Index", 10000);
         currentUserHabitCol.document(habitId)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

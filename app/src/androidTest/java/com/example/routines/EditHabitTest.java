@@ -9,6 +9,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.robotium.solo.Solo;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -64,8 +65,9 @@ public class EditHabitTest {
     public void editHabit(){
         login();
         // have to add a habit every time to make sure there is one to edit, no need for this till deleteHabit is implemented
-        //addHabit();
-        solo.clickInList(0);
+        addHabit();
+        solo.clickOnText("TEST HABIT");
+        //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
         solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
         // click the floating action button
         View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.event_list_toolbar);
@@ -87,5 +89,13 @@ public class EditHabitTest {
         solo.clickOnButton("Sunday");
         solo.clickOnButton("OK");
         solo.sleep(500);
+    }
+    /**
+     * Closes the activity after every test
+     * @throws Exception
+     */
+    @After
+    public void tearDown() throws Exception{
+        solo.finishOpenedActivities();
     }
 }

@@ -76,19 +76,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         setContentView(R.layout.activity_home);
         fragmentLayout = findViewById(R.id.container);
 
-        //        Get user ID
-        myAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = myAuth.getCurrentUser();
-        userId = user.getUid();
-
-//        Create a separate Habits collection
-        db = FirebaseFirestore.getInstance();
-        habitCollection = db.collection("Habits");
-        userDocument = habitCollection.document(userId);
-//        Sub-collection of Habit under the current user
-        currentUserHabitCol = userDocument.collection("Habits");
-        currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
-
+        habitToServer();
         switchActivity();
         switchRadioButton();
         updateFragment();
@@ -110,7 +98,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
      * is filled out. This will add the newly created habit into the habit list and to firestore
      * @param newHabit
      * @see AddHabitFragment class
-     * @author lwaschuk, yi
+     * @author lwaschuk, yyang13
      */
     public void onOkPressed(Habit newHabit){
         String habitName = newHabit.getName();
@@ -145,6 +133,25 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         updateFragment();
     }
 
+    /**
+     * connect to Firestore, create user collection and habit collection
+     * @return void
+     * @author yyang13
+     */
+    public void habitToServer() {
+        //        Get user ID
+        myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        userId = user.getUid();
+
+//        Create a separate Habits collection
+        db = FirebaseFirestore.getInstance();
+        habitCollection = db.collection("Habits");
+        userDocument = habitCollection.document(userId);
+//        Sub-collection of Habit under the current user
+        currentUserHabitCol = userDocument.collection("Habits");
+        currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
+    }
 
     /**
      * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity

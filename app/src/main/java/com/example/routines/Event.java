@@ -36,6 +36,7 @@ public class Event implements Serializable {
 
     /**
      * Constructor for the habit to initialize the Event object
+     * @author Shanshan Wei/swei3
      * @param eventName
      * @param description
      */

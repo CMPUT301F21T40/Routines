@@ -45,6 +45,8 @@ import java.io.InputStream;
  * This activity will allows the user to see their profile information, upload a photo for the profile
  * It also allows user to exit the app and direct the user back to WelcomeActivity
  * @author Shanshan Wei/swei3
+ * @see SearchActivity
+ * @see HomeActivity
  */
 public class ProfileActivity extends AppCompatActivity {
 

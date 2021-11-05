@@ -32,6 +32,8 @@ import java.util.List;
  * Outstanding issues: search users bu user name
  * @author Zezhou Xiong
  * @see User
+ * @see HomeActivity
+ * @see ProfileActivity
  */
 public class SearchActivity extends AppCompatActivity {
     //initialize the layout
@@ -120,6 +122,8 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity
      * @author Shanshan Wei/swei3
+     * @see ProfileActivity
+     * @see HomeActivity
      */
     public void switchActivity(){
         bottomNavigator = findViewById(R.id.bottom_navigation);

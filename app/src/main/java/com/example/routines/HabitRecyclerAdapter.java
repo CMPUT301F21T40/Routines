@@ -32,6 +32,7 @@ import java.util.Map;
 /**
  * This extends RecyclerView.Adapter and customized the adapter
  * @author Shanshan Wei/swei3
+ * @see com.example.routines.ReorderHabits.RecyclerTouchHelper
  */
 public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdapter.MyViewHolder>
 implements ReorderHabits.RecyclerTouchHelper {
@@ -40,6 +41,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * Constructor of this adapter is used to initialzied the adapter in other activities
+     * @author Shanshan Wei/swei3
      * @param habits
      * @param onHabitClickListener
      */
@@ -51,6 +53,7 @@ implements ReorderHabits.RecyclerTouchHelper {
     /**
      * This view holder extends Recycler.ViewHolder and sets the attributes for items to show
      * It also override the click listener.
+     * @author Shanshan Wei/swei3
      */
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView habitNameText;
@@ -74,6 +77,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This method create the view holder for adapter
+     * @author Shanshan Wei/swei3
      * @param parent
      * @param viewType
      * @return HabitRecyclerAdapter.MyViewHolder
@@ -87,6 +91,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This method help the adapter get and set the attributes of event
+     * @author Shanshan Wei/swei3
      * @param holder
      * @param position
      */
@@ -102,6 +107,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This counts the items showed by this adapter
+     * @author Shanshan Wei/swei3
      * @return int
      */
     @Override
@@ -111,6 +117,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This creates a listener for every list item showed by adapter
+     * @author Shanshan Wei/swei3
      */
     public interface OnHabitClickListener {
         void onItemClick(int position);
@@ -118,6 +125,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * It records the item row movement and swaps the items rows between the two positions
+     * @author Shanshan Wei/swei3
      * @param from
      * @param to
      */
@@ -139,6 +147,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This will set the background color of the selected row to gray
+     * @author Shanshan Wei/swei3
      * @param myViewHolder
      */
     @Override
@@ -148,6 +157,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This clears the background color of selected item row
+     * @author Shanshan Wei/swei3
      * @param myViewHolder
      */
     @Override
@@ -157,6 +167,7 @@ implements ReorderHabits.RecyclerTouchHelper {
 
     /**
      * This will records the items' positions and update Index filed on firebase base on the position
+     * @author Shanshan Wei/swei3
      */
     public void updateDocIndex() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();

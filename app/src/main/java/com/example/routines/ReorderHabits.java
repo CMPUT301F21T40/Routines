@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * This is a subclass of ItemToucheHelper.Callback which can construct drag and swipe
- * @author Shanshan Wei
+ * @author Shanshan Wei/swei3
+ * @see ItemTouchHelper
+ * @see RecyclerTouchHelper
  */
 public class ReorderHabits extends ItemTouchHelper.Callback {
 
@@ -15,6 +17,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * This is the constructor
+     * @author Shanshan Wei/swei3
      * @param recyclerTouchHelper
      */
     public ReorderHabits(RecyclerTouchHelper recyclerTouchHelper) {
@@ -23,6 +26,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * This means that the user has to long click on the item, so that the drag will function
+     * @author Shanshan Wei/swei3
      * @return boolean
      */
     @Override
@@ -32,6 +36,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * This discards the swipe action
+     * @author Shanshan Wei/swei3
      * @return boolean
      */
     @Override
@@ -41,6 +46,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * This sets a drag flag for movement
+     * @author Shanshan Wei/swei3
      * @param recyclerView
      * @param viewHolder
      * @return
@@ -53,6 +59,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * This overrides the onMove method of RecyclerTouchHelper
+     * @author Shanshan Wei/swei3
      * @param recyclerView
      * @param viewHolder
      * @param target
@@ -65,7 +72,8 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
     }
 
     /**
-     *  touch helper will help to identify the drag and drop and implements onRowSelected method
+     * touch helper will help to identify the drag and drop and implements onRowSelected method
+     * @author Shanshan Wei/swei3
      * @param viewHolder
      * @param actionState
      */
@@ -82,6 +90,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * This overrides the clearView method and implements the onRowClear method
+     * @author Shanshan Wei/swei3
      * @param recyclerView
      * @param viewHolder
      */
@@ -102,6 +111,7 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     /**
      * Interfaces for above three overrided methods
+     * @author Shanshan Wei/swei3
      */
     public interface RecyclerTouchHelper{
         void onRowMoved(int from, int to);

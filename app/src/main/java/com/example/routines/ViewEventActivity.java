@@ -79,8 +79,8 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
      * This overrides the listener onOkPressed.
      * If the user edits the event details on EditEventFragment and clicks OK, this will start to work
      * It will update the local event and update the event doc on the firebase
-     * @param event
      * @author Shanshan Wei/swei3
+     * @param event
      */
     @Override
     public void onOkPressed(Event event) {

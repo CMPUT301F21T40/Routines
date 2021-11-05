@@ -89,6 +89,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         currentUserHabitCol = userDocument.collection("Habits");
         currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
 
+
         switchActivity();
         switchRadioButton();
         updateFragment();
@@ -244,6 +245,10 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         }
     }
 
+    /**
+     * This method will create the HomeFragment and set it to be default
+     * @author Shanshan Wei/swei3
+     */
     public void updateFragment(){
         homeFragment = HomeFragment.newInstance();
         FragmentManager manager = getSupportFragmentManager();

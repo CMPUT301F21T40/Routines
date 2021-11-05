@@ -37,6 +37,8 @@ import java.util.List;
  * This is a filter fragment and it will filter the user's habits that need to be finished today
  * This implements HabitRecyclerAdapter.OnHabitClickListener
  * @author Shanshan Wei/swei3
+ * @see ViewHabitActivity
+ * @see HomeActivity
  */
 
 public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener{
@@ -56,6 +58,7 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
 
     /**
      * A empty constructor that can be used to initialized the fragment
+     * @author Shanshan Wei/swei3
      */
     public TodayFilterFragment() {
         // Required empty public constructor
@@ -63,6 +66,7 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
 
     /**
      * It is used to create an instance of fragment
+     * @author Shanshan Wei/swei3
      * @return HomeFragment
      */
     public static TodayFilterFragment newInstance() {
@@ -72,6 +76,7 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
 
     /**
      * It inflated the fragment
+     * @author Shanshan Wei/swei3
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -93,6 +98,10 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
         findWeekday();
         Log.d("Week day", dayWeek);
 
+        /**
+         * This lines filter the today habits from all habits of the user.
+         * @author Shanshan Wei/swei3
+         */
         db = FirebaseFirestore.getInstance();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         collectionReference = db.collection("Habits")
@@ -131,6 +140,7 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
 
     /**
      * This method finds which weekday today is
+     * @author Shanshan Wei/swei3
      */
     public void findWeekday(){
         Calendar calendar = Calendar.getInstance();
@@ -164,6 +174,7 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
 
     /**
      * This will initialize views for all components like textview, buttons
+     * @author Shanshan Wei/swei3
      */
     public void initializeView(){
         habitView = rootView.findViewById(R.id.fragment_habitList);
@@ -179,6 +190,7 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
     /**
      * This methods override HabitRecyclerAdapter.OnHabitClickListener
      * If the user clicks on the item of RecyclerView, it will direct the user to ViewHabitActivity
+     * @author Shanshan Wei/swei3
      * @param position
      */
     @Override

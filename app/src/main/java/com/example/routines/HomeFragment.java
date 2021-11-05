@@ -35,8 +35,10 @@ import java.util.ArrayList;
  * The fragment is used to show all the habits of the user
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment
- * it implements HabitRecyclerAdapter.OnHabitClickListener
  * @author Shanshan Wei/swei3
+ * @see HabitRecyclerAdapter
+ * @see HomeActivity
+ * @see ViewHabitActivity
  */
 public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener {
 
@@ -57,6 +59,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
 
     /**
      * This is the constructor
+     * @author Shanshan Wei/swei3
      */
     public HomeFragment() {
         // Required empty public constructor
@@ -64,6 +67,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
 
     /**
      * It is used to create an instance of fragment
+     * @author Shanshan Wei/swei3
      * @return HomeFragment
      */
     public static HomeFragment newInstance() {
@@ -73,6 +77,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
 
     /**
      * It inflates the fragment
+     * @author Shanshan Wei/swei3
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -147,6 +152,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     /**
      * This overrides the onItemClick method in HabitRecyclerAdapter
      * When the user clicks on the item, it will direct the user to ViewHabitActivity
+     * @author Shanshan Wei/swei3
      * @param position
      */
     @Override
@@ -161,7 +167,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     /**
      * This attaches the ReorderHabits which is a subclass of ItemTouchHelper to the Recyclerview
      * It will show all the habits of the user
-     * @author Shanshan Wei
+     * @author Shanshan Wei/swei3
      */
     public void initHabitOrder(){
         ItemTouchHelper.Callback callback = new ReorderHabits(habitAdapter);

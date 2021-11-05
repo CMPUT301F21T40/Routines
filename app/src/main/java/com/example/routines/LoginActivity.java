@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * This activity will allow user to input the email and password.
  * If the email is signed up and the password is correct, the user will be directed to HomeActivity
  * @author Shanshan wei/swei3
+ * @see HomeActivity
  */
 
 public class LoginActivity extends AppCompatActivity {

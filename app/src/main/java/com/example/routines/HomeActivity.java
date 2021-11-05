@@ -96,8 +96,8 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
      * This is called when the + button is pressed and the info from the pop up fragment
      * is filled out. This will add the newly created habit into the habit list and to firestore
      * @param newHabit
-     * @ruturn void
-     * @author yyang13
+     * @see AddHabitFragment class
+     * @author lwaschuk, yyang13
      */
     public void onOkPressed(Habit newHabit){
         String habitName = newHabit.getName();
@@ -108,9 +108,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         if (frequencyList.isEmpty()) {
             frequencyList.add("Null");
         }
-
         habitId = db.collection(String.valueOf(currentUserHabitCol)).document().getId();
-
 //        Add new habit to Firestore
         HashMap<String, Object> data = new HashMap<>();
         data.put("Habit Name", habitName);

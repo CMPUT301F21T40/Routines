@@ -98,14 +98,10 @@ implements ReorderHabits.RecyclerTouchHelper {
         }else{
             for(int i = from; i > to; i--){
                 Collections.swap(habits, i, i-1);
-
             }
         }
         notifyItemMoved(from, to);
-
-        Log.d("Reorder Begin", Integer.toString(from));
-        Log.d("Reorder End", Integer.toString(to));
-
+        updateDocIndex();
     }
 
     @Override
@@ -125,11 +121,9 @@ implements ReorderHabits.RecyclerTouchHelper {
                 .document(userId)
                 .collection("Habits");
         int length = habits.size();
-        int i;
-        for (i = 0; i < length; i++) {
+
+        for (int i = 0; i < length; i++) {
             String habitName = habits.get(i).getName();
-            //Map<String, Object> data = new HashMap<>();
-            //data.put("Index", i);
             int finalI = i;
             collectionReference
                     .whereEqualTo("Habit Name", habitName)
@@ -145,11 +139,6 @@ implements ReorderHabits.RecyclerTouchHelper {
                             }
                         }
                     });
-
-
         }
-        collectionReference.orderBy("Index", Query.Direction.ASCENDING);
-
-
     }
 }

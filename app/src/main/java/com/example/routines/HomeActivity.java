@@ -36,6 +36,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -47,7 +48,7 @@ import java.util.HashMap;
  */
 public class HomeActivity extends AppCompatActivity  implements AddHabitFragment.OnFragmentInteractionListener{
 
-    private ArrayAdapter<Habit> habitAdapter;
+    private HabitRecyclerAdapter habitAdapter;
     private ArrayList<Habit> habitDataList;
     AppCompatRadioButton switchHabits;
     AppCompatRadioButton switchTodayHabits;
@@ -85,6 +86,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         userDocument = habitCollection.document(userId);
 //        Sub-collection of Habit under the current user
         currentUserHabitCol = userDocument.collection("Habits");
+        currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
 
         switchActivity();
         switchRadioButton();
@@ -126,6 +128,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         data.put("Start Date", habitDate);
         data.put("Frequency", frequencyList);
         data.put("Privacy", habitPrivacy);
+        data.put("Index", 10000);
         currentUserHabitCol.document(habitId)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -234,6 +237,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         transaction.commit();
 
     }
+
 
 
 

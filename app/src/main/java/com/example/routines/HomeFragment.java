@@ -5,22 +5,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,21 +25,24 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener {
 
     private View rootView;
-    private ArrayAdapter<Habit> habitAdapter;
+    private  HabitRecyclerAdapter habitAdapter;
+    private RecyclerView habitView;
+    private ArrayList<Habit> habitDataList;
+    private ArrayList<String> habitIdList;
     FrameLayout fragmentLayout;
     FirebaseFirestore db;
     String userId;
@@ -88,22 +88,60 @@ public class HomeFragment extends Fragment {
         currentUserHabitCol = userDocument.collection("Habits");
 
 
+
         fragmentLayout = rootView.findViewById(R.id.container);
 
         // creating a listview and the adapter so we can store all the habits in a list on the home screen
-        ListView habitList = rootView.findViewById(R.id.home_fragment_habitList);
+        habitView = rootView.findViewById(R.id.home_fragment_habitList);
 
-        ArrayList<Habit> habitDataList = new ArrayList<>();
-        ArrayList<String> habitIdList = new ArrayList<>();
-        habitAdapter = new HabitList(getContext(), habitDataList);
+        habitDataList = new ArrayList<>();
+        habitIdList = new ArrayList<>();
+        habitAdapter = new HabitRecyclerAdapter(habitDataList, this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        habitView.setLayoutManager(layoutManager);
+        initHabitOrder();
+        showList();
+        habitView.setAdapter(habitAdapter);
 
-        habitList.setAdapter(habitAdapter);
 
-//        Add habits from Firestore to local habit list
-        currentUserHabitCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+
+
+
+    }
+
+    public void clear() {
+        int size = habitDataList.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                habitDataList.remove(0);
+            }
+            habitAdapter.notifyItemRangeRemoved(0, size);
+        }
+    }
+
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getContext(), ViewHabitActivity.class);
+        String habitId = habitIdList.get(position);
+        intent.putExtra("habitId", habitId);
+        startActivity(intent);
+    }
+
+    public void initHabitOrder(){
+        ItemTouchHelper.Callback callback = new ReorderHabits(habitAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(habitView);
+        showList();
+    }
+
+    public void showList(){
+        //        Add habits from Firestore to local habit list
+        Query currentUserCol = currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
+        currentUserCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                habitAdapter.clear();
+                clear();
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
                     String habitName = (String)doc.getData().get("Habit Name");
                     String habitReason = (String)doc.getData().get("Habit Reason");
@@ -117,23 +155,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-
-
-
-
-        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getContext(), ViewHabitActivity.class);
-                String habitId = habitIdList.get(i);
-                intent.putExtra("habitId", habitId);
-                startActivity(intent);
-            }
-        });
-
     }
-
-
 
 
 }

@@ -1,10 +1,13 @@
 package com.example.routines;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -29,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class TodayFilterFragment extends Fragment {
+public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener{
     final String TAG = "Today filter fragment";
     private View rootView;
     ListView fragmentHabitsList;
@@ -38,6 +42,11 @@ public class TodayFilterFragment extends Fragment {
     CollectionReference collectionReference;
     FirebaseAuth myAuth;
     String userId;
+    private ArrayList<String> habitIdList;
+
+    private  HabitRecyclerAdapter habitAdapter;
+    private RecyclerView habitView;
+    private ArrayList<Habit> habitDataList;
 
     public TodayFilterFragment() {
         // Required empty public constructor
@@ -59,11 +68,8 @@ public class TodayFilterFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initializeView();
 
-        fragmentHabitsList = (ListView) rootView.findViewById(R.id.fragment_habitList);
-        ArrayList<Habit> habitsList = new ArrayList<Habit>();
-        ArrayAdapter<Habit> habitAdapter = new HabitList(getContext(), habitsList);
-        fragmentHabitsList.setAdapter(habitAdapter);
         findWeekday();
         Log.d("Week day", dayWeek);
 
@@ -84,9 +90,10 @@ public class TodayFilterFragment extends Fragment {
                                         if(value != null && value.exists()){
                                             ArrayList<String> frequency = (ArrayList<String>) value.getData().get("Frequency");
                                             if(frequency.contains(dayWeek)||frequency.contains("null")){
-                                                habitsList.add(new Habit( (String)value.getData().get("Habit Name"),
+                                                habitDataList.add(new Habit( (String)value.getData().get("Habit Name"),
                                                         (String)value.getData().get("Habit Reason"),
                                                         (String)value.getData().get("Start Date")));
+                                                habitIdList.add((String) document.getId() );
                                                 habitAdapter.notifyDataSetChanged();
                                             }
                                         }
@@ -132,9 +139,22 @@ public class TodayFilterFragment extends Fragment {
 
     }
 
+    public void initializeView(){
+        habitView = rootView.findViewById(R.id.fragment_habitList);
+        habitDataList = new ArrayList<Habit>();
+        habitIdList = new ArrayList<>();
+        habitAdapter = new HabitRecyclerAdapter(habitDataList, this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        habitView.setLayoutManager(layoutManager);
+        habitView.setAdapter(habitAdapter);
+    }
 
 
-
-
-
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getContext(), ViewHabitActivity.class);
+        String habitId = habitIdList.get(position);
+        intent.putExtra("habitId", habitId);
+        startActivity(intent);
+    }
 }

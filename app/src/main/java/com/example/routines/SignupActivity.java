@@ -33,6 +33,8 @@ import java.util.HashMap;
  * If all the conditions satisfied, firebase auth will create an account for this user with email and password
  * Then, it will upload the user's information to a firebase document
  * @author Shanshan Wei/swei3
+ * @see WelcomeActivity
+ * @see HomeActivity
  */
 
 public class SignupActivity extends AppCompatActivity {
@@ -86,7 +88,7 @@ public class SignupActivity extends AppCompatActivity {
          * to HomeActivity
          * It will check whether there is a required input missed, whether the confirm password doesn't match with the password,
          * whether the password is 6 digits and whether the email is signed up.
-         *
+         * @author Shanshan Wei/swei3
          */
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +126,7 @@ public class SignupActivity extends AppCompatActivity {
 
         /**
          * This sets a button listener, it will directs the user back to WelcomeActivity
+         * @author Shanshan Wei/swei3
          */
         signUpExit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,6 +138,7 @@ public class SignupActivity extends AppCompatActivity {
 
     /**
      * This will initialize views for all components like textview, buttons
+     * @author Shanshan Wei/swei3
      */
     public void initializeView(){
         //signUpText = findViewById(R.id.text_signup_page);
@@ -154,7 +158,7 @@ public class SignupActivity extends AppCompatActivity {
 
     /**
      * This method checks whether the input email is in right format.
-     * @author Shanshan Wei
+     * @author Shanshan Wei/swei3
      * @param inputEmail
      * @return boolean
      * Resource: https://www.javatpoint.com/java-email-validation
@@ -170,7 +174,7 @@ public class SignupActivity extends AppCompatActivity {
 
     /**
      * This method checks whether the input user name is unique and used by another user
-     * @author Shanshan Wei
+     * @author Shanshan Wei/swei3
      * @param strName
      * @return boolean
      */
@@ -202,7 +206,7 @@ public class SignupActivity extends AppCompatActivity {
 
     /**
      * This method allows firebase auth to create the user's account with his/her input email and password
-     * @author Shanshan Wei
+     * @author Shanshan Wei/swei3
      * @param UserEmail
      * @param UserPassword
      */

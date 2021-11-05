@@ -15,6 +15,8 @@ import android.widget.TextView;
  * This activity allows the user to decide whether he/she wants to sign up or log in.
  * Then the button will direct the user to SignupActivity/LoginActivity
  * @author Shanshan Wei/swei3
+ * @see LoginActivity
+ * @see SignupActivity
  */
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -29,7 +31,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         // hide the title bar on welcome, login, signup
         requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
@@ -39,6 +40,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_welcome);
 
+
+        /**
+         * This lines initialize the views of all components of this activity
+         * @author Shanshan Wei/swei3
+         */
         appName = findViewById(R.id.text_project_name);
         welcomeText = findViewById(R.id.text_welcome);
         quoteText = findViewById(R.id.text_quote);
@@ -49,6 +55,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         /**
          * This sets the button listener and it will direct the user to LoginActivity if the user click on it
+         * @author Shanshan Wei/swei3
          */
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +68,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         /**
          * This sets the button listener and it will direct the user to SignupActivity if the user click on it
+         * @author Shanshan Wei/swei3
          */
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override

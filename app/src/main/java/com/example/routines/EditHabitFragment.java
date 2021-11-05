@@ -281,15 +281,21 @@ public class EditHabitFragment extends DialogFragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Habit newHabit = new Habit("","","",null,"");
                         String newName = habitName.getText().toString();
                         newName = check(newName);
+                        newHabit.setName(newName);
                         String newDate = habitDate.getText().toString();
                         newDate = check(newDate);
+                        newHabit.setDate(newDate);
                         String newReason = habitReason.getText().toString();
                         newReason = check(newReason);
+                        newHabit.setReason(newReason);
                         String newPrivacy = currentPrivacy;
                         newPrivacy = check(newPrivacy);
-                        listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy));
+                        newHabit.setPrivacy(newPrivacy);
+                        newHabit.setFrequency(frequencyList);
+                        listener.onEditPressed(originalHabit, newHabit);
                     }
                 }).create();
     }

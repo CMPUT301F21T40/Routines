@@ -16,6 +16,7 @@ import java.util.ArrayList;
 /**
  * Unit Test for US 01.04.01
  * Tests the EditHabit Story
+ * Issues: Test events were not received
  */
 public class EditHabitUnitTest {
     private Habit mockHabit;

@@ -27,6 +27,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Document;
 
+/**
+ * Response when user clicks the delete icon after selecting a habit.
+ * This prompts the user to confirm whether they want to delete the
+ * habit. If yes, the selected habit is deleted. If no, the user is returned
+ * to previous screen.
+ * @author ipaterso, osinjolu
+ * @see ViewHabitActivity
+ */
+
+
 public class DeleteHabitFragment extends DialogFragment {
     Habit habit;
 
@@ -47,6 +57,11 @@ public class DeleteHabitFragment extends DialogFragment {
         }
     }
 
+    /**
+     * Receives an instance of a habit that is to be deleted
+     * @param habit
+     * @return
+     */
     static DeleteHabitFragment newInstance(Habit habit) {
         Bundle args = new Bundle();
         args.putSerializable("habit", habit);
@@ -66,7 +81,7 @@ public class DeleteHabitFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Confirm Delete?")
+                .setTitle("Are you sure you want to delete?")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override

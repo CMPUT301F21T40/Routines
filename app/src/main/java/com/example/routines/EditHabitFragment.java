@@ -30,6 +30,8 @@ import java.util.List;
 /**
  * Response when the user clicks edit after selecting a habit.
  * User has the ability to update the information of a given habit.
+ * @author ipaterso
+ * @see ViewHabitActivity
  */
 
 public class EditHabitFragment extends DialogFragment {

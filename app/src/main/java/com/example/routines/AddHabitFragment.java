@@ -27,6 +27,8 @@ import java.util.List;
  *     To respond to the user clicking the + button at the bottom of the screen.
  *     This will pop up a fragment where the user can add all the habit info and it will
  *     add the habit to the habit list on the home page
+ * @see HomeActivity class
+ * @author lwaschuk 
  */
 public class AddHabitFragment extends DialogFragment {
     /*
@@ -68,6 +70,8 @@ public class AddHabitFragment extends DialogFragment {
 
     /**
      * A interface to connect the fragment with Main activity
+     * @see HomeActivity class
+     * @author lwaschuk
      */
     public interface OnFragmentInteractionListener {
         void onOkPressed(Habit habit);
@@ -76,7 +80,6 @@ public class AddHabitFragment extends DialogFragment {
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-
         if (context instanceof OnFragmentInteractionListener) {
             listener = (OnFragmentInteractionListener) context;
         } else {
@@ -108,7 +111,75 @@ public class AddHabitFragment extends DialogFragment {
         satSwitch = view.findViewById(R.id.sat_switch);
         sunSwitch = view.findViewById(R.id.sun_switch);
 
-//        Set current date as default
+
+//        Create Date picker
+        createDatePicker();
+
+//        Create Frequency switches
+        createFrequencySwitch();
+
+//        Create Privacy Switch
+        createPrivacySwitch();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        return builder
+                .setView(view)
+                .setTitle("Add New Habit")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String date = habitDate.getText().toString();
+                        date = check(date);
+                        String name = habitName.getText().toString();
+                        name = check(name);
+                        String reason = habitReason.getText().toString();
+                        reason = check(reason);
+                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
+                    }
+                }).create();
+    }
+    // to check if the user entered anything, if he entered nothing it will add NULL
+
+    /**
+     * If the string len is 0 set the string to NULL and return
+     * @param str
+     * @return str
+     * returns either the original string or the NULL
+     */
+    public String check(String str){
+        if (str.length() == 0){
+            str = "Null";
+        }
+        return str;
+    }
+    
+    /**
+     * create privacy switch
+     * @return void
+     * @author yyang13
+     */
+    public void createPrivacySwitch() {
+        privacy = "Public";
+        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked && !privacy.equals("Private")) {
+                    privacy = "Private";
+                }
+                else if (!isChecked && !privacy.equals("Public")) {
+                    privacy = "Public";
+                }
+            }
+        });
+    }
+
+    /**
+     * create DatePicker
+     * @return void
+     */
+    public void createDatePicker() {
+        //        Set current date as default
         Calendar c = Calendar.getInstance();
         day = c.get(Calendar.DAY_OF_MONTH);
         month = c.get(Calendar.MONTH) + 1;
@@ -126,24 +197,13 @@ public class AddHabitFragment extends DialogFragment {
                 habitDate.setText(String.format("%d-%02d-%d", year, month, day));
             }
         });
+    }
 
-        privacy = "Public";
-//        Create Privacy switch
-        privacySwtich.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked && !privacy.equals("Private")) {
-                    privacy = "Private";
-                }
-                else if (!isChecked && !privacy.equals("Public")) {
-                    privacy = "Public";
-                }
-            }
-        });
-
-
-
-//        Create Frequency switches
+    /**
+     * create Frequency Switches
+     * @return void
+     */
+    public void createFrequencySwitch() {
         monSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -227,38 +287,7 @@ public class AddHabitFragment extends DialogFragment {
                 }
             }
         });
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        return builder
-                .setView(view)
-                .setTitle("Add New Habit")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        String date = habitDate.getText().toString();
-                        date = check(date);
-                        String name = habitName.getText().toString();
-                        name = check(name);
-                        String reason = habitReason.getText().toString();
-                        reason = check(reason);
-                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
-                    }
-                }).create();
     }
-    // to check if the user entered anything, if he entered nothing it will add NULL
 
-    /**
-     * If the string len is 0 set the string to NULL and return
-     * @param str
-     * @return str
-     * returns either the original string or the NULL
-     */
-    public String check(String str){
-        if (str.length() == 0){
-            str = "Null";
-        }
-        return str;
-    }
+
 }

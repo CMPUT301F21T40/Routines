@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * Initial Habit class to store various information about a habit
+ * @see HabitList Class
+ * @author lwaschuk
  */
 public class Habit implements Serializable {
     /*
@@ -24,10 +26,11 @@ public class Habit implements Serializable {
 
     /**
      * Initializer for the habit
-     * @param name
-     * @param reason
-     * @param date
-     * @param privacy
+     * @param name String
+     * @param reason String
+     * @param date String
+     * @param privacy String
+     * @author lwaschuk
      */
     public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy) {
         this.name = name;
@@ -37,17 +40,25 @@ public class Habit implements Serializable {
         this.privacy = privacy;
     }
 
+    /**
+     * Second initializer for habit
+     * @param name String
+     * @param reason String
+     * @param date String
+     * @see Habit Class
+     * @author lwaschuk
+     */
     public Habit(String name, String reason, String date) {
         this.name = name;
         this.reason = reason;
         this.date = date;
     }
 
-    //    Setters
-
     /**
      * set the name of the habit
-     * @param name
+     * @param name String
+     * @see Habit Class
+     * @author lwaschuk
      */
     public void setName(String name) {
         this.name = name;
@@ -55,7 +66,9 @@ public class Habit implements Serializable {
 
     /**
      * set the reason of the habit
-     * @param reason
+     * @param reason String
+     * @see Habit Class
+     * @author lwasachuk
      */
     public void setReason(String reason) {
         this.reason = reason;
@@ -63,7 +76,9 @@ public class Habit implements Serializable {
 
     /**
      * sets the date of the habit
-     * @param date
+     * @param date String
+     * @see Habit Class
+     * @author lwaschuk
      */
     public void setDate(String date) {
         this.date = date;
@@ -71,7 +86,9 @@ public class Habit implements Serializable {
 
     /**
      * sets the privacy attribute of a habit
-     * @param privacy
+     * @param privacy String
+     * @see Habit Class
+     * @author lwaschuk
      */
     public void setPrivacy(String privacy){
         this.privacy = privacy;
@@ -79,15 +96,18 @@ public class Habit implements Serializable {
 
     /**
      * sets the frequency of the habit
-     * @param freq
+     * @param freq String
+     * @see Habit Class
+     * @author lwaschuk
      */
     public void setFrequency(ArrayList<String> freq){
         this.frequency = freq;
     }
     /**
      * Gets the name of the habit
-     * @return
-     * String name
+     * @return name String
+     * @see Habit Class
+     * @author lwaschuk
      */
     public String getName(){
         return this.name;
@@ -95,8 +115,9 @@ public class Habit implements Serializable {
 
     /**
      * Gets the reason of the habit
-     * @return
-     * String reason
+     * @return String reason
+     * @see Habit Class
+     * @author lwaschuk
      */
     public String getReason(){
         return this.reason;
@@ -104,8 +125,9 @@ public class Habit implements Serializable {
 
     /**
      * Gets the Date started of the habit
-     * @return
-     * String Date
+     * @return String Date
+     * @see Habit Class
+     * @author lwasachuk
      */
     public String getDate(){
         return this.date;
@@ -113,8 +135,9 @@ public class Habit implements Serializable {
 
     /**
      * Gets the days the habit occurs on
-     * @return
-     * ArrayList frequency
+     * @return ArrayList frequency
+     * @see Habit Class
+     * @author lwaschuk
      */
     public List<String> getFrequency() {
         return this.frequency;
@@ -122,9 +145,28 @@ public class Habit implements Serializable {
 
     /**
      * returns the current setting of privacy
-     * @return
+     * @return privacy String
+     * @see Habit Class
+     * @author lwaschuk
      */
     public String getPrivacy(){
         return this.privacy;
     }
+
+    /**
+     * check if name is under 20 characters
+     * @return boolean
+     */
+    public boolean underNameLimit() {
+        return name.replace(" ", "").length() <= 20;
+    }
+
+    /**
+     * check if reason is under 30 characters
+     * @return boolean
+     */
+    public boolean underReasonLimit() {
+        return reason.replace(" ", "").length() <= 30;
+    }
+
 }

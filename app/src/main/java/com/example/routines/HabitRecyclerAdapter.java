@@ -65,7 +65,7 @@ implements ReorderHabits.RecyclerTouchHelper {
     @NonNull
     @Override
     public HabitRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_list, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.habit_list, parent, false);
         return new MyViewHolder(itemView, onHabitClickListener);
     }
 

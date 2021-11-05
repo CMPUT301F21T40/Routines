@@ -30,6 +30,8 @@ import java.util.List;
 /**
  * This activity allow user to search other users by enter the username
  * Outstanding issues: search users bu user name
+ * @author Zezhou Xiong
+ * @see User
  * @see HomeActivity
  * @see ProfileActivity
  */

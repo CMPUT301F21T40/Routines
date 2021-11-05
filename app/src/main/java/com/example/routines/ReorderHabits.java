@@ -5,36 +5,70 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * This is a subclass of ItemToucheHelper.Callback which can construct drag and swipe
+ * @author Shanshan Wei
+ */
 public class ReorderHabits extends ItemTouchHelper.Callback {
 
     private RecyclerTouchHelper recyclerTouchHelper;
 
+    /**
+     * This is the constructor
+     * @param recyclerTouchHelper
+     */
     public ReorderHabits(RecyclerTouchHelper recyclerTouchHelper) {
         this.recyclerTouchHelper = recyclerTouchHelper;
     }
 
+    /**
+     * This means that the user has to long click on the item, so that the drag will function
+     * @return boolean
+     */
     @Override
     public boolean isLongPressDragEnabled(){
         return true;
     }
 
+    /**
+     * This discards the swipe action
+     * @return boolean
+     */
     @Override
     public boolean isItemViewSwipeEnabled() {
         return false;
     }
 
+    /**
+     * This sets a drag flag for movement
+     * @param recyclerView
+     * @param viewHolder
+     * @return
+     */
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         int dragFlag = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
         return makeMovementFlags(dragFlag,0);
     }
 
+    /**
+     * This overrides the onMove method of RecyclerTouchHelper
+     * @param recyclerView
+     * @param viewHolder
+     * @param target
+     * @return boolean
+     */
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
         this.recyclerTouchHelper.onRowMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
+    /**
+     *  touch helper will help to identify the drag and drop and implements onRowSelected method
+     * @param viewHolder
+     * @param actionState
+     */
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         if(actionState != ItemTouchHelper.ACTION_STATE_IDLE){
@@ -46,6 +80,11 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
         super.onSelectedChanged(viewHolder, actionState);
     }
 
+    /**
+     * This overrides the clearView method and implements the onRowClear method
+     * @param recyclerView
+     * @param viewHolder
+     */
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
@@ -61,6 +100,9 @@ public class ReorderHabits extends ItemTouchHelper.Callback {
 
     }
 
+    /**
+     * Interfaces for above three overrided methods
+     */
     public interface RecyclerTouchHelper{
         void onRowMoved(int from, int to);
         void onRowSelected(HabitRecyclerAdapter.MyViewHolder myViewHolder);

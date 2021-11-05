@@ -22,6 +22,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+/**
+ * This activity will allow user to input the email and password.
+ * If the email is signed up and the password is correct, the user will be directed to HomeActivity
+ * @author Shanshan wei/swei3
+ */
+
 public class LoginActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
@@ -55,6 +61,10 @@ public class LoginActivity extends AppCompatActivity {
         collectionReference = db.collection("Users");
         myAuth = FirebaseAuth.getInstance();
 
+        /**
+         * This sets a button listener.
+         * if the input emails and passwords is correct, this will direct the user to HomeActivity
+         */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +89,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
+    /**
+     * This will initialize views for all components like textview, buttons
+     */
     public void initializeView(){
 
         loginText = findViewById(R.id.text_login_page);
@@ -94,6 +106,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This will allow user to log in to their account by checking with firebase auth
+     * @param UserEmail
+     * @param UserPassword
+     */
     public void Login(String UserEmail, String UserPassword){
         myAuth.signInWithEmailAndPassword(UserEmail,UserPassword)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

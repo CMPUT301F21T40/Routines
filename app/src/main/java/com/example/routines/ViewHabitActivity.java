@@ -165,6 +165,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             }
         });
 
+        /**
+         * Response when the delete button is clicked, it sends the user
+         * to a page to confirm the deletion of the selected habit
+         */
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,13 +179,14 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     }
 
     /**
-     * When the user confirms to delete the habit, this function runs.
+     * When the user clicks "CONFIRM" to delete the habit, this function runs.
      * It takes the habit as a parameter then deletes it from the firebase
      * @param habit
+     * @author Isaiah Paterson
      */
     public void onDeletePressed(Habit habit) {
+//      Connect to Firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         CollectionReference collRef = db.collection("Habits")
                 .document(userId)
                 .collection("Habits");
@@ -203,22 +208,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                     }
                 });
         deleteEvent();
+//      Update the Screen
         finish();
         Intent intent = getIntent();
         intent.setClass(ViewHabitActivity.this, HomeActivity.class);
         startActivity(intent);
-        //updateFragment();
         ViewGroup vg = findViewById(R.id.container);
-    }
-
-    public void updateFragment(){
-        homeFragment = HomeFragment.newInstance();
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        setContentView(R.layout.activity_home);
-        transaction.replace(R.id.container, homeFragment);
-        transaction.commit();
-
     }
 
     /**
@@ -226,6 +221,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * It updates the habit that was selected with the newly provided details
      * @param habit
      * @param newHabit
+     * @author Isaiah Paterson
      */
     public void onEditPressed(Habit habit, Habit newHabit) {
         habitName = newHabit.getName();
@@ -244,7 +240,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             habitFrequency.remove("Null");
         }
 
-//      Update habit in Firestore
+//      Connect to Firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collRef = db.collection("Habits")
                 .document(userId)
@@ -275,6 +271,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         }
         frequencyView.setText(extendedFrequency);
 
+//      Update Firebase
         docRef.update(
                 "Habit Name", habitName,
                 "Habit Reason", habitReason,
@@ -312,6 +309,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         }
     };
 
+    /**
+     * This method delete all the events of a habit
+     * @author Shanshan Wei/swei3
+     */
     public void deleteEvent(){
         CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("Events");
         collectionReference.whereEqualTo("habitId", habitId)

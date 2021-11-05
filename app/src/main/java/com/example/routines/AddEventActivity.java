@@ -78,7 +78,6 @@ public class AddEventActivity extends AppCompatActivity {
                 HashMap<String, String> data = new HashMap<>();
                 data.put("name", name);
                 data.put("description", description);
-
                 data.put("habitId", habitId);
                 data.put("date", date);
 

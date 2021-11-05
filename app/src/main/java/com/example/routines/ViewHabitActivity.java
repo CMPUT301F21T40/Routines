@@ -182,7 +182,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * When the user clicks "CONFIRM" to delete the habit, this function runs.
      * It takes the habit as a parameter then deletes it from the firebase
      * @param habit
-     * @author Isaiah Paterson
+     * @author ipaterso
+     * @see DeleteHabitFragment
      */
     public void onDeletePressed(Habit habit) {
 //      Connect to Firebase
@@ -221,7 +222,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * It updates the habit that was selected with the newly provided details
      * @param habit
      * @param newHabit
-     * @author Isaiah Paterson
+     * @author ipaterso
+     * @see EditHabitFragment
      */
     public void onEditPressed(Habit habit, Habit newHabit) {
         habitName = newHabit.getName();

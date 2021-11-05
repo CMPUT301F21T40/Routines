@@ -106,7 +106,6 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
 
 
 
-//        Add habits from Firestore to local habit list
 
     }
 
@@ -137,6 +136,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     }
 
     public void showList(){
+        //        Add habits from Firestore to local habit list
         Query currentUserCol = currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
         currentUserCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

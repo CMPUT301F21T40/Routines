@@ -60,6 +60,7 @@
         app:itemIconTint="@color/yellow"
         app:itemTextColor="@color/yellow"
         android:layout_gravity="bottom"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav" />
 
 

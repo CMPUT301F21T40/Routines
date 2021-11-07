@@ -3,5 +3,6 @@
 
     <item android:id="@+id/home" android:title="Home" android:icon = "@drawable/ic_home" />
     <item android:id="@+id/search" android:title="Search" android:icon="@drawable/ic_search"/>
+    <item android:id="@+id/notification" android:title="Request" android:icon="@drawable/ic_notifications"/>
     <item android:id="@+id/profile" android:title="Profile" android:icon="@drawable/ic_profile"/>
 </menu>

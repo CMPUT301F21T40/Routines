@@ -66,6 +66,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     double latFromMap;
     double longFromMap;
 
+    boolean loadingLocation = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,27 +90,29 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-//        Check Location Permission
+//        Check location permission
         checkLocationPermission();
 
-//        Get Location
+//        Get location
         getLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getLocation();
+                loadingLocation = true;
                 if (currentLongitude == 0 || currentLatitude == 0) {
-                    Toast.makeText(getApplicationContext(), "Gathering Location Information", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(getApplicationContext(), "Loadting Location", Toast.LENGTH_SHORT ).show();
                 }
             }
         });
 
-//        Open Map
+//        Open map
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getLocation();
+                loadingLocation = true;
                 if (currentLongitude == 0 || currentLatitude == 0) {
-                    Toast.makeText(getApplicationContext(), "Gathering Location Information", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
                 }
                 if (currentLatitude != 0 || currentLongitude != 0) {
                     name = eventName.getText().toString();
@@ -135,6 +139,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 String description = eventDescription.getText().toString();
                 String locaiton = eventLocation.getText().toString();
 
+                CollectionReference eventReference = db.collection("Events");
+
                 if (name == "")
                     name = "null";
 
@@ -151,54 +157,66 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 int month = c.get(Calendar.MONTH) + 1;
                 int year = c.get(Calendar.YEAR);
 
-                String date = String.format("%d-%02d-%d", year, month, day);
-                HashMap<String, String> data = new HashMap<>();
-                data.put("name", name);
-                data.put("description", description);
-                data.put("location", locaiton);
-                data.put("habitId", habitId);
-                data.put("date", date);
 
-                CollectionReference eventReference = db.collection("Events");
+//                If get current location button is pressed, add event will be diabled until information is loaded
+                if (currentLongitude == 0 && currentLatitude == 0 && loadingLocation == true) {
+                    Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
+                } else {
+                    String date = String.format("%d-%02d-%d", year, month, day);
+                    HashMap<String, String> data = new HashMap<>();
+                    data.put("name", name);
+                    data.put("description", description);
+                    data.put("location", locaiton);
+                    data.put("habitId", habitId);
+                    data.put("date", date);
 
-                //generate an unique id for each event
-                String eventID = eventReference.document().getId();
-                eventReference
-                        .document(eventID)
-                        .set(data)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("Success","Document added with ID: "+eventID);
-                            }
-                        })
+                    //generate an unique id for each event
+                    String eventID = eventReference.document().getId();
+                    eventReference
+                            .document(eventID)
+                            .set(data)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("Success","Document added with ID: "+eventID);
+                                }
+                            })
 
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w("Fail", "Error adding document", e);
-                            }
-                        });
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Fail", "Error adding document", e);
+                                }
+                            });
 
-                //after successfully add a event, update the event list under the habit collection
-                if (eventID != null) {
-                    DocumentReference habitReference = db
-                            .collection("Habits").document(userId)
-                            .collection("Habits").document(habitId);
-                    Log.d("Success", "field added with ID: " + eventID);
-                    habitReference.update("eventList", FieldValue.arrayUnion(eventID));
+                    //after successfully add a event, update the event list under the habit collection
+                    if (eventID != null) {
+                        DocumentReference habitReference = db
+                                .collection("Habits").document(userId)
+                                .collection("Habits").document(habitId);
+                        Log.d("Success", "field added with ID: " + eventID);
+                        habitReference.update("eventList", FieldValue.arrayUnion(eventID));
+                    }
+
+                    //return to the last activity after everything is done
+                    eventName.setText("");
+                    eventDescription.setText("");
+                    eventLocation.setText("");
+                    onBackPressed();
                 }
 
-                //return to the last activity after everything is done
-                eventName.setText("");
-                eventDescription.setText("");
-                eventLocation.setText("");
-                onBackPressed();
+
             }
         });
 
     }
 
+    /**
+     * Get result back from Map activity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

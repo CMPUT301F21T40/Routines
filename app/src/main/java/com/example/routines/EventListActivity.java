@@ -62,8 +62,7 @@ public class EventListActivity extends AppCompatActivity {
 
 
         //fetch all the events which stores corresponding habit id
-        CollectionReference eventRef = db
-                .collection("Events");
+        CollectionReference eventRef = db.collection("Events");
 
         eventRef
                 .whereEqualTo("habitId", habitId)
@@ -76,11 +75,12 @@ public class EventListActivity extends AppCompatActivity {
                                 Log.d("Success", document.getId() + " => " + document.getData());
                                 String name = (String) document.getData().get("name");
                                 String date = (String) document.getData().get("date");
+                                String location = (String) document.getData().get("location");
                                 String habitId = (String) document.getData().get("habitId");
                                 String description = (String) document.getData().get("description");
                                 String eventId = (String) document.getId();
 
-                                eventArrayList.add(new Event(name, description, habitId, date));
+                                eventArrayList.add(new Event(name, description, habitId, date, location));
                                 eventIdList.add(eventId);
                                 eventArrayAdapter.notifyDataSetChanged();
                             }

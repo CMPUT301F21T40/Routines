@@ -71,6 +71,7 @@ public class AddHabitEvent {
         solo.sleep(1000);
         solo.enterText((EditText) solo.getView(R.id.view_habit_name), "12345678901234567890");
         solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
+        solo.enterText((EditText) solo.getView(R.id.event_location_editText), "Edmonton");
         solo.clickOnButton("ADD");
         solo.sleep(1000);
         solo.clickOnButton("VIEW EVENTS");

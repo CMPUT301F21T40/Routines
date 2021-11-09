@@ -34,7 +34,7 @@ public class EventListUnitTest {
     }
 
     public Event stubEvent() {
-        return new Event("Test Event", "Test Description", "Habit Id", "2020-01-01");
+        return new Event("Test Event", "Test Description", "Habit Id", "2020-01-01", "Edmonton");
     }
 
 

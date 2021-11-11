@@ -15,6 +15,7 @@
         android:theme="?attr/actionBarTheme">
 
         <RelativeLayout
+            android:id="@+id/rel_layout_with_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

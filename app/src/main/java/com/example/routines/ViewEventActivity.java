@@ -29,6 +29,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     TextView eventName;
     TextView eventComment;
     TextView eventDate;
+    TextView eventLocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); //connect to firebase
     FloatingActionButton editButton;
     String eventId;
@@ -41,6 +42,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventName = findViewById(R.id.view_event_name);
         eventComment = findViewById(R.id.view_event_comment);
         eventDate = findViewById(R.id.view_event_date);
+        eventLocation = findViewById(R.id.view_event_location);
         editButton = findViewById(R.id.edit_event_button);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
@@ -117,10 +119,12 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
                                 String name = (String) document.getData().get("name");
                                 String date = (String) document.getData().get("date");
                                 String comment = (String) document.getData().get("description");
+                                String location = (String) document.getData().get("location");
 
                                 eventName.setText(name);
                                 eventDate.setText(date);
                                 eventComment.setText(comment);
+                                eventLocation.setText(location);
                             } else
                                 Log.d("Fail", "Error document noe exist: ", task.getException());
 

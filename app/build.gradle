@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.example.routines"
         //Firebase: Targets API level 16 (Jelly Bean) or higher
-        minSdk 16
+        minSdk 21
         multiDexEnabled true
         targetSdk 30 // no tests will work with SDK 30 dont use
         versionCode 1
@@ -63,6 +63,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation platform('com.google.firebase:firebase-bom:28.4.2')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.android.gms:play-services-maps:18.0.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testImplementation 'org.testng:testng:6.9.6'

@@ -67,7 +67,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     Object ViewHabitActivity;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,11 +116,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                     frequency += habitFrequency.get(i) + " ";
                                 }
 
-                                nameView.setText("Name:  " + habitName);
-                                reasonView.setText("Reason:  " + habitReason);
-                                dateView.setText("Date:  " + habitDate);
-                                privacyView.setText("Privacy:  " + habitPrivacy);
-                                frequencyView.setText("Frequency:  " + frequency);
+                                nameView.setText(habitName);
+                                reasonView.setText(habitReason);
+                                dateView.setText(habitDate);
+                                privacyView.setText(habitPrivacy);
+                                frequencyView.setText(frequency);
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }
                             else {
@@ -143,6 +142,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 startActivity(intent);
             }
         });
+
+
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,16 +259,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
 
 //      Update the Details Screen
-
-        String extendedName = "Name: "+habitName;
-        nameView.setText(extendedName);
-        String extendedReason = "Reason: " + habitReason;
-        reasonView.setText(extendedReason);
+        nameView.setText(habitName);
+        reasonView.setText(habitReason);
         String extendedDate = "Date: " + habitDate;
-        dateView.setText(extendedDate);
-        String extendedPrivacy = "Privacy: " + habitPrivacy;
-        privacyView.setText(extendedPrivacy);
-        String extendedFrequency = "Frequency: ";
+        dateView.setText(habitDate);
+        privacyView.setText(habitPrivacy);
+        String extendedFrequency = "";
         for (int i = 0; i < habitFrequency.size(); i++){
             extendedFrequency += habitFrequency.get(i) + " ";
         }

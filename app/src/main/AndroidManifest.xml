@@ -43,6 +43,7 @@
 
         <activity
             android:name=".ViewEventActivity"
+            android:label="View Habit Event Details"
             android:exported="false"
             android:parentActivityName=".EventListActivity"/>
 
@@ -52,6 +53,7 @@
             android:parentActivityName=".SearchActivity"/>
         <activity
             android:name=".EventListActivity"
+            android:label="View Habit Events"
             android:exported="true" />
         <activity
             android:name=".AddEventActivity"
@@ -59,6 +61,7 @@
             android:parentActivityName=".ViewHabitActivity"/>
         <activity
             android:name=".ViewHabitActivity"
+            android:label="View Habit Details"
             android:parentActivityName=".HomeActivity"
             android:exported="true" />
         <activity
@@ -71,7 +74,7 @@
             android:exported="true" />
         <activity
             android:name=".HomeActivity"
-            android:parentActivityName=".WelcomeActivity"
+            
             android:exported="true" />
         <activity
             android:name=".SignupActivity"

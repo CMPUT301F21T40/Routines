@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -60,12 +61,16 @@ public class HabitList extends ArrayAdapter<Habit> {
         // a habit list to store the habits
         Habit habit = habits.get(position);
         TextView habitName = view.findViewById(R.id.habitName);
-        TextView habitDate = view.findViewById(R.id.habitDate);
-        TextView habitReason = view.findViewById(R.id.habitReason);
+        //TextView habitDate = view.findViewById(R.id.habitDate);
+        //TextView habitReason = view.findViewById(R.id.habitReason);
+
+        // this is testing for progress bar
+        ProgressBar progress = view.findViewById(R.id.progressBar3);
+        progress.setProgress(5);
 
         habitName.setText(habit.getName());
-        habitDate.setText(habit.getDate());
-        habitReason.setText(habit.getReason());
+        //habitDate.setText(habit.getDate());
+        //habitReason.setText(habit.getReason());
 
         return view;
     }

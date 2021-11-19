@@ -81,7 +81,7 @@ public class DeleteHabitFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
                 .setView(view)
-                .setTitle("Are you sure you want to delete?")
+                .setTitle("Are you sure you want to delete this habit?")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override

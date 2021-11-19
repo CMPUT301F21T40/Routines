@@ -1,97 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/date"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/background_pink"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/event_list_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/add_event_title"
-                android:layout_width="168dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="100dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="110dp"
-                android:text="Habit Details"
-                android:textColor="@color/white"
-                android:textSize="28sp" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/edit_habit_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="13dp"
-                android:layout_marginBottom="0dp"
-                android:clickable="true"
-                app:srcCompat="@android:drawable/ic_menu_edit" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/delete_habit_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                app:srcCompat="@android:drawable/ic_menu_delete" />
-
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/habit_name_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:hint="Name"
+            android:layout_gravity="left"
+            android:textStyle="bold|italic"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/view_habit_name"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:hint="Name:"
+            android:layout_marginLeft="20dp"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/habit_reason_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:hint="Reason"
+            android:layout_gravity="left"
+            android:textStyle="bold|italic"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/view_habit_reason"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:hint="Reason:"
+            android:layout_marginLeft="20dp"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/habit_date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:hint="Date Started"
+            android:layout_gravity="left"
+            android:textStyle="bold|italic"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/view_habit_date"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:hint="Date:"
+            android:layout_marginLeft="20dp"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/habit_privacy_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:hint="Privacy Setting"
+            android:layout_gravity="left"
+            android:textStyle="bold|italic"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/view_habit_privacy"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:hint="Privacy:"
+            android:layout_marginLeft="20dp"
             android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/habit_frequency_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
+            android:hint="Occurs on"
+            android:layout_gravity="left"
+            android:textStyle="bold|italic"
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/view_habit_frequency"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Frequency:"
+            android:layout_marginLeft="20dp"
             android:textSize="20sp" />
 
         <Button
@@ -108,5 +120,45 @@
             android:layout_gravity="bottom"
             android:text="VIEW EVENTS" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/edit_habit_button"
+                android:layout_width="423dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:foregroundGravity="top"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                android:backgroundTint="@color/project_pink"
+                app:srcCompat="@android:drawable/ic_menu_edit" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/delete_habit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:clickable="true"
+                android:focusable="true"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.842"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                android:backgroundTint="@color/red"
+                app:srcCompat="@android:drawable/ic_menu_delete" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </LinearLayout>
+
+
 </LinearLayout>

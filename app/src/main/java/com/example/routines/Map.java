@@ -119,10 +119,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
-
-        LatLng latLng = new LatLng(currentLat, currentLong);
-        userMarker = new MarkerOptions().position(latLng).title("Current Location");
-        map.addMarker(userMarker);
+        LatLng latLng = new LatLng(53.4397, -113.625);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {

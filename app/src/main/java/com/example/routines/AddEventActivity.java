@@ -55,8 +55,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     Button getLocationBtn;
     String habitId;
     String userId;
-    String name;
-    String description;
 
     LocationManager locationManager;
 
@@ -100,7 +98,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 getLocation();
                 loadingLocation = true;
                 if (currentLongitude == 0 || currentLatitude == 0) {
-                    Toast.makeText(getApplicationContext(), "Loadting Location", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
                 }
             }
         });
@@ -109,21 +107,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getLocation();
-                loadingLocation = true;
-                if (currentLongitude == 0 || currentLatitude == 0) {
-                    Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
-                }
-                if (currentLatitude != 0 || currentLongitude != 0) {
-                    name = eventName.getText().toString();
-                    description = eventDescription.getText().toString();
-
                     Intent intent = new Intent(AddEventActivity.this, Map.class);
                     intent.putExtra("currentLat", currentLatitude);
                     intent.putExtra("currentLong", currentLongitude);
 
                     startActivityForResult(intent, 1);
-                }
             }
         });
 

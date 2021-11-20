@@ -102,6 +102,14 @@ public class EventListActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
 
     /**
      * This is called when the up button is pressed. It changes the original

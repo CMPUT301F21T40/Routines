@@ -1,5 +1,7 @@
 package com.example.routines;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 /**
  * This activity display the details of a given event
@@ -96,6 +99,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         showInfo();
 
     }
+
 
     /**
      * This shows the information of the event

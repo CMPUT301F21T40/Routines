@@ -42,6 +42,7 @@ public class EventListActivity extends AppCompatActivity {
     ArrayList<Event> eventArrayList;
     ArrayList<String> eventIdList;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String habitId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +54,46 @@ public class EventListActivity extends AppCompatActivity {
 
 
         eventList = findViewById(R.id.event_list_view);
+        habitId = (String) getIntent().getStringExtra("habitId");
+
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
+                String eventId = eventIdList.get(i);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+    }
+
+    /**
+     * This is called when the up button is pressed. It changes the original
+     * functionality of up button. It let user back to the last activity
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void setScreen(String habitId) {
         eventArrayList = new ArrayList<>();
         eventIdList = new ArrayList<>();
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
-        String habitId = (String) getIntent().getStringExtra("habitId");
-
-
         //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db.collection("Events");
-
         eventRef
                 .whereEqualTo("habitId", habitId)
                 .get()
@@ -89,33 +119,14 @@ public class EventListActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
-                String eventId = eventIdList.get(i);
-                intent.putExtra("eventId", eventId);
-                startActivity(intent);
-            }
-        });
-
-
     }
 
-    /**
-     * This is called when the up button is pressed. It changes the original
-     * functionality of up button. It let user back to the last activity
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
 
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("Test", "RESUMING-----------------------------");
+        setScreen(habitId);
     }
 
 }

@@ -59,7 +59,7 @@ public class EventListActivity extends AppCompatActivity {
         eventList.setAdapter(eventArrayAdapter);
 
         String habitId = (String) getIntent().getStringExtra("habitId");
-
+        String userId = (String) getIntent().getStringExtra("userId");
 
         //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db.collection("Events");
@@ -95,6 +95,7 @@ public class EventListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
                 String eventId = eventIdList.get(i);
+                intent.putExtra("userId", userId);
                 intent.putExtra("eventId", eventId);
                 startActivity(intent);
             }

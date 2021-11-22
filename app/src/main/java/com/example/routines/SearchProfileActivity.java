@@ -2,10 +2,12 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,11 +49,12 @@ public class SearchProfileActivity extends AppCompatActivity {
     TextView userName;
     TextView habitLabel;
     Button followButton;
+
     //String userId;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
+    FirebaseAuth myAuth;
 
-    FrameLayout fragmentLayout;
-    HabitRecyclerAdapter habitAdapter;
+    String actualUserId;
     ArrayList<String> habitIdList;
     ArrayList<Habit> habitDataList;
     ArrayAdapter<Habit> habitArrayAdapter;
@@ -70,12 +74,15 @@ public class SearchProfileActivity extends AppCompatActivity {
         //enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        habitList= findViewById(R.id.search_event_list);
+        habitList = findViewById(R.id.search_event_list);
         habitList.setAdapter(habitArrayAdapter);
         userName = findViewById(R.id.search_profile_name);
         habitLabel = findViewById(R.id.habit_label);
         followButton = findViewById(R.id.follow);
-        //userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        actualUserId = user.getUid();
 
         //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
@@ -106,7 +113,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
-
         CollectionReference collectionReference = db.collection("Habits")
                 .document(id)
                 .collection("Habits");
@@ -123,7 +129,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                         if (value != null && value.exists()) {
                                             String privacy = (String) value.getData().get("Privacy");
                                             if (privacy != null && privacy.equals("Public")) {
-                                                habitDataList.add(new Habit( (String) value.getData().get("Habit Name"),
+                                                habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
                                                         (String) value.getData().get("Habit Reason"),
                                                         (String) value.getData().get("Start Date"),
                                                         (ArrayList<String>) value.getData().get("Frequency"),
@@ -142,5 +148,39 @@ public class SearchProfileActivity extends AppCompatActivity {
             }
         });
 
+        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
+                String habitId = habitIdList.get(position);
+                intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", id);
+                Log.d("Intent habit id", habitId);
+                startActivity(intent);
+            }
+        });
+
     }
+
 }
+/*
+private boolean checkFollow(DocumentReference userRef, String actualUserId) {
+        userRef.collection("Followers")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String userId = document.getId();
+                                if (userId == actualUserId) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+    }
+*/
+
+

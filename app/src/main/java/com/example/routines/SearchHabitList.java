@@ -35,13 +35,9 @@ public class SearchHabitList extends ArrayAdapter<Habit> {
         // a habit list to store the habits
         Habit habit = habits.get(position);
         TextView habitName = view.findViewById(R.id.search_habit_name);
-        //TextView habitDate = view.findViewById(R.id.habitDate);
-        //TextView habitReason = view.findViewById(R.id.habitReason);
 
 
         habitName.setText(habit.getName());
-        //habitDate.setText(habit.getDate());
-        //habitReason.setText(habit.getReason());
 
         return view;
     }

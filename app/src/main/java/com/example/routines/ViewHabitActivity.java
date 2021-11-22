@@ -60,6 +60,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FloatingActionButton delete;
     FirebaseAuth myAuth;
     String userId;
+    String actualUserId;
     String habitId;
 
     HomeFragment homeFragment;
@@ -77,7 +78,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
-        userId = user.getUid();
+        actualUserId = user.getUid();
+
+        userId = (String) getIntent().getStringExtra("userId");
+
+
 
         habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
@@ -89,6 +94,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
+
+        if (userId != actualUserId) {
+            add.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);
+        }
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -150,6 +161,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             public void onClick(View view) {
                 Intent intent = new Intent(ViewHabitActivity.this, EventListActivity.class);
                 intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", userId);
                 startActivity(intent);
             }
         });

@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,6 +50,16 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
         eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
+
+        FirebaseAuth myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        String actualUserId = user.getUid();
+        String userId = getIntent().getStringExtra("userId");
+
+        if (userId != actualUserId) {
+            editButton.setVisibility(View.INVISIBLE);
+
+        }
 
         showInfo();
 

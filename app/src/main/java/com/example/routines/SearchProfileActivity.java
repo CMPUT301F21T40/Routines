@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,10 +44,12 @@ public class SearchProfileActivity extends AppCompatActivity {
     //initialize the layout
     ListView habitList;
     TextView userName;
+    TextView habitLabel;
     Button followButton;
     //String userId;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
 
+    FrameLayout fragmentLayout;
     HabitRecyclerAdapter habitAdapter;
     ArrayList<String> habitIdList;
     ArrayList<Habit> habitDataList;
@@ -59,7 +62,8 @@ public class SearchProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_profile);
 
         habitDataList = new ArrayList<>();
-        habitArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, habitDataList);
+        //habitArrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, habitDataList);
+        habitArrayAdapter = new SearchHabitList(this, habitDataList);
 
         habitIdList = new ArrayList<>();
 
@@ -69,6 +73,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         habitList= findViewById(R.id.search_event_list);
         habitList.setAdapter(habitArrayAdapter);
         userName = findViewById(R.id.search_profile_name);
+        habitLabel = findViewById(R.id.habit_label);
         followButton = findViewById(R.id.follow);
         //userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -91,6 +96,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 String name = (String) document.getData().get("User Name");
                                 userName.setText(name);
+                                habitLabel.setText(name + "'s Habits");
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             } else {
                                 Log.d("TAG", "No such document");
@@ -117,17 +123,11 @@ public class SearchProfileActivity extends AppCompatActivity {
                                         if (value != null && value.exists()) {
                                             String privacy = (String) value.getData().get("Privacy");
                                             if (privacy != null && privacy.equals("Public")) {
-                                                /*
-                                                habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
+                                                habitDataList.add(new Habit( (String) value.getData().get("Habit Name"),
                                                         (String) value.getData().get("Habit Reason"),
-                                                        (String) value.getData().get("Start Date")));
-                                                habitIdList.add((String) document.getId());
-                                                habitAdapter.notifyDataSetChanged();
-                                                */
-                                                Habit habit = new Habit((String) value.getData().get("Habit Name"),
-                                                        (String) value.getData().get("Habit Reason"),
-                                                        (String) value.getData().get("Start Date"));
-                                                habitDataList.add(habit);
+                                                        (String) value.getData().get("Start Date"),
+                                                        (ArrayList<String>) value.getData().get("Frequency"),
+                                                        (String) value.getData().get("Privacy")));
                                                 habitIdList.add(docId);
                                                 habitArrayAdapter.notifyDataSetChanged();
                                             }
@@ -136,7 +136,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                                 });
                         Log.d(TAG, document.getId() + " => " + document.getData());
                     }
-
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }

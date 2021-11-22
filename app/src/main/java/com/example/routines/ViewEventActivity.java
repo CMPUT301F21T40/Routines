@@ -34,6 +34,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     TextView eventLocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); //connect to firebase
     FloatingActionButton editButton;
+    FloatingActionButton deleteButton;
     String eventId;
 
     @Override
@@ -46,6 +47,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventDate = findViewById(R.id.view_event_date);
         eventLocation = findViewById(R.id.view_event_location);
         editButton = findViewById(R.id.edit_event_button);
+        deleteButton = findViewById(R.id.delete_habit_event_button);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
@@ -58,7 +60,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
 
         if (userId != actualUserId) {
             editButton.setVisibility(View.INVISIBLE);
-
+            deleteButton.setVisibility(View.INVISIBLE);
         }
 
         showInfo();

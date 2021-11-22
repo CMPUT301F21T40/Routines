@@ -54,6 +54,7 @@ public class SearchProfileActivity extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
     FirebaseAuth myAuth;
 
+    Boolean follow;
     String actualUserId;
     ArrayList<String> habitIdList;
     ArrayList<Habit> habitDataList;
@@ -70,6 +71,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         habitArrayAdapter = new SearchHabitList(this, habitDataList);
 
         habitIdList = new ArrayList<>();
+        follow = false;
 
         //enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -113,6 +115,26 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        // Use when Followers has been set up
+/*
+        userRef.collection("Followers")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String userId = document.getId();
+                                if (userId == actualUserId) {
+                                    follow = true;
+                                }
+                            }
+                        }
+                    }
+                });
+  */
+
         CollectionReference collectionReference = db.collection("Habits")
                 .document(id)
                 .collection("Habits");
@@ -153,6 +175,7 @@ public class SearchProfileActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
                 String habitId = habitIdList.get(position);
+                intent.putExtra("sameUser", false);
                 intent.putExtra("habitId", habitId);
                 intent.putExtra("userId", id);
                 Log.d("Intent habit id", habitId);

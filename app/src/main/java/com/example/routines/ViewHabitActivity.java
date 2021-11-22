@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -95,11 +96,24 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
 
-        if (userId != actualUserId) {
+        //Boolean sameUser = Boolean.valueOf(getIntent().getStringExtra("sameUser"));
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+        if (!sameUser) {
             add.setVisibility(View.INVISIBLE);
             edit.setVisibility(View.INVISIBLE);
             delete.setVisibility(View.INVISIBLE);
+        } else {
+            userId = actualUserId;
         }
+/*
+        if ((userId != null) && (userId != actualUserId)) {
+            add.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);
+        } else {
+            userId = actualUserId;
+        }*/
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -162,6 +176,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 Intent intent = new Intent(ViewHabitActivity.this, EventListActivity.class);
                 intent.putExtra("habitId", habitId);
                 intent.putExtra("userId", userId);
+                intent.putExtra("sameUser", sameUser);
+                intent.putExtra("actualUserId", actualUserId);
                 startActivity(intent);
             }
         });

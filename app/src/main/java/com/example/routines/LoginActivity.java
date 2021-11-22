@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -72,7 +73,9 @@ public class LoginActivity extends AppCompatActivity {
                 String inputEmail = loginEmail.getText().toString();
                 String inputPassword = loginPassword.getText().toString();
                 if (inputEmail.length() == 0|| inputPassword.length() == 0){
-                    Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT ).show();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Information Missing", Toast.LENGTH_SHORT );
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }else{
                     Login(inputEmail, inputPassword);
                 }
@@ -123,7 +126,10 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(intent);
                         }else{
                             Log.d(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "invalid Email/Password", Toast.LENGTH_SHORT).show();
+                            Toast toast = Toast.makeText(getApplicationContext(), "invalid Email/Password", Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+
                         }
                     }
                 });

@@ -155,6 +155,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     public void onItemClick(int position) {
         Intent intent = new Intent(getContext(), ViewHabitActivity.class);
         String habitId = habitIdList.get(position);
+        intent.putExtra("sameUser", true);
         intent.putExtra("habitId", habitId);
         Log.d("Intent habit id", habitId);
         startActivity(intent);

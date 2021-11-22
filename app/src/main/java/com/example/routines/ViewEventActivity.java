@@ -55,13 +55,23 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
 
         FirebaseAuth myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
-        String actualUserId = user.getUid();
+        //String actualUserId = user.getUid();
+        String actualUserId = getIntent().getStringExtra("actualUserId");
         String userId = getIntent().getStringExtra("userId");
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
-        if (userId != actualUserId) {
+        if (!sameUser) {
             editButton.setVisibility(View.INVISIBLE);
             deleteButton.setVisibility(View.INVISIBLE);
         }
+        /*
+        if (userId != actualUserId) {
+            editButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.INVISIBLE);
+        } else {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+        }*/
 
         showInfo();
 

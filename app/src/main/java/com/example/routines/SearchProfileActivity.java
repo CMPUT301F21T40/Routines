@@ -63,7 +63,6 @@ public class SearchProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addPendingFollower();
-                Log.d("Test Button", "works");
             }
         });
 
@@ -102,6 +101,11 @@ public class SearchProfileActivity extends AppCompatActivity {
 
 
     public void addPendingFollower(){
+        myAuth = FirebaseAuth.getInstance();
+        String userId = myAuth.getCurrentUser().getUid();
+        requestId = db.collection(String.valueOf(requestReference)).document().getId();
+        requestReference = db.collection("Notification");
+
         db.collection("Users")
                 .whereEqualTo("User Name", userName.getText().toString())
                 .get()
@@ -109,51 +113,48 @@ public class SearchProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
-                            Log.d("Query", "works");
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 requestReceiver = document.getId();
                                 Log.d("requestReceiver", requestReceiver);
                             }
-                        }
-                    }
-                });
-        Log.d("requestReceiver", requestReceiver);
-        Log.d("addPendingFollower", "works");
-        myAuth = FirebaseAuth.getInstance();
-        String userId = myAuth.getCurrentUser().getUid();
-        requestId = db.collection(String.valueOf(requestReference)).document().getId();
-        requestReference = db.collection("Notification");
-        requestReference.whereEqualTo("Receiver", requestReceiver )
-                .whereEqualTo("Sender", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                if(document.exists() && task.getResult()!= null){
-                                    Toast.makeText(getApplicationContext(),
-                                            "You have followed this user", Toast.LENGTH_SHORT)
-                                            .show();
-                                }else{
-                                    HashMap<String, Object> data = new HashMap<>();
-                                    data.put("Sender", userId);
-                                    data.put("Receiver", requestReceiver);
-                                    data.put("Status", "pending");
-                                    requestReference.document(document.getId())
-                                            .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            requestReference
+                                    .whereEqualTo("Receiver", requestReceiver )
+                                    .whereEqualTo("Sender", userId)
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
-                                        public void onSuccess(Void unused) {
-                                            Log.w("Add Request", "Success on writing documentation on Firebase");
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.w("Add Request Failed", "Error on writing documentation on Firebase");
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                boolean isEmpty = task.getResult().isEmpty();
+                                                if(!isEmpty){
+                                                    Toast.makeText(getApplicationContext(),
+                                                            "You have followed this user", Toast.LENGTH_SHORT)
+                                                            .show();
+                                                }else{
+                                                    HashMap<String, Object> data = new HashMap<>();
+                                                    data.put("Sender", userId);
+                                                    data.put("Receiver", requestReceiver);
+                                                    data.put("Status", "pending");
+                                                    requestReference.document(requestId)
+                                                            .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            Log.w("Add Request", "Success on writing documentation on Firebase");
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.w("Add Request Failed", "Error on writing documentation on Firebase");
+                                                        }
+                                                    });
+
+                                                }
+
+                                            }
+
                                         }
                                     });
-                                }
-                            }
+
                         }
                     }
                 });

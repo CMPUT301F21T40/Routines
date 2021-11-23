@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,6 +34,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     TextView eventLocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); //connect to firebase
     FloatingActionButton editButton;
+    FloatingActionButton deleteButton;
     String eventId;
 
     @Override
@@ -44,10 +47,31 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventDate = findViewById(R.id.view_event_date);
         eventLocation = findViewById(R.id.view_event_location);
         editButton = findViewById(R.id.edit_event_button);
+        deleteButton = findViewById(R.id.delete_habit_event_button);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
         eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
+
+        FirebaseAuth myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        //String actualUserId = user.getUid();
+        String actualUserId = getIntent().getStringExtra("actualUserId");
+        String userId = getIntent().getStringExtra("userId");
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+        if (!sameUser) {
+            editButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.INVISIBLE);
+        }
+        /*
+        if (userId != actualUserId) {
+            editButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.INVISIBLE);
+        } else {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+        }*/
 
         showInfo();
 

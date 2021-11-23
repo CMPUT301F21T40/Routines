@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,6 +59,13 @@ public class SearchProfileActivity extends AppCompatActivity {
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
 
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPendingFollower();
+                Log.d("Test Button", "works");
+            }
+        });
 
         //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
@@ -88,56 +96,62 @@ public class SearchProfileActivity extends AppCompatActivity {
                     }
                 });
 
-        onButtonClick();
+
 
     }
 
-    public void onButtonClick(){
-        followButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPendingFollower();
-            }
-        });
-    }
 
     public void addPendingFollower(){
-
-        db.collection("User")
-                .whereEqualTo("User Name", userName)
+        db.collection("Users")
+                .whereEqualTo("User Name", userName.getText().toString())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful() && task != null){
+                        if(task.isSuccessful()){
+                            Log.d("Query", "works");
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 requestReceiver = document.getId();
+                                Log.d("requestReceiver", requestReceiver);
                             }
                         }
                     }
                 });
-
+        Log.d("requestReceiver", requestReceiver);
+        Log.d("addPendingFollower", "works");
         myAuth = FirebaseAuth.getInstance();
         String userId = myAuth.getCurrentUser().getUid();
         requestId = db.collection(String.valueOf(requestReference)).document().getId();
         requestReference = db.collection("Notification");
-        requestReference.whereEqualTo("To", requestReceiver )
-                .whereEqualTo("From", userId)
+        requestReference.whereEqualTo("Receiver", requestReceiver )
+                .whereEqualTo("Sender", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
-                                if(document.exists()){
+                                if(document.exists() && task.getResult()!= null){
                                     Toast.makeText(getApplicationContext(),
                                             "You have followed this user", Toast.LENGTH_SHORT)
                                             .show();
                                 }else{
                                     HashMap<String, Object> data = new HashMap<>();
-                                    String fromUser = userId;
-                                    String toUser = requestReceiver;
-                                    String status = "pending";
+                                    data.put("Sender", userId);
+                                    data.put("Receiver", requestReceiver);
+                                    data.put("Status", "pending");
+                                    requestReference.document(document.getId())
+                                            .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Log.w("Add Request", "Success on writing documentation on Firebase");
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w("Add Request Failed", "Error on writing documentation on Firebase");
+                                        }
+                                    });
                                 }
                             }
                         }

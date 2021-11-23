@@ -43,6 +43,9 @@ public class EventListActivity extends AppCompatActivity {
     ArrayList<String> eventIdList;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String habitId;
+    Boolean sameUser;
+    String actualUserId;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,10 @@ public class EventListActivity extends AppCompatActivity {
 
         eventList = findViewById(R.id.event_list_view);
         habitId = (String) getIntent().getStringExtra("habitId");
+
+        userId = (String) getIntent().getStringExtra("userId");
+        actualUserId = (String) getIntent().getStringExtra("actualUserId");
+        sameUser = getIntent().getBooleanExtra("sameUser", true);
 
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -92,14 +99,6 @@ public class EventListActivity extends AppCompatActivity {
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
-//<<<<<<< HEAD
-//=======
-        //String habitId = (String) getIntent().getStringExtra("habitId");
-        String userId = (String) getIntent().getStringExtra("userId");
-        String actualUserId = (String) getIntent().getStringExtra("actualUserId");
-        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
-
-//>>>>>>> ba8859f2c544a5be97cc00b5a2d2ab6737f1f34d
         //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db.collection("Events");
         eventRef
@@ -127,8 +126,6 @@ public class EventListActivity extends AppCompatActivity {
                         }
                     }
                 });
-//<<<<<<< HEAD
-//=======
 
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -143,8 +140,6 @@ public class EventListActivity extends AppCompatActivity {
             }
         });
 
-
-//>>>>>>> ba8859f2c544a5be97cc00b5a2d2ab6737f1f34d
     }
     @Override
     protected void onRestart() {

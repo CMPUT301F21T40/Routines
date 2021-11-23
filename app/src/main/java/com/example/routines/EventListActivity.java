@@ -92,6 +92,14 @@ public class EventListActivity extends AppCompatActivity {
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
+//<<<<<<< HEAD
+//=======
+        //String habitId = (String) getIntent().getStringExtra("habitId");
+        String userId = (String) getIntent().getStringExtra("userId");
+        String actualUserId = (String) getIntent().getStringExtra("actualUserId");
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+//>>>>>>> ba8859f2c544a5be97cc00b5a2d2ab6737f1f34d
         //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db.collection("Events");
         eventRef
@@ -119,6 +127,32 @@ public class EventListActivity extends AppCompatActivity {
                         }
                     }
                 });
+//<<<<<<< HEAD
+//=======
+
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
+                String eventId = eventIdList.get(i);
+                intent.putExtra("userId", userId);
+                intent.putExtra("eventId", eventId);
+                intent.putExtra("sameUser", sameUser);
+                intent.putExtra("actualUserId", actualUserId);
+                startActivity(intent);
+            }
+        });
+
+
+//>>>>>>> ba8859f2c544a5be97cc00b5a2d2ab6737f1f34d
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }
 
 

@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
+ * 
  * This is a filter fragment and it will filter the user's habits that need to be finished today
  * This implements HabitRecyclerAdapter.OnHabitClickListener
  * @author Shanshan Wei/swei3

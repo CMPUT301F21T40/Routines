@@ -135,7 +135,11 @@ public class AddHabitFragment extends DialogFragment {
                         name = check(name);
                         String reason = habitReason.getText().toString();
                         reason = check(reason);
-                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy));
+                        String completionTime = "0";
+                        String estimateCompletionTime = "0";
+                        String lastCompletionTime = "0";
+                        String lastModifiedDate = habitDate.getText().toString();
+                        listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy,completionTime,estimateCompletionTime,lastCompletionTime,lastModifiedDate));
                     }
                 }).create();
     }
@@ -184,7 +188,7 @@ public class AddHabitFragment extends DialogFragment {
         day = c.get(Calendar.DAY_OF_MONTH);
         month = c.get(Calendar.MONTH) + 1;
         year = c.get(Calendar.YEAR);
-        habitDate.setText(String.format("%d-%02d-%d", year, month, day));
+        habitDate.setText(String.format("%d-%02d-%02d", year, month, day));
 
 //        Create Date picker
         confirmDateButton.setOnClickListener(new View.OnClickListener() {

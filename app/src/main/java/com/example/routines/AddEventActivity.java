@@ -1,5 +1,7 @@
 package com.example.routines;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -21,10 +23,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Calendar;
@@ -192,6 +198,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     eventName.setText("");
                     eventDescription.setText("");
                     eventLocation.setText("");
+                    updateCompletion(habitId, userId, db);
                     onBackPressed();
                 }
 
@@ -292,6 +299,46 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void updateCompletion(String habitId, String userId, FirebaseFirestore db){
+        DocumentReference habitRef = db
+                .collection("Habits")
+                .document(userId)
+                .collection("Habits")
+                .document(habitId);
+        habitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        String completion = (String) document.getData().get("Completion Time");
+                        
+                        completion = Integer.toString(Integer.parseInt(completion + 1));
+                        habitRef.update("Completion Time", completion)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
     }
 

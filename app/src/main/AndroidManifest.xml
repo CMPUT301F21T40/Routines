@@ -89,6 +89,10 @@
             android:exported="true"
             />
         <activity
+            android:name=".DeleteEventFragment"
+            android:exported="true"
+            />
+        <activity
             android:name=".WelcomeActivity"
             android:exported="true">
         </activity>

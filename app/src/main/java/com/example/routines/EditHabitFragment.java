@@ -293,7 +293,11 @@ public class EditHabitFragment extends DialogFragment {
                         newReason = check(newReason);
                         String newPrivacy = currentPrivacy;
                         newPrivacy = check(newPrivacy);
-                        listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy));
+                        String newCompletionTime = "0";
+                        String newEstimateCompletionTime = "0";
+                        String newLastCompletionTime = "0";
+                        String newLastModifiedDate = habitName.getText().toString();
+                        listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy,newCompletionTime,newEstimateCompletionTime,newLastCompletionTime,newLastModifiedDate));
                     }
                 }).create();
     }

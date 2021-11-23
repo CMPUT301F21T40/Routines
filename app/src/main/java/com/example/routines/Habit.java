@@ -23,21 +23,33 @@ public class Habit implements Serializable {
     public String date;
     public ArrayList<String> frequency;
     public String privacy;
+    public String lastModifiedDate;
+    public String lastCompletionTime;
+    public String completionTime;
+    public String estimateCompletionDate;
 
     /**
-     * Initializer for the habit
-     * @param name String
-     * @param reason String
-     * @param date String
-     * @param privacy String
+     * @param name
+     * @param reason
+     * @param date
+     * @param frequency
+     * @param privacy
+     * @param completionTime
+     * @param estimateCompletionTime
+     * @param lastCompletionTime
+     * @param lastModifiedDate
      * @author lwaschuk
      */
-    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy) {
+    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, String completionTime, String estimateCompletionTime, String lastCompletionTime, String lastModifiedDate) {
         this.name = name;
         this.reason = reason;
         this.date = date;
         this.frequency = frequency;
         this.privacy = privacy;
+        this.completionTime = completionTime;
+        this.estimateCompletionDate = estimateCompletionDate;
+        this.lastCompletionTime = lastCompletionTime;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     /**
@@ -169,4 +181,36 @@ public class Habit implements Serializable {
         return reason.replace(" ", "").length() <= 30;
     }
 
+
+    public String getLastCompletionTime() {
+        return lastCompletionTime;
+    }
+
+    public void setLastCompletionTime(String lastCompletionTime) {
+        this.lastCompletionTime = lastCompletionTime;
+    }
+
+    public String getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(String completionTime) {
+        this.completionTime = completionTime;
+    }
+
+    public String getEstimateCompletionDate() {
+        return estimateCompletionDate;
+    }
+
+    public void setEstimateCompletionDate(String estimateCompletionDate) {
+        this.estimateCompletionDate = estimateCompletionDate;
+    }
+
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
 }

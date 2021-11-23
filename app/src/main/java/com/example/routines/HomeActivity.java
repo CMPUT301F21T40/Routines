@@ -115,6 +115,10 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         if (frequencyList.isEmpty()) {
             frequencyList.add("Null");
         }
+        String completionTime = newHabit.getCompletionTime();
+        String estimateCompletionTime = newHabit.getEstimateCompletionDate();
+        String lastCompletionTime = newHabit.getLastCompletionTime();
+        String lastModifiedDate = newHabit.getLastModifiedDate();
 
         habitId = db.collection(String.valueOf(currentUserHabitCol)).document().getId();
 //        Add new habit to Firestore
@@ -124,6 +128,11 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         data.put("Start Date", habitDate);
         data.put("Frequency", frequencyList);
         data.put("Privacy", habitPrivacy);
+        data.put("Completion Time", completionTime);
+        data.put("Estimate Completion Time", estimateCompletionTime);
+        data.put("Last Completion Time", lastCompletionTime);
+        data.put("Last Modified Date", lastModifiedDate);
+
         data.put("Index", 10000);
         currentUserHabitCol.document(habitId)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {

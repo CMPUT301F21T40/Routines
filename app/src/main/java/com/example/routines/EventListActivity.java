@@ -58,38 +58,6 @@ public class EventListActivity extends AppCompatActivity {
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
-        String habitId = (String) getIntent().getStringExtra("habitId");
-
-
-        //fetch all the events which stores corresponding habit id
-        CollectionReference eventRef = db.collection("Events");
-
-        eventRef
-                .whereEqualTo("habitId", habitId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("Success", document.getId() + " => " + document.getData());
-                                String name = (String) document.getData().get("name");
-                                String date = (String) document.getData().get("date");
-                                String location = (String) document.getData().get("location");
-                                String habitId = (String) document.getData().get("habitId");
-                                String description = (String) document.getData().get("description");
-                                String eventId = (String) document.getId();
-
-                                eventArrayList.add(new Event(name, description, habitId, date, location));
-                                eventIdList.add(eventId);
-                                eventArrayAdapter.notifyDataSetChanged();
-                            }
-                        } else {
-                            Log.d("Fail", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -116,6 +84,41 @@ public class EventListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String habitId = (String) getIntent().getStringExtra("habitId");
+        CollectionReference eventRef = db.collection("Events");
+        eventArrayList.clear();
+        eventArrayAdapter.notifyDataSetChanged();
+        eventRef
+                .whereEqualTo("habitId", habitId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("Success", document.getId() + " => " + document.getData());
+                                String name = (String) document.getData().get("name");
+                                String date = (String) document.getData().get("date");
+                                String location = (String) document.getData().get("location");
+                                String habitId = (String) document.getData().get("habitId");
+                                String description = (String) document.getData().get("description");
+                                String eventId = (String) document.getId();
+
+                                eventArrayList.add(new Event(name, description, habitId, date, location));
+                                eventIdList.add(eventId);
+                                eventArrayAdapter.notifyDataSetChanged();
+                            }
+                        } else {
+                            Log.d("Fail", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
     }
 
 }

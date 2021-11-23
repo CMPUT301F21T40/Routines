@@ -1,18 +1,27 @@
 package com.example.routines;
 
+import static android.content.ContentValues.TAG;
+
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,7 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * @author Zezhou Xiong
  * @see Event
  */
-public class ViewEventActivity extends AppCompatActivity implements EditEventFragment.OnFragmentInteractionalListener{
+public class ViewEventActivity extends AppCompatActivity implements EditEventFragment.OnFragmentInteractionalListener, DeleteEventFragment.OnFragmentInteractionListener{
 
     //Text views for the details of given event
     TextView eventName;
@@ -32,6 +41,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     TextView eventLocation;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); //connect to firebase
     FloatingActionButton editButton;
+    FloatingActionButton deleteButton;
     String eventId;
 
     @Override
@@ -44,6 +54,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventDate = findViewById(R.id.view_event_date);
         eventLocation = findViewById(R.id.view_event_location);
         editButton = findViewById(R.id.edit_event_button);
+        deleteButton = findViewById(R.id.delete_habit_event_button);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
@@ -66,8 +77,42 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             }
         });
 
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DeleteEventFragment();
+                DeleteEventFragment.newInstance(eventId).show(getSupportFragmentManager(),"Delete Event");
+            }
+        });
+
 
     }
+
+    public void onDeletePressedEvent(String eventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("Events")
+                .document(eventId);
+        docRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+        onBackPressed();
+
+
+
+    }
+
+
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

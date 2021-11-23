@@ -6,8 +6,8 @@
     tools:context=".FollowerRequestFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fragment_follower_request"
+    <ListView
+        android:id="@+id/fragment_follower_request_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="4dp"

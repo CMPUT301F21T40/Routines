@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,11 +24,13 @@ public class NotificationActivity extends AppCompatActivity {
     AppCompatRadioButton switchFollowerRequest;
     MyRequestFragment myRequestFragment;
     FollowerRequestFragment followerRequestFragment;
+    FrameLayout fragmentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        fragmentLayout = findViewById(R.id.container);
 
         switchActivity();
         switchRadioButton();
@@ -102,7 +105,7 @@ public class NotificationActivity extends AppCompatActivity {
     public void onClickButton(View view){
         boolean isSelected = ((AppCompatRadioButton)view).isChecked();
         switch(view.getId()){
-            case R.id.switch_habits:
+            case R.id.switch_mine:
                 if(isSelected) {
                     switchMyRequest.setTextColor(Color.WHITE);
                     switchFollowerRequest.setTextColor(Color.BLACK);
@@ -119,7 +122,7 @@ public class NotificationActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "All Habits", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.switch_today:
+            case R.id.switch_follower:
                 if(isSelected){
                     switchFollowerRequest.setTextColor(Color.WHITE);
                     switchMyRequest.setTextColor(Color.BLACK);

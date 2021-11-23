@@ -69,6 +69,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
 
     }
 
+
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 

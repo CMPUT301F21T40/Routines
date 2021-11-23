@@ -2,19 +2,31 @@ package com.example.routines;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+
+import java.util.HashMap;
 
 /**
  * This activity display the details of a user
@@ -28,6 +40,10 @@ public class SearchProfileActivity extends AppCompatActivity {
     TextView userName;
     Button followButton;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
+    CollectionReference requestReference;
+    FirebaseAuth myAuth;
+    String requestId;
+    String requestReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +57,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         habitList= findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
+
 
         //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
@@ -67,6 +84,62 @@ public class SearchProfileActivity extends AppCompatActivity {
                             }
                         } else {
                             Log.d("TAG", "get failed with ", task.getException());
+                        }
+                    }
+                });
+
+        onButtonClick();
+
+    }
+
+    public void onButtonClick(){
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addPendingFollower();
+            }
+        });
+    }
+
+    public void addPendingFollower(){
+
+        db.collection("User")
+                .whereEqualTo("User Name", userName)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful() && task != null){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                requestReceiver = document.getId();
+                            }
+                        }
+                    }
+                });
+
+        myAuth = FirebaseAuth.getInstance();
+        String userId = myAuth.getCurrentUser().getUid();
+        requestId = db.collection(String.valueOf(requestReference)).document().getId();
+        requestReference = db.collection("Notification");
+        requestReference.whereEqualTo("To", requestReceiver )
+                .whereEqualTo("From", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                if(document.exists()){
+                                    Toast.makeText(getApplicationContext(),
+                                            "You have followed this user", Toast.LENGTH_SHORT)
+                                            .show();
+                                }else{
+                                    HashMap<String, Object> data = new HashMap<>();
+                                    String fromUser = userId;
+                                    String toUser = requestReceiver;
+                                    String status = "pending";
+                                }
+                            }
                         }
                     }
                 });

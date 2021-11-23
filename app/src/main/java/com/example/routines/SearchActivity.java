@@ -3,6 +3,7 @@ package com.example.routines;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -139,6 +140,11 @@ public class SearchActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.search:
+                        return true;
+
+                    case R.id.notification:
+                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+                        overridePendingTransition(0,0);
                         return true;
 
                     case R.id.profile:

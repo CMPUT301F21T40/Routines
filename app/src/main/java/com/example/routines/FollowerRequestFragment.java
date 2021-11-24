@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link FollowerRequestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FollowerRequestFragment extends Fragment {
+public class FollowerRequestFragment extends Fragment implements RequestStatuslFragment.RespondFragmentInteractionListener {
     private View rootView;
     FrameLayout fragmentLayout;
     FirebaseFirestore db;
@@ -83,6 +85,15 @@ public class FollowerRequestFragment extends Fragment {
         userId = myAuth.getCurrentUser().getUid();
         requestReference = db.collection("Notification");
 
+        myRequestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Request request = requestList.get(i);
+                RequestStatuslFragment.newInstance(request).show(getActivity().getSupportFragmentManager(), "Edit");
+                requestAdapter.notifyDataSetChanged();
+            }
+        });
+
         requestReference
                 .whereEqualTo("Receiver", userId)
                 .get()
@@ -128,4 +139,32 @@ public class FollowerRequestFragment extends Fragment {
     }
 
 
+    @Override
+    public void onYesPressed(Request request) {
+        String newStatus = request.getStatus();
+        String newname = request.getRequestUser();
+        requestReference
+                .whereEqualTo("Sender Name", newname)
+                .whereEqualTo("Receiver", userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                requestReference
+                                        .document(document.getId())
+                                        .update("Status", newStatus)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d("Updated Request", document.getId() + " => " + document.getData());
+                                            }
+                                        });
+                            }
+                        }
+                    }
+                });
+
+    }
 }

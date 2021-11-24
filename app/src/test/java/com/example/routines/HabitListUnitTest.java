@@ -27,7 +27,7 @@ public class HabitListUnitTest {
     private View mockView = mock(View.class);
     private ViewGroup mockViewGroup = mock(ViewGroup.class);
     private TextView mockTextView = mock(TextView.class);
-    
+
     @BeforeEach
     public void createHabitList(){ // create a new mock habit list for every test
         habitList = new HabitList(mockContext, new ArrayList<>());

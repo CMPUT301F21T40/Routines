@@ -60,12 +60,24 @@ public class ViewHabitTest {
         solo.clickOnButton("OK");
         solo.sleep(1000);
     }
+    public void deleteHabit(){
+        solo.clickOnText("TEST HABIT");
+        //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
+        solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
+        // click the floating action button
+        solo.clickOnView(solo.getView(R.id.delete_habit_button)); // click on the floating button
+        solo.sleep(500);
+        solo.clickOnButton("Confirm"); // click on the confirm
+        solo.sleep(1000);
+    }
+
     @Test
     public void viewHabitTest(){
         login();
         addHabit();
         solo.clickOnText("TEST HABIT");
         solo.sleep(1000);
+        deleteHabit();
     }
     /**
      * Closes the activity after every test

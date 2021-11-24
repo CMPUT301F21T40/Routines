@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link FollowerRequestFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FollowerRequestFragment extends Fragment implements RequestStatuslFragment.RespondFragmentInteractionListener {
+public class FollowerRequestFragment extends Fragment {
     private View rootView;
     FrameLayout fragmentLayout;
     FirebaseFirestore db;
@@ -138,33 +138,4 @@ public class FollowerRequestFragment extends Fragment implements RequestStatuslF
                 });
     }
 
-
-    @Override
-    public void onYesPressed(Request request) {
-        String newStatus = request.getStatus();
-        String newname = request.getRequestUser();
-        requestReference
-                .whereEqualTo("Sender Name", newname)
-                .whereEqualTo("Receiver", userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                requestReference
-                                        .document(document.getId())
-                                        .update("Status", newStatus)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d("Updated Request", document.getId() + " => " + document.getData());
-                                            }
-                                        });
-                            }
-                        }
-                    }
-                });
-
-    }
 }

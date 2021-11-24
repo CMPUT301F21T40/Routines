@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class NotificationActivity extends AppCompatActivity {
+public class NotificationActivity extends AppCompatActivity implements RequestStatuslFragment.RespondFragmentInteractionListener {
 
     BottomNavigationView bottomNavigator;
     AppCompatRadioButton switchMyRequest;
@@ -34,7 +34,8 @@ public class NotificationActivity extends AppCompatActivity {
 
         switchActivity();
         switchRadioButton();
-        updateFragment();
+        updateMyRequestFragment();
+        updateFollowerRequestFragment();
     }
 
 
@@ -119,7 +120,7 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                     transaction.replace(R.id.container, myRequestFragment);
                     transaction.commit();
-                    Toast.makeText(getApplicationContext(), "All Habits", Toast.LENGTH_SHORT).show();
+
                 }
                 break;
             case R.id.switch_follower:
@@ -136,17 +137,30 @@ public class NotificationActivity extends AppCompatActivity {
                     }
                     transaction.replace(R.id.container, followerRequestFragment);
                     transaction.commit();
-                    Toast.makeText(getApplicationContext(), "Today's Habits", Toast.LENGTH_SHORT).show();
                 }
         }
     }
 
-    public void updateFragment(){
+    public void updateMyRequestFragment(){
         myRequestFragment = MyRequestFragment.newInstance();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container, myRequestFragment);
         transaction.commit();
 
+    }
+
+    public void updateFollowerRequestFragment(){
+        followerRequestFragment = FollowerRequestFragment.newInstance();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container, myRequestFragment);
+        transaction.commit();
+    }
+
+
+    @Override
+    public void onYesPressed() {
+        updateFollowerRequestFragment();
     }
 }

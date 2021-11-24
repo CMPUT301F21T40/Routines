@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This activity display the details of a user
@@ -45,6 +46,7 @@ public class SearchProfileActivity extends AppCompatActivity {
     FirebaseAuth myAuth;
     String requestId;
     String requestReceiver;
+    String currentUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class SearchProfileActivity extends AppCompatActivity {
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
 
+        requestReference = db.collection("Notification");
+        requestId = db.collection(String.valueOf(requestReference)).document().getId();
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,8 +107,27 @@ public class SearchProfileActivity extends AppCompatActivity {
     public void addPendingFollower(){
         myAuth = FirebaseAuth.getInstance();
         String userId = myAuth.getCurrentUser().getUid();
-        requestId = db.collection(String.valueOf(requestReference)).document().getId();
-        requestReference = db.collection("Notification");
+
+        Log.d("requestid 1", requestId);
+
+        db.collection("Users")
+                .document(userId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.w("Current user name", "Listen failed.", error);
+                            return;
+                        }
+                        if (value != null && value.exists()) {
+                            Log.d("Current user name", "Current data: " + value.getData());
+                            currentUserName = (String) value.getData().get("User Name");
+                        } else {
+                            Log.d("Current user name", "Current data: null");
+                        }
+
+                    }
+                });
 
         db.collection("Users")
                 .whereEqualTo("User Name", userName.getText().toString())
@@ -120,6 +143,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                             requestReference
                                     .whereEqualTo("Receiver", requestReceiver )
                                     .whereEqualTo("Sender", userId)
+                                    .limit(1)
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
@@ -127,6 +151,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 boolean isEmpty = task.getResult().isEmpty();
                                                 if(!isEmpty){
+                                                    Log.d("Follow", "There is request doc");
                                                     Toast.makeText(getApplicationContext(),
                                                             "You have followed this user", Toast.LENGTH_SHORT)
                                                             .show();
@@ -135,6 +160,8 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                     data.put("Sender", userId);
                                                     data.put("Receiver", requestReceiver);
                                                     data.put("Status", "pending");
+                                                    data.put("Sender Name", currentUserName);
+                                                    data.put("Receiver Name", userName.getText().toString() );
                                                     requestReference.document(requestId)
                                                             .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override

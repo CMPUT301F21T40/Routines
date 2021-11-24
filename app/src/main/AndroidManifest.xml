@@ -42,6 +42,10 @@
             android:parentActivityName=".AddEventActivity"/>
 
         <activity
+            android:name=".NotificationActivity"
+            android:exported="false"/>
+
+        <activity
             android:name=".ViewEventActivity"
             android:label="View Habit Event Details"
             android:exported="false"

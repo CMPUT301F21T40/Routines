@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -178,6 +179,11 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
 
                     case R.id.search:
                         startActivity(new Intent(getApplicationContext(),SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.notification:
+                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
                         overridePendingTransition(0,0);
                         return true;
 

@@ -70,9 +70,7 @@ public class DeleteHabitTest {
         //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
         solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
         // click the floating action button
-        View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.event_list_toolbar);
-        View fab= floatingButtonView.findViewById(R.id.delete_habit_button); // get the button inside the relative layout
-        solo.clickOnView(fab);
+        solo.clickOnView(solo.getView(R.id.delete_habit_button)); // click on the floating button
         solo.sleep(500);
         solo.clickOnButton("Confirm"); // click on the confirm
         solo.sleep(1000);

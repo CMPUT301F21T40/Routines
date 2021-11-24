@@ -45,6 +45,17 @@ public class EditHabitTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
+    public void deleteHabit(){
+        solo.clickOnText("TEST HABIT");
+        //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
+        solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
+        // click the floating action button
+        solo.clickOnView(solo.getView(R.id.delete_habit_button)); // click on the floating button
+        solo.sleep(500);
+        solo.clickOnButton("Confirm"); // click on the confirm
+        solo.sleep(1000);
+    }
+
     public void addHabit(){
         // click the floating action button
         View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.container); // get the frame layout
@@ -69,10 +80,7 @@ public class EditHabitTest {
         solo.clickOnText("TEST HABIT");
         //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
         solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
-        // click the floating action button
-        View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.event_list_toolbar);
-        View fab= floatingButtonView.findViewById(R.id.edit_habit_button); // get the button inside the frame layout
-        solo.clickOnView(fab);
+        solo.clickOnView(solo.getView(R.id.edit_habit_button)); // click on the floating button
         solo.sleep(1000);
         // inside the fragment
         solo.clickOnButton("CONFIRM DATE");
@@ -89,6 +97,7 @@ public class EditHabitTest {
         solo.clickOnButton("Sunday");
         solo.clickOnButton("OK");
         solo.sleep(500);
+        deleteHabit();
     }
     /**
      * Closes the activity after every test

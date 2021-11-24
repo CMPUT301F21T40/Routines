@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,12 +61,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FloatingActionButton delete;
     FirebaseAuth myAuth;
     String userId;
+    String actualUserId;
     String habitId;
 
     HomeFragment homeFragment;
     ViewHabitActivity viewActivity;
     Object ViewHabitActivity;
-
 
 
     @Override
@@ -78,7 +79,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
-        userId = user.getUid();
+        actualUserId = user.getUid();
+
+        userId = (String) getIntent().getStringExtra("userId");
+
+
 
         habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
@@ -90,6 +95,25 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
+
+        //Boolean sameUser = Boolean.valueOf(getIntent().getStringExtra("sameUser"));
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+        if (!sameUser) {
+            add.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);
+        } else {
+            userId = actualUserId;
+        }
+/*
+        if ((userId != null) && (userId != actualUserId)) {
+            add.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);
+        } else {
+            userId = actualUserId;
+        }*/
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -117,11 +141,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                     frequency += habitFrequency.get(i) + " ";
                                 }
 
-                                nameView.setText("Name:  " + habitName);
-                                reasonView.setText("Reason:  " + habitReason);
-                                dateView.setText("Date:  " + habitDate);
-                                privacyView.setText("Privacy:  " + habitPrivacy);
-                                frequencyView.setText("Frequency:  " + frequency);
+                                nameView.setText(habitName);
+                                reasonView.setText(habitReason);
+                                dateView.setText(habitDate);
+                                privacyView.setText(habitPrivacy);
+                                frequencyView.setText(frequency);
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }
                             else {
@@ -144,11 +168,16 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             }
         });
 
+
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ViewHabitActivity.this, EventListActivity.class);
                 intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", userId);
+                intent.putExtra("sameUser", sameUser);
+                intent.putExtra("actualUserId", actualUserId);
                 startActivity(intent);
             }
         });
@@ -258,16 +287,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
 
 //      Update the Details Screen
-
-        String extendedName = "Name: "+habitName;
-        nameView.setText(extendedName);
-        String extendedReason = "Reason: " + habitReason;
-        reasonView.setText(extendedReason);
+        nameView.setText(habitName);
+        reasonView.setText(habitReason);
         String extendedDate = "Date: " + habitDate;
-        dateView.setText(extendedDate);
-        String extendedPrivacy = "Privacy: " + habitPrivacy;
-        privacyView.setText(extendedPrivacy);
-        String extendedFrequency = "Frequency: ";
+        dateView.setText(habitDate);
+        privacyView.setText(habitPrivacy);
+        String extendedFrequency = "";
         for (int i = 0; i < habitFrequency.size(); i++){
             extendedFrequency += habitFrequency.get(i) + " ";
         }

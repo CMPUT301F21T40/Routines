@@ -14,12 +14,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -74,7 +77,10 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_home);
+
         fragmentLayout = findViewById(R.id.container);
 
         habitToServer();
@@ -110,6 +116,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         if (frequencyList.isEmpty()) {
             frequencyList.add("Null");
         }
+
         habitId = db.collection(String.valueOf(currentUserHabitCol)).document().getId();
 //        Add new habit to Firestore
         HashMap<String, Object> data = new HashMap<>();

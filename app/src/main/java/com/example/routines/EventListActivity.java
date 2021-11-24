@@ -59,11 +59,12 @@ public class EventListActivity extends AppCompatActivity {
         eventList.setAdapter(eventArrayAdapter);
 
         String habitId = (String) getIntent().getStringExtra("habitId");
-
+        String userId = (String) getIntent().getStringExtra("userId");
+        String actualUserId = (String) getIntent().getStringExtra("actualUserId");
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
         //fetch all the events which stores corresponding habit id
-        CollectionReference eventRef = db
-                .collection("Events");
+        CollectionReference eventRef = db.collection("Events");
 
         eventRef
                 .whereEqualTo("habitId", habitId)
@@ -76,11 +77,12 @@ public class EventListActivity extends AppCompatActivity {
                                 Log.d("Success", document.getId() + " => " + document.getData());
                                 String name = (String) document.getData().get("name");
                                 String date = (String) document.getData().get("date");
+                                String location = (String) document.getData().get("location");
                                 String habitId = (String) document.getData().get("habitId");
                                 String description = (String) document.getData().get("description");
                                 String eventId = (String) document.getId();
 
-                                eventArrayList.add(new Event(name, description, habitId, date));
+                                eventArrayList.add(new Event(name, description, habitId, date, location));
                                 eventIdList.add(eventId);
                                 eventArrayAdapter.notifyDataSetChanged();
                             }
@@ -95,12 +97,23 @@ public class EventListActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
                 String eventId = eventIdList.get(i);
+                intent.putExtra("userId", userId);
                 intent.putExtra("eventId", eventId);
+                intent.putExtra("sameUser", sameUser);
+                intent.putExtra("actualUserId", actualUserId);
                 startActivity(intent);
             }
         });
 
 
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
     }
 
     /**

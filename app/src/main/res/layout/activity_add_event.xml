@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/project_white"
+    android:layout_height="match_parent" >
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/date"
+    android:id="@+id/add_habit_event"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -57,10 +62,39 @@
             android:maxLength="20"
             android:hint="Comments (Max 20 characters)" />
 
+
+        <EditText
+            android:id="@+id/event_location_editText"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:hint="Current Location">
+        </EditText>
+
+
+        <Button
+            android:id="@+id/get_location_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GET CURRENT LOCATION">
+
+        </Button>
+
+        <Button
+            android:id="@+id/open_map"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="GET LOCATION FROM MAP"
+            android:textAllCaps="false"/>
+
+
         <Button
             android:id="@+id/add_event_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ADD" />
+
     </LinearLayout>
+
 </LinearLayout>
+
+</ScrollView>

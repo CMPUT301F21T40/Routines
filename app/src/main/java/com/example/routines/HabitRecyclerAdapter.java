@@ -63,8 +63,8 @@ implements ReorderHabits.RecyclerTouchHelper {
         public MyViewHolder(View view, OnHabitClickListener onHabitClickListener){
             super(view);
             habitNameText = view.findViewById(R.id.habitName);
-            habitReasonText = view.findViewById(R.id.habitReason);
-            habitDateText = view.findViewById(R.id.habitDate);
+            //habitReasonText = view.findViewById(R.id.habitReason);
+            //habitDateText = view.findViewById(R.id.habitDate);
             this.onHabitClickListener = onHabitClickListener;
             view.setOnClickListener(this);
         }
@@ -98,11 +98,11 @@ implements ReorderHabits.RecyclerTouchHelper {
     @Override
     public void onBindViewHolder(@NonNull HabitRecyclerAdapter.MyViewHolder holder, int position) {
         String name = habits.get(position).getName();
-        String reason = habits.get(position).getReason();
-        String date = habits.get(position).getDate();
+        //String reason = habits.get(position).getReason();
+        //String date = habits.get(position).getDate();
         holder.habitNameText.setText(name);
-        holder.habitReasonText.setText(reason);
-        holder.habitDateText.setText(date);
+        //holder.habitReasonText.setText(reason);
+        //holder.habitDateText.setText(date);
     }
 
     /**

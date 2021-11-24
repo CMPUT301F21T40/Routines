@@ -7,17 +7,20 @@
         android:name="android.permission.WAKE_LOCK"
         tools:node="remove" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="false"
         android:exported="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:label="@string/app_name"
         android:theme="@style/Theme.Routines">
-        <activity
-            android:name=".NotificationActivity"
-            android:exported="false" />
+
+
         <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
@@ -25,54 +28,70 @@
             tools:ignore="Instantiatable,MissingClass">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+
+        <activity
+            android:name=".Map"
+            android:exported="true"
+            android:parentActivityName=".AddEventActivity"/>
+
         <activity
             android:name=".ViewEventActivity"
+            android:label="View Habit Event Details"
             android:exported="false"
-            android:parentActivityName=".EventListActivity" />
+            android:parentActivityName=".EventListActivity"/>
+
         <activity
             android:name=".SearchProfileActivity"
             android:exported="false"
-            android:parentActivityName=".SearchActivity" />
+            android:parentActivityName=".SearchActivity"/>
         <activity
             android:name=".EventListActivity"
+            android:label="View Habit Events"
             android:exported="true" />
         <activity
             android:name=".AddEventActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:parentActivityName=".ViewHabitActivity"/>
         <activity
             android:name=".ViewHabitActivity"
-            android:exported="true"
-            android:parentActivityName=".HomeActivity" />
-        <activity
-            android:name=".ProfileActivity"
-            android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
-        <activity
-            android:name=".SearchActivity"
-            android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
-        <activity
-            android:name=".HomeActivity"
-            android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
-        <activity
-            android:name=".SignupActivity"
-            android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
-        <activity
-            android:name=".DeleteHabitFragment"
+            android:label="View Habit Details"
+            android:parentActivityName=".HomeActivity"
             android:exported="true" />
         <activity
+            android:name=".ProfileActivity"
+            android:parentActivityName=".WelcomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SearchActivity"
+            android:parentActivityName=".WelcomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".HomeActivity"
+            
+            android:exported="true" />
+        <activity
+            android:name=".SignupActivity"
+            android:parentActivityName=".WelcomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LoginActivity"
+            android:parentActivityName=".WelcomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".DeleteHabitFragment"
+            android:exported="true"
+            />
+        <activity
             android:name=".WelcomeActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

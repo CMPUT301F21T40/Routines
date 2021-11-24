@@ -11,66 +11,33 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-/**
- * A custom list to add the habits into
- * @see HomeActivity class
- * @author lwaschuk
- */
-public class HabitList extends ArrayAdapter<Habit> {
-    /*
-    Purpose: To create the list that all the habits will be stored in for the duration of program
-    execution
-
-    Outstanding Issues: None
-*/
+public class SearchHabitList extends ArrayAdapter<Habit> {
     private ArrayList<Habit> habits;
     private Context context;
 
-    /**
-     * constructor for the habit list
-     * @param context Context
-     * @param habits Habit
-     * @see HabitList Class
-     * @author lwaschuk
-     */
-    public HabitList(Context context, ArrayList<Habit> habits){
+    public SearchHabitList(Context context, ArrayList<Habit> habits){
         super(context, 0, habits);
         this.habits = habits;
         this.context = context;
     }
 
-    /**
-     * gets the view of the habitlist to add habits into
-     * @param position int
-     * @param convertView View
-     * @param parent View
-     * @see HomeActivity class
-     * @author lwaschuk
-     * @return view View
-     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view = convertView;
 
         if(view==null){
-            view = LayoutInflater.from(context).inflate(R.layout.habit_list, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.search_habit_list, parent, false);
         }
         // a habit list to store the habits
         Habit habit = habits.get(position);
-        TextView habitName = view.findViewById(R.id.habitName);
-        //TextView habitDate = view.findViewById(R.id.habitDate);
-        //TextView habitReason = view.findViewById(R.id.habitReason);
+        TextView habitName = view.findViewById(R.id.search_habit_name);
 
-        // this is testing for progress bar
-        ProgressBar progress = view.findViewById(R.id.progressBar3);
-        progress.setProgress(5);
 
         habitName.setText(habit.getName());
-        //habitDate.setText(habit.getDate());
-        //habitReason.setText(habit.getReason());
 
         return view;
     }
@@ -107,5 +74,5 @@ public class HabitList extends ArrayAdapter<Habit> {
     public boolean containsHabit(Habit habit){
         return habits.contains(habit);
     }
-}
 
+}

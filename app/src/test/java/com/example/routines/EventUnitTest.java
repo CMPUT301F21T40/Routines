@@ -11,7 +11,7 @@ public class EventUnitTest {
 
     @BeforeEach
     public void createEvent() {
-        event = new Event("Test Event", "Test Description", "Habit Id", "2020-01-01");
+        event = new Event("Test Event", "Test Description", "Habit Id", "2020-01-01", "Edmonton");
     }
 
     @Test
@@ -36,6 +36,11 @@ public class EventUnitTest {
     public void getEventDateTest() {
         String date = event.getEventDate();
         assertEquals("2020-01-01", date);
+    }
+
+    @Test void getEventLocationTest() {
+        String location = event.getEventLocation();
+        assertEquals("Edmonton", location);
     }
 
 
@@ -69,6 +74,14 @@ public class EventUnitTest {
         event.setEventDate(newDate);
         String updateDate = event.getEventDate();
         assertEquals("2002-01-01", updateDate);
+    }
+
+    @Test
+    public void setEventLocationTest() {
+        String newLocation = "Calgary";
+        event.setEventLocation(newLocation);
+        String updatedLocation = event.getEventLocation();
+        assertEquals("Calgary", updatedLocation);
     }
 
 }

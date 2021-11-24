@@ -15,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING FOR US.02.05.01
+ * Unit testing for US 02.04.01
  */
-public class EditHabitEventTest {
+public class ViewHabitEvent {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -69,28 +69,16 @@ public class EditHabitEventTest {
         solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
         solo.clickOnButton("ADD");
     }
-
-    public void viewHabitEvent(){
+    @Test
+    public void viewHabitEventTest(){
+        login();
+        addHabit();
         solo.clickOnText("TEST HABIT");
         addHabitEvent();
         solo.clickOnButton("VIEW EVENTS");
         solo.clickOnText("TEST HABIT EVENT");
+        solo.sleep(3000);
     }
-    @Test
-    public void editHabitEventTest(){
-        login();
-        addHabit();
-        viewHabitEvent();
-        solo.clickOnView(solo.getView(R.id.edit_event_button)); // click on the floating button
-        solo.clearEditText((EditText) solo.getView(R.id.editText_event_name));
-        solo.clearEditText((EditText) solo.getView(R.id.editText_event_comment));
-        solo.enterText((EditText) solo.getView(R.id.editText_event_name), " EDITED TEST HABIT EVENT");
-        solo.enterText((EditText) solo.getView(R.id.editText_event_comment), "EDITED SOME KIND OF REASON");
-        solo.sleep(2000);
-        solo.clickOnText("Confirm");
-        solo.sleep(2000);
-    }
-
     /**
      * Closes the activity after every test
      * @throws Exception
@@ -100,5 +88,4 @@ public class EditHabitEventTest {
         solo.finishOpenedActivities();
     }
 }
-
 

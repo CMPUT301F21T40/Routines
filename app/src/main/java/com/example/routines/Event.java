@@ -20,6 +20,7 @@ public class Event implements Serializable {
     public String description;
     public String habitID;
     public String eventDate;
+    public String eventLocation;
     /**
      * Initializer for the habit
      * @param eventName
@@ -27,11 +28,12 @@ public class Event implements Serializable {
      * @param habitID
      * @param eventDate
      */
-    public Event(String eventName, String description, String habitID, String eventDate) {
+    public Event(String eventName, String description, String habitID, String eventDate, String eventLocation) {
         this.eventName = eventName;
         this.description = description;
         this.habitID = habitID;
         this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
     }
 
     /**
@@ -109,4 +111,22 @@ public class Event implements Serializable {
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
+
+    /**
+     * get event location
+     * @return eventLocation
+     */
+    public String getEventLocation() {
+        return eventLocation;
+    }
+
+    /**
+     * set event location
+     * @param eventLocation
+     */
+    public void setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
+    }
+
+
 }

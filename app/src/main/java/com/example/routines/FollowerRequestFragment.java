@@ -85,27 +85,33 @@ public class FollowerRequestFragment extends Fragment {
         userId = myAuth.getCurrentUser().getUid();
         requestReference = db.collection("Notification");
 
+        showInfo();
+
         myRequestListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Request request = requestList.get(i);
                 RequestStatuslFragment.newInstance(request).show(getActivity().getSupportFragmentManager(), "Edit");
-                requestAdapter.notifyDataSetChanged();
+                //requestAdapter.notifyDataSetChanged();
+
             }
         });
 
+
+    }
+    public void showInfo() {
         requestReference
                 .whereEqualTo("Receiver", userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             boolean isEmpty = task.getResult().isEmpty();
-                            if(isEmpty){
+                            if (isEmpty) {
                                 Log.d("Follower Request", "null");
-                            }else{
-                                for (QueryDocumentSnapshot document : task.getResult()){
+                            } else {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d("Follower Request", document.getId() + " => " + document.getData());
                                     requestReference
                                             .document(document.getId())
@@ -120,7 +126,7 @@ public class FollowerRequestFragment extends Fragment {
                                                     if (value != null && value.exists()) {
                                                         Log.d("Get request", "Current data: " + value.getData());
                                                         String name = (String) value.getData().get("Sender Name");
-                                                        String  status = (String) value.getData().get("Status");
+                                                        String status = (String) value.getData().get("Status");
                                                         Request request = new Request(name, status);
                                                         requestList.add(request);
                                                         requestAdapter.notifyDataSetChanged();
@@ -133,8 +139,8 @@ public class FollowerRequestFragment extends Fragment {
                                     requestAdapter.notifyDataSetChanged();
                                 }
                             }
+                        }
                     }
-                }
                 });
     }
 

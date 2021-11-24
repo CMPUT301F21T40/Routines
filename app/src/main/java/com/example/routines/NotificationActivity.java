@@ -35,7 +35,7 @@ public class NotificationActivity extends AppCompatActivity implements RequestSt
         switchActivity();
         switchRadioButton();
         updateMyRequestFragment();
-        updateFollowerRequestFragment();
+        //updateFollowerRequestFragment();
     }
 
 
@@ -154,7 +154,7 @@ public class NotificationActivity extends AppCompatActivity implements RequestSt
         followerRequestFragment = FollowerRequestFragment.newInstance();
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container, myRequestFragment);
+        transaction.replace(R.id.container, followerRequestFragment);
         transaction.commit();
     }
 

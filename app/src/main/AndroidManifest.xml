@@ -18,9 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Routines">
-        <activity
-            android:name=".ViewRequestActivity"
-            android:exported="false" />
+
         <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
@@ -41,6 +39,11 @@
             android:name=".Map"
             android:exported="true"
             android:parentActivityName=".AddEventActivity" />
+
+        <activity
+            android:name=".ViewRequestActivity"
+            android:exported="false"
+            android:parentActivityName=".NotificationActivity"/>
         <activity
             android:name=".NotificationActivity"
             android:exported="false" />

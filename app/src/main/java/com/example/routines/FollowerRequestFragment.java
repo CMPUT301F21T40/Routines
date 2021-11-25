@@ -96,6 +96,7 @@ public class FollowerRequestFragment extends Fragment {
                 //requestAdapter.notifyDataSetChanged();
                 Intent intent = new Intent(getContext(), ViewRequestActivity.class);
                 intent.putExtra("User Name", request.getRequestUser());
+                intent.putExtra("Status", request.getStatus());
                 startActivity(intent);
 
             }

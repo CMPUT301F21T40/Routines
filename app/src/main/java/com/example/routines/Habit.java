@@ -51,10 +51,11 @@ public class Habit implements Serializable {
      * @see Habit Class
      * @author lwaschuk
      */
-    public Habit(String name, String reason, String date) {
+    public Habit(String name, String reason, String date, long progress) {
         this.name = name;
         this.reason = reason;
         this.date = date;
+        this.progress = progress;
     }
 
     /**

@@ -122,6 +122,41 @@ public class SearchProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        CollectionReference collectionReference = db.collection("Habits")
+                .document(id)
+                .collection("Habits");
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String docId = document.getId();
+                        collectionReference.document(docId)
+                                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                        if (value != null && value.exists()) {
+                                            String privacy = (String) value.getData().get("Privacy");
+                                            if (privacy != null && privacy.equals("Public")) {
+                                                habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
+                                                        (String) value.getData().get("Habit Reason"),
+                                                        (String) value.getData().get("Start Date"),
+                                                        (ArrayList<String>) value.getData().get("Frequency"),
+                                                        (String) value.getData().get("Privacy")));
+                                                habitIdList.add(docId);
+                                                habitArrayAdapter.notifyDataSetChanged();
+                                            }
+                                        }
+                                    }
+                                });
+                        //Log.d(TAG, document.getId() + " => " + document.getData());
+                    }
+                } else {
+                    //Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
         habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {

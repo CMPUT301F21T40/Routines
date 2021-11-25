@@ -112,6 +112,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         String habitReason = newHabit.getReason();
         String habitDate = newHabit.getDate();
         String habitPrivacy = newHabit.getPrivacy();
+        long habitProgress = newHabit.getProgress();
         ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
         if (frequencyList.isEmpty()) {
             frequencyList.add("Null");
@@ -126,6 +127,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         data.put("Frequency", frequencyList);
         data.put("Privacy", habitPrivacy);
         data.put("Index", 10000);
+        data.put("Progress", habitProgress);
         currentUserHabitCol.document(habitId)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

@@ -165,7 +165,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                 if(!isEmpty){
                                                     Log.d("Follow", "There is request doc");
                                                     Toast.makeText(getApplicationContext(),
-                                                            "You have send request to this user", Toast.LENGTH_SHORT)
+                                                            "You have already send request to this user", Toast.LENGTH_SHORT)
                                                             .show();
                                                 }else{
                                                     HashMap<String, Object> data = new HashMap<>();
@@ -187,7 +187,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                         }
                                                     });
                                                     Toast.makeText(getApplicationContext(),
-                                                            "Request sent", Toast.LENGTH_SHORT)
+                                                            "Request sent successfully", Toast.LENGTH_SHORT)
                                                             .show();
 
 

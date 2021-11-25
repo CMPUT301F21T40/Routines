@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +51,12 @@ public class SearchProfileActivity extends AppCompatActivity {
     String requestId;
     String requestReceiver;
     String currentUserName;
+
+    Boolean follow;
+    String actualUserId;
+    ArrayList<String> habitIdList;
+    ArrayList<Habit> habitDataList;
+    ArrayAdapter<Habit> habitArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

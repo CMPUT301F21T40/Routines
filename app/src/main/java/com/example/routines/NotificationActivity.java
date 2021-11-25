@@ -34,8 +34,7 @@ public class NotificationActivity extends AppCompatActivity implements RequestSt
 
         switchActivity();
         switchRadioButton();
-        updateMyRequestFragment();
-        //updateFollowerRequestFragment();
+        updateFollowerRequestFragment();
     }
 
 

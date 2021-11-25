@@ -63,7 +63,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String userId;
     String actualUserId;
     String habitId;
-    int habitProgress;
+    long habitProgress;
 
     HomeFragment homeFragment;
     ViewHabitActivity viewActivity;
@@ -136,7 +136,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
                                 habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
-                                habitProgress = 0;
+                                habitProgress = (long)document.getData().get("Progress");
                                 Collections.sort(habitFrequency,comparator);
                                 habitPrivacy = (String) document.getData().get("Privacy");
                                 for (int i = 0; i < habitFrequency.size(); i++){

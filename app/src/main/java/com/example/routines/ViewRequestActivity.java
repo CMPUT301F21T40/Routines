@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +40,6 @@ public class ViewRequestActivity extends AppCompatActivity {
     ImageView userImage;
     RadioGroup radioGroup;
     Button applyButton;
-    Button resetButton;
     String requestFrom;
     String requestStatus;
     String updatedStatus;
@@ -65,6 +67,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         requestReference = db.collection("Notification");
         myAuth = FirebaseAuth.getInstance();
+        userId = myAuth.getCurrentUser().getUid();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child("User Photo");
 
@@ -81,38 +84,30 @@ public class ViewRequestActivity extends AppCompatActivity {
         userImage = findViewById(R.id.image_request);
         radioGroup = findViewById(R.id.radioGroup);
         applyButton = findViewById(R.id.button_status_selected);
-        resetButton = findViewById(R.id.button_status_reset);
         applyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkedId = radioGroup.getCheckedRadioButtonId();
                 if(checkedId == -1){
-                    Toast.makeText(getApplicationContext(), "You haven't seleted a choice", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You haven't selected a choice", Toast.LENGTH_SHORT).show();
                 }else{
                     findRadioButton(checkedId);
                 }
             }
         });
 
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                radioGroup.clearCheck();
-                updatedStatus = "";
-            }
-        });
     }
 
     public void findRadioButton(int checkedId){
         switch (checkedId){
             case R.id.radio_accept:
                 updatedStatus = "accepted";
-                updateStatus();
+                updateStatus(requestUserId);
                 break;
 
             case R.id.radio_deny:
                 updatedStatus = "denied";
-                updateStatus();
+                updateStatus(requestUserId);
                 break;
 
         }
@@ -142,7 +137,25 @@ public class ViewRequestActivity extends AppCompatActivity {
                                                 if (value != null && value.exists()){
                                                     userRequestEmail = (String) value.getData().get("Email");
                                                     requestUserId = (String) value.getData().get("User ID");
+                                                    Log.d("Request user id", requestUserId);
                                                     emailShow.setText(userRequestEmail);
+
+                                                    StorageReference imageRef = storageRef.child(requestUserId);
+                                                    imageRef.getBytes(1024*1024)
+                                                            .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                                @Override
+                                                                public void onSuccess(byte[] bytes) {
+                                                                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                                    userImage.setImageBitmap(bitmap);
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.d("User Image", "Doesn't exist");
+                                                        }
+                                                    });
+
+
                                                 } else {
                                                     Log.d("get request", "Current data: null");
                                                 }
@@ -153,23 +166,49 @@ public class ViewRequestActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    public void showImage(){
-        StorageReference imageRef = storageRef.child(requestUserId);
-        imageRef.getBytes(1024*1024)
-                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-
-                    }
-                })
 
     }
-
-    public void updateStatus(){
-
-
+    public void updateStatus(String senderId){
+        if(updatedStatus == "accepted"){
+            requestReference
+                    .whereEqualTo("Receiver", userId )
+                    .whereEqualTo("Sender", senderId )
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if(task.isSuccessful()){
+                                for (QueryDocumentSnapshot document : task.getResult()){
+                                    requestReference
+                                            .document(document.getId())
+                                            .update("Status", "accepted");
+                                }
+                            }
+                        }
+                    });
+            Toast.makeText(getApplicationContext(), "You have accepted the request", Toast.LENGTH_SHORT).show();
+        }else if(updatedStatus == "denied"){
+            requestReference
+                    .whereEqualTo("Receiver", userId )
+                    .whereEqualTo("Sender", senderId )
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    requestReference
+                                            .document(document.getId())
+                                            .update("Status", "denied");
+                                }
+                            }
+                        }
+                    });
+            Toast.makeText(getApplicationContext(), "You have denied the request", Toast.LENGTH_SHORT).show();
+        }
 
     }
+
+
+
 }

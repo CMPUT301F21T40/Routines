@@ -105,12 +105,16 @@ implements ReorderHabits.RecyclerTouchHelper {
     @Override
     public void onBindViewHolder(@NonNull HabitRecyclerAdapter.MyViewHolder holder, int position) {
         String name = habits.get(position).getName();
-        long progress = habits.get(position).getProgress();
+        long progress = habits.get(position).getProgress(); // stored as a long must convert it to update it
         //String reason = habits.get(position).getReason();
         //String date = habits.get(position).getDate();
         holder.habitNameText.setText(name);
+        // this will be how you update the progress bar in w.e function you need to
+        // generally ProgressBar progressbar = view.FindViewBtId()
+        // habit.setProgress(long(yourNumber))
+        // progressbar.setProgress(habit.getProgress());
 
-        int i = (int) progress;
+        int i = (int) progress; // convert to int, must store as long
         holder.progressbar.setProgress(i);
 
         //holder.habitReasonText.setText(reason);

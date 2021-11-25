@@ -172,11 +172,22 @@ public class Habit implements Serializable {
         return reason.replace(" ", "").length() <= 30;
     }
 
-
+    /**
+     * Returns the percentage of habit we are completing on time
+     * @return long progress
+     * @author lukas
+     * @see Habit
+     */
     public long getProgress() {
         return this.progress;
     }
 
+    /**
+     * Allows the progress to be set and savaed to firebase
+     * @param progress
+     * @author lukas
+     * @see Habit
+     */
     public void setProgress(long progress) {
         this.progress = progress;
     }

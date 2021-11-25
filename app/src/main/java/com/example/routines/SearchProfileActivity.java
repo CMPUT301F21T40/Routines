@@ -53,6 +53,7 @@ public class SearchProfileActivity extends AppCompatActivity {
     String requestReceiver;
     String currentUserName;
 
+    TextView habitLabel;
     Boolean follow;
     String actualUserId;
     ArrayList<String> habitIdList;
@@ -76,9 +77,8 @@ public class SearchProfileActivity extends AppCompatActivity {
         habitList= findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
-
+        habitLabel = findViewById(R.id.habit_label);
         habitList.setAdapter(habitArrayAdapter);
-        //habitLabel = findViewById(R.id.habit_label);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -112,6 +112,8 @@ public class SearchProfileActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 String name = (String) document.getData().get("User Name");
                                 userName.setText(name);
+                                habitLabel.setText("Follow this user to view their habits");
+                                habitLabel.setTextSize(15);
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             } else {
                                 Log.d("TAG", "No such document");
@@ -122,6 +124,50 @@ public class SearchProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        db.collection("Notification")
+                .whereEqualTo("Receiver", id)
+                .whereEqualTo("Sender", actualUserId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("TAG", "Found a document--------------");
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", "Got a task ----------------");
+                                String status = (String) document.getData().get("Status");
+                                Log.d("TAG", "Status : " + status);
+                                if (status.equals("accepted")) {
+                                    Log.d("TAG", "print habits here -------------");
+                                    showHabits(id);
+                                    habitLabel.setText("User's Habits");
+                                    habitLabel.setTextSize(25);
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+
+        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
+                String habitId = habitIdList.get(position);
+                intent.putExtra("sameUser", false);
+                intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", id);
+                Log.d("Intent habit id", habitId);
+                startActivity(intent);
+            }
+        });
+
+
+
+    }
+
+    public void showHabits(String id) {
         CollectionReference collectionReference = db.collection("Habits")
                 .document(id)
                 .collection("Habits");
@@ -149,29 +195,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                        //Log.d(TAG, document.getId() + " => " + document.getData());
                     }
-                } else {
-                    //Log.d(TAG, "Error getting documents: ", task.getException());
                 }
             }
         });
-
-        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
-                String habitId = habitIdList.get(position);
-                intent.putExtra("sameUser", false);
-                intent.putExtra("habitId", habitId);
-                intent.putExtra("userId", id);
-                Log.d("Intent habit id", habitId);
-                startActivity(intent);
-            }
-        });
-
-
-
     }
 
 

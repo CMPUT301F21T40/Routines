@@ -186,9 +186,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                             if (privacy != null && privacy.equals("Public")) {
                                                 habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
                                                         (String) value.getData().get("Habit Reason"),
-                                                        (String) value.getData().get("Start Date"),
-                                                        (ArrayList<String>) value.getData().get("Frequency"),
-                                                        (String) value.getData().get("Privacy")));
+                                                        (String) value.getData().get("Start Date")));
+                                                        //(ArrayList<String>) value.getData().get("Frequency"),
+                                                        //(String) value.getData().get("Privacy"))),
+                                                        //(long) value.getData().get("Progress");
                                                 habitIdList.add(docId);
                                                 habitArrayAdapter.notifyDataSetChanged();
                                             }

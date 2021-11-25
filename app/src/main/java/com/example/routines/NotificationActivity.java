@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class NotificationActivity extends AppCompatActivity implements RequestStatuslFragment.RespondFragmentInteractionListener {
+public class NotificationActivity extends AppCompatActivity  {
 
     BottomNavigationView bottomNavigator;
     AppCompatRadioButton switchMyRequest;
@@ -158,8 +158,4 @@ public class NotificationActivity extends AppCompatActivity implements RequestSt
     }
 
 
-    @Override
-    public void onYesPressed() {
-        updateFollowerRequestFragment();
-    }
 }

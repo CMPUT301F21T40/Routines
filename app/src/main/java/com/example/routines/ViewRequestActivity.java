@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -200,13 +201,24 @@ public class ViewRequestActivity extends AppCompatActivity {
                                     requestReference
                                             .document(document.getId())
                                             .update("Status", "denied");
+                                    String docId = document.getId();
+                                    deleteDeniedRequest(docId);
                                 }
                             }
                         }
                     });
+
             Toast.makeText(getApplicationContext(), "You have denied the request", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public void deleteDeniedRequest(String docId){
+        requestReference
+                .document(docId)
+                .delete();
+        Intent intent = new Intent(getApplicationContext(), NotificationActivity.class);
+        startActivity(intent);
     }
 
 

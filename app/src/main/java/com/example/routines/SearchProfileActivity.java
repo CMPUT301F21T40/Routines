@@ -186,6 +186,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                             Log.w("Add Request Failed", "Error on writing documentation on Firebase");
                                                         }
                                                     });
+                                                    Toast.makeText(getApplicationContext(),
+                                                            "Request sent", Toast.LENGTH_SHORT)
+                                                            .show();
+
 
                                                 }
 

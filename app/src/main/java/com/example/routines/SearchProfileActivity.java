@@ -47,6 +47,7 @@ public class SearchProfileActivity extends AppCompatActivity {
     String requestId;
     String requestReceiver;
     String currentUserName;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,12 +64,7 @@ public class SearchProfileActivity extends AppCompatActivity {
 
         requestReference = db.collection("Notification");
         requestId = db.collection(String.valueOf(requestReference)).document().getId();
-        followButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPendingFollower();
-            }
-        });
+
 
         //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
@@ -99,14 +95,25 @@ public class SearchProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        getCurrentUserName();
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentUserName == userName.getText().toString()){
+                    Toast.makeText(getApplicationContext(),"You can't follow yourself", Toast.LENGTH_SHORT).show();
+                }else{
+                    addPendingFollower();
+                }
+            }
+        });
+
 
 
     }
 
-
-    public void addPendingFollower(){
+    public void getCurrentUserName(){
         myAuth = FirebaseAuth.getInstance();
-        String userId = myAuth.getCurrentUser().getUid();
+        userId = myAuth.getCurrentUser().getUid();
 
         Log.d("requestid 1", requestId);
 
@@ -128,7 +135,12 @@ public class SearchProfileActivity extends AppCompatActivity {
 
                     }
                 });
+    }
 
+
+
+
+    public void addPendingFollower(){
         db.collection("Users")
                 .whereEqualTo("User Name", userName.getText().toString())
                 .get()
@@ -153,7 +165,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                 if(!isEmpty){
                                                     Log.d("Follow", "There is request doc");
                                                     Toast.makeText(getApplicationContext(),
-                                                            "You have followed this user", Toast.LENGTH_SHORT)
+                                                            "You have already send request to this user", Toast.LENGTH_SHORT)
                                                             .show();
                                                 }else{
                                                     HashMap<String, Object> data = new HashMap<>();
@@ -174,6 +186,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                             Log.w("Add Request Failed", "Error on writing documentation on Firebase");
                                                         }
                                                     });
+                                                    Toast.makeText(getApplicationContext(),
+                                                            "Request sent successfully", Toast.LENGTH_SHORT)
+                                                            .show();
+
 
                                                 }
 

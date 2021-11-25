@@ -114,6 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:labelVisibilityMode="labeled"
         android:background="@color/project_lightPink"
         app:itemBackground="@color/project_purple"
         app:itemIconTint="@color/project_pink"

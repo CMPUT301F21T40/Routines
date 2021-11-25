@@ -33,7 +33,7 @@ import java.util.Map;
 /**
  * This activity display the details of a user
  * Outstanding issues: allows user to follow all the habit
- * @author Zezhou Xiong
+ * @author Zezhou Xiong, Shanshan Wei
  * @see User
  */
 public class SearchProfileActivity extends AppCompatActivity {
@@ -95,6 +95,12 @@ public class SearchProfileActivity extends AppCompatActivity {
                     }
                 });
 
+        /**
+         * This sets the button click listener.
+         * This will send to a follow request to the user you want viewing.
+         * If you are viewing yourself, it will toast a message and won't make any functions.
+         * @author Shanshan Wei
+         */
         getCurrentUserName();
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +117,10 @@ public class SearchProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method gets the user name of the user you are viewing
+     * @author Shanshan Wei
+     */
     public void getCurrentUserName(){
         myAuth = FirebaseAuth.getInstance();
         userId = myAuth.getCurrentUser().getUid();
@@ -138,8 +148,12 @@ public class SearchProfileActivity extends AppCompatActivity {
     }
 
 
-
-
+    /**
+     * Once you click follow button and conditions satisfies.
+     * This will write your request doc on firebase with your id and name,  id and name of the user you are viewing
+     * and an initial default "pending" status for the request
+     * @author Shanshan Wei
+     */
     public void addPendingFollower(){
         db.collection("Users")
                 .whereEqualTo("User Name", userName.getText().toString())
@@ -201,6 +215,9 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+    }
+    public void showHabits(){
 
     }
 }

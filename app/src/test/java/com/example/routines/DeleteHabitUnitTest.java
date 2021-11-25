@@ -38,7 +38,7 @@ public class DeleteHabitUnitTest {
         habitList = new HabitList(mockContext, new ArrayList<>());
         frequency.add("Monday");
         frequency.add("Thursday");
-        studHabit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private");
+        studHabit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private", 0);
         habitList.addHabit(studHabit);
     }
 

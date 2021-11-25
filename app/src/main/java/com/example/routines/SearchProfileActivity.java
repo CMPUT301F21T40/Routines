@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -52,6 +53,7 @@ public class SearchProfileActivity extends AppCompatActivity {
     String requestId;
     String requestReceiver;
     String currentUserName;
+    String userId;
 
     TextView habitLabel;
     Boolean follow;
@@ -74,7 +76,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         habitIdList = new ArrayList<>();
         follow = false;
 
-        habitList= findViewById(R.id.search_event_list);
+        habitList = findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
         habitLabel = findViewById(R.id.habit_label);
@@ -86,12 +88,7 @@ public class SearchProfileActivity extends AppCompatActivity {
 
         requestReference = db.collection("Notification");
         requestId = db.collection(String.valueOf(requestReference)).document().getId();
-        followButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addPendingFollower();
-            }
-        });
+
 
         //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
@@ -100,6 +97,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         DocumentReference userRef = db
                 .collection("Users")
                 .document(id);
+
 
         //fetch field from the document and set text to text view
         userRef
@@ -149,7 +147,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
 
 
-
         habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -163,135 +160,158 @@ public class SearchProfileActivity extends AppCompatActivity {
             }
         });
 
-
-
-    }
-
-    /**
-     * This function will write the user's public habits if and only
-     * if the current user is following the user
-     * @param id
-     * @author ipaterso
-     */
-
-    public void showHabits(String id) {
-        CollectionReference collectionReference = db.collection("Habits")
-                .document(id)
-                .collection("Habits");
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        getCurrentUserName();
+        followButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String docId = document.getId();
-                        collectionReference.document(docId)
-                                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                        if (value != null && value.exists()) {
-                                            String privacy = (String) value.getData().get("Privacy");
-                                            if (privacy != null && privacy.equals("Public")) {
-                                                habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
-                                                        (String) value.getData().get("Habit Reason"),
-                                                        (String) value.getData().get("Start Date"),
-                                                        (ArrayList<String>) value.getData().get("Frequency"),
-                                                        (String) value.getData().get("Privacy"),
-                                                        (long) value.getData().get("Progress")));
-                                                habitIdList.add(docId);
-                                                habitArrayAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    }
-                                });
-                    }
+            public void onClick(View view) {
+                if (currentUserName == userName.getText().toString()) {
+                    Toast.makeText(getApplicationContext(), "You can't follow yourself", Toast.LENGTH_SHORT).show();
+                } else {
+                    addPendingFollower();
                 }
             }
         });
+
     }
 
 
-    public void addPendingFollower(){
-        myAuth = FirebaseAuth.getInstance();
-        String userId = myAuth.getCurrentUser().getUid();
 
-        Log.d("requestid 1", requestId);
 
-        db.collection("Users")
-                .document(userId)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.w("Current user name", "Listen failed.", error);
-                            return;
-                        }
-                        if (value != null && value.exists()) {
-                            Log.d("Current user name", "Current data: " + value.getData());
-                            currentUserName = (String) value.getData().get("User Name");
-                        } else {
-                            Log.d("Current user name", "Current data: null");
-                        }
+            /**
+             * This function will write the user's public habits if and only
+             * if the current user is following the user
+             *
+             * @param id
+             * @author ipaterso
+             */
 
-                    }
-                });
-
-        db.collection("Users")
-                .whereEqualTo("User Name", userName.getText().toString())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            public void showHabits(String id) {
+                CollectionReference collectionReference = db.collection("Habits")
+                        .document(id)
+                        .collection("Habits");
+                collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
-                                requestReceiver = document.getId();
-                                Log.d("requestReceiver", requestReceiver);
-                            }
-                            requestReference
-                                    .whereEqualTo("Receiver", requestReceiver )
-                                    .whereEqualTo("Sender", userId)
-                                    .limit(1)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                boolean isEmpty = task.getResult().isEmpty();
-                                                if(!isEmpty){
-                                                    Log.d("Follow", "There is request doc");
-                                                    Toast.makeText(getApplicationContext(),
-                                                            "You have followed this user", Toast.LENGTH_SHORT)
-                                                            .show();
-                                                }else{
-                                                    HashMap<String, Object> data = new HashMap<>();
-                                                    data.put("Sender", userId);
-                                                    data.put("Receiver", requestReceiver);
-                                                    data.put("Status", "pending");
-                                                    data.put("Sender Name", currentUserName);
-                                                    data.put("Receiver Name", userName.getText().toString() );
-                                                    requestReference.document(requestId)
-                                                            .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            Log.w("Add Request", "Success on writing documentation on Firebase");
-                                                        }
-                                                    }).addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Log.w("Add Request Failed", "Error on writing documentation on Firebase");
-                                                        }
-                                                    });
-
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String docId = document.getId();
+                                collectionReference.document(docId)
+                                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                                if (value != null && value.exists()) {
+                                                    String privacy = (String) value.getData().get("Privacy");
+                                                    if (privacy != null && privacy.equals("Public")) {
+                                                        habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
+                                                                (String) value.getData().get("Habit Reason"),
+                                                                (String) value.getData().get("Start Date"),
+                                                                (ArrayList<String>) value.getData().get("Frequency"),
+                                                                (String) value.getData().get("Privacy"),
+                                                                (long) value.getData().get("Progress")));
+                                                        habitIdList.add(docId);
+                                                        habitArrayAdapter.notifyDataSetChanged();
+                                                    }
                                                 }
-
                                             }
-
-                                        }
-                                    });
-
+                                        });
+                            }
                         }
                     }
                 });
+            }
 
+
+            public void getCurrentUserName() {
+                myAuth = FirebaseAuth.getInstance();
+                userId = myAuth.getCurrentUser().getUid();
+
+                Log.d("requestid 1", requestId);
+
+                db.collection("Users")
+                        .document(userId)
+                        .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                                if (error != null) {
+                                    Log.w("Current user name", "Listen failed.", error);
+                                    return;
+                                }
+                                if (value != null && value.exists()) {
+                                    Log.d("Current user name", "Current data: " + value.getData());
+                                    currentUserName = (String) value.getData().get("User Name");
+                                } else {
+                                    Log.d("Current user name", "Current data: null");
+                                }
+
+                            }
+                        });
+            }
+
+
+            public void addPendingFollower() {
+                db.collection("Users")
+                        .whereEqualTo("User Name", userName.getText().toString())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        requestReceiver = document.getId();
+                                        Log.d("requestReceiver", requestReceiver);
+                                    }
+                                    requestReference
+                                            .whereEqualTo("Receiver", requestReceiver)
+                                            .whereEqualTo("Sender", userId)
+                                            .limit(1)
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        boolean isEmpty = task.getResult().isEmpty();
+                                                        if (!isEmpty) {
+                                                            Log.d("Follow", "There is request doc");
+                                                            Toast.makeText(getApplicationContext(),
+                                                                    "You have already send request to this user", Toast.LENGTH_SHORT)
+                                                                    .show();
+                                                        } else {
+                                                            HashMap<String, Object> data = new HashMap<>();
+                                                            data.put("Sender", userId);
+                                                            data.put("Receiver", requestReceiver);
+                                                            data.put("Status", "pending");
+                                                            data.put("Sender Name", currentUserName);
+                                                            data.put("Receiver Name", userName.getText().toString());
+                                                            requestReference.document(requestId)
+                                                                    .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    Log.w("Add Request", "Success on writing documentation on Firebase");
+                                                                }
+                                                            }).addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Log.w("Add Request Failed", "Error on writing documentation on Firebase");
+                                                                }
+                                                            });
+                                                            Toast.makeText(getApplicationContext(),
+                                                                    "Request sent successfully", Toast.LENGTH_SHORT)
+                                                                    .show();
+
+
+                                                        }
+
+                                                    }
+
+                                                }
+                                            });
+
+                                }
+                            }
+                        });
+
+
+            }
 
     }
-}
+

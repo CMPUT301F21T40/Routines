@@ -26,7 +26,7 @@
 
     <RadioGroup
         android:id="@+id/radio_button"
-        android:layout_width="220dp"
+        android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/switch_mine"
+            android:id="@+id/switch_follower"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
@@ -45,11 +45,11 @@
             android:button="@android:color/transparent"
             android:checked="true"
             android:gravity="center"
-            android:text="My Request"
+            android:text="Request Received"
             android:textColor="@color/white" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
-            android:id="@+id/switch_follower"
+            android:id="@+id/switch_mine"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
@@ -58,7 +58,7 @@
             android:button="@android:color/transparent"
             android:checked="false"
             android:gravity="center"
-            android:text="Other Request"
+            android:text="Request Sent"
             android:textColor="@color/black" />
 
     </RadioGroup>

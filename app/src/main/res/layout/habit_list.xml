@@ -25,7 +25,7 @@
         android:layout_marginLeft="5dp"
         android:indeterminate="false"
         android:progressTint="@color/project_purple"
-        android:progress="30"
+        android:progress="0"
         android:layout_weight="1" />
 
 

@@ -1,8 +1,10 @@
 package com.example.routines;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -185,6 +187,19 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
+                String habitId = habitIdList.get(position);
+                intent.putExtra("sameUser", false);
+                intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", id);
+                Log.d("Intent habit id", habitId);
+                startActivity(intent);
+            }
+        });
 
     }
 }

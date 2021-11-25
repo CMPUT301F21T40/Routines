@@ -70,7 +70,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         habitDataList = new ArrayList<>();
-        habitArrayAdapter = new SearchHabitList(this, habitDataList);
+        habitArrayAdapter = new HabitList(this, habitDataList);
         habitIdList = new ArrayList<>();
         follow = false;
 
@@ -167,6 +167,13 @@ public class SearchProfileActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This function will write the user's public habits if and only
+     * if the current user is following the user
+     * @param id
+     * @author ipaterso
+     */
+
     public void showHabits(String id) {
         CollectionReference collectionReference = db.collection("Habits")
                 .document(id)
@@ -186,10 +193,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                             if (privacy != null && privacy.equals("Public")) {
                                                 habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
                                                         (String) value.getData().get("Habit Reason"),
-                                                        (String) value.getData().get("Start Date")));
-                                                        //(ArrayList<String>) value.getData().get("Frequency"),
-                                                        //(String) value.getData().get("Privacy"))),
-                                                        //(long) value.getData().get("Progress");
+                                                        (String) value.getData().get("Start Date"),
+                                                        (ArrayList<String>) value.getData().get("Frequency"),
+                                                        (String) value.getData().get("Privacy"),
+                                                        (long) value.getData().get("Progress")));
                                                 habitIdList.add(docId);
                                                 habitArrayAdapter.notifyDataSetChanged();
                                             }

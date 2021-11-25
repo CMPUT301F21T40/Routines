@@ -34,7 +34,7 @@ public class EditHabitUnitTest {
     public void createHabit(){ // create a new mock habit list for every test
         frequency.add("Monday");
         frequency.add("Thursday");
-        mockHabit = new Habit("Piano", "Good for me", "2020-05-27",frequency, "Private");
+        mockHabit = new Habit("Piano", "Good for me", "2020-05-27",frequency, "Private", 0);
     }
 
     @Test
@@ -50,6 +50,8 @@ public class EditHabitUnitTest {
         assertEquals(frequency, mockHabit.getFrequency());
         mockHabit.setPrivacy("Public");
         assertEquals("Public", mockHabit.getPrivacy());
+        mockHabit.setProgress(10);
+        assertEquals(10, mockHabit.getProgress());
     }
 
 }

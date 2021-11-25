@@ -78,7 +78,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         followButton = findViewById(R.id.follow);
 
         habitList.setAdapter(habitArrayAdapter);
-        habitLabel = findViewById(R.id.habit_label);
+        //habitLabel = findViewById(R.id.habit_label);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -121,6 +121,19 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
+                String habitId = habitIdList.get(position);
+                intent.putExtra("sameUser", false);
+                intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", id);
+                Log.d("Intent habit id", habitId);
+                startActivity(intent);
+            }
+        });
 
 
 
@@ -209,18 +222,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                     }
                 });
 
-        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
-                String habitId = habitIdList.get(position);
-                intent.putExtra("sameUser", false);
-                intent.putExtra("habitId", habitId);
-                intent.putExtra("userId", id);
-                Log.d("Intent habit id", habitId);
-                startActivity(intent);
-            }
-        });
 
     }
 }

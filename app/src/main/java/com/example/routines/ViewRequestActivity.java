@@ -13,7 +13,7 @@ import org.w3c.dom.Text;
 public class ViewRequestActivity extends AppCompatActivity {
     TextView textName;
     TextView nameShow;
-    TextView emailshow;
+    TextView emailShow;
     TextView textEmail;
     TextView textLine;
     ImageView userImage;

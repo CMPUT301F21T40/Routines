@@ -185,6 +185,16 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 clear();
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    /**
+                    int habitProgress = 0;
+                    try {
+                        habitProgress = (int)doc.getData().get("Progress");
+                    } catch (Exception e) {
+                        System.out.println("TESTTT");
+                        System.out.println(e);
+                    }**/
+
+                    long habitProgress = (long)doc.getData().get("Progress");
                     String habitName = (String)doc.getData().get("Habit Name");
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
@@ -192,7 +202,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
                     String privacy = (String) doc.getData().get("Privacy"); // recently added
                     String id = (String) doc.getId();
                     habitIdList.add(id);
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy));
+                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, habitProgress));
                     habitAdapter.notifyDataSetChanged();
                 }
             }

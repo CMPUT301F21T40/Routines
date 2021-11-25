@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,9 +61,15 @@ implements ReorderHabits.RecyclerTouchHelper {
         private TextView habitReasonText;
         private TextView habitDateText;
         OnHabitClickListener onHabitClickListener;
+
+        private ProgressBar progressbar;
+
         public MyViewHolder(View view, OnHabitClickListener onHabitClickListener){
             super(view);
             habitNameText = view.findViewById(R.id.habitName);
+
+            progressbar = view.findViewById(R.id.progressBar3);
+
             //habitReasonText = view.findViewById(R.id.habitReason);
             //habitDateText = view.findViewById(R.id.habitDate);
             this.onHabitClickListener = onHabitClickListener;
@@ -98,9 +105,14 @@ implements ReorderHabits.RecyclerTouchHelper {
     @Override
     public void onBindViewHolder(@NonNull HabitRecyclerAdapter.MyViewHolder holder, int position) {
         String name = habits.get(position).getName();
+        long progress = habits.get(position).getProgress();
         //String reason = habits.get(position).getReason();
         //String date = habits.get(position).getDate();
         holder.habitNameText.setText(name);
+
+        int i = (int) progress;
+        holder.progressbar.setProgress(i);
+
         //holder.habitReasonText.setText(reason);
         //holder.habitDateText.setText(date);
     }

@@ -24,6 +24,8 @@ public class Habit implements Serializable {
     public ArrayList<String> frequency;
     public String privacy;
 
+    private long progress;
+
     /**
      * Initializer for the habit
      * @param name String
@@ -32,12 +34,13 @@ public class Habit implements Serializable {
      * @param privacy String
      * @author lwaschuk
      */
-    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy) {
+    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, long progress) {
         this.name = name;
         this.reason = reason;
         this.date = date;
         this.frequency = frequency;
         this.privacy = privacy;
+        this.progress = progress;
     }
 
     /**
@@ -169,4 +172,12 @@ public class Habit implements Serializable {
         return reason.replace(" ", "").length() <= 30;
     }
 
+
+    public long getProgress() {
+        return this.progress;
+    }
+
+    public void setProgress(long progress) {
+        this.progress = progress;
+    }
 }

@@ -63,6 +63,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String userId;
     String actualUserId;
     String habitId;
+    int habitProgress;
 
     HomeFragment homeFragment;
     ViewHabitActivity viewActivity;
@@ -135,6 +136,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
                                 habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
+                                habitProgress = 0;
                                 Collections.sort(habitFrequency,comparator);
                                 habitPrivacy = (String) document.getData().get("Privacy");
                                 for (int i = 0; i < habitFrequency.size(); i++){
@@ -189,7 +191,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "EDIT_HABIT");
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
 
             }
         });
@@ -201,7 +203,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy)).show(getSupportFragmentManager(), "DELETE_HABIT");
+                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "DELETE_HABIT");
             }
         });
 

@@ -37,7 +37,7 @@ public class HabitListUnitTest {
     private Habit stubHabit(){
         frequency.add("Monday");
         frequency.add("Thursday");
-        return new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private");
+        return new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private",0);
     }
     public void addHabit(){
         habitList.addHabit(stubHabit());

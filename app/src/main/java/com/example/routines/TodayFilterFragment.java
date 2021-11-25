@@ -121,7 +121,8 @@ public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapte
                                             if(frequency.contains(dayWeek)||frequency.contains("null")){
                                                 habitDataList.add(new Habit( (String)value.getData().get("Habit Name"),
                                                         (String)value.getData().get("Habit Reason"),
-                                                        (String)value.getData().get("Start Date")));
+                                                        (String)value.getData().get("Start Date"),
+                                                        (long)value.getData().get("Progress")));
                                                 habitIdList.add((String) document.getId() );
                                                 habitAdapter.notifyDataSetChanged();
                                             }

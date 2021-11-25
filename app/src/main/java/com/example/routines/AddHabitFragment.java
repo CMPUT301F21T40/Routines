@@ -135,7 +135,7 @@ public class AddHabitFragment extends DialogFragment {
                         name = check(name);
                         String reason = habitReason.getText().toString();
                         reason = check(reason);
-                        long progress = 0; // init progress to 0 every time
+                        long progress = 50; // init progress to 0 every time
                         listener.onOkPressed(new Habit(name, reason, date, frequencyList, privacy, progress));
                     }
                 }).create();

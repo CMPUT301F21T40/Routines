@@ -17,7 +17,7 @@ public class HabitUnitTest {
     public void createHabit(){
         frequency.add("Monday");
         frequency.add("Thursday");
-        habit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private");
+        habit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private", 0);
     }
 
     @Test
@@ -51,6 +51,12 @@ public class HabitUnitTest {
     public void getPrivacyTest() {
         String privacy = habit.getPrivacy();
         assertEquals("Private", privacy);
+    }
+
+    @Test
+    public void getProgressTest() {
+        long progress = habit.getProgress();
+        assertEquals(0, progress);
     }
 
     @Test
@@ -93,6 +99,15 @@ public class HabitUnitTest {
         habit.setPrivacy(newPrivacy);
         String updatedPrivacy = habit.getPrivacy();
         assertEquals("Public", newPrivacy);
+    }
+
+    @Test
+    public void setProgressTest() {
+        long newProgress = 12;
+        habit.setProgress(newProgress);
+        long updatedProgress = habit.getProgress();
+        habit.setProgress(updatedProgress);
+        assertEquals(12, updatedProgress);
     }
 
 }

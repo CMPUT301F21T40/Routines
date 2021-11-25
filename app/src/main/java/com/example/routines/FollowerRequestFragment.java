@@ -1,5 +1,6 @@
 package com.example.routines;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -91,8 +92,11 @@ public class FollowerRequestFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Request request = requestList.get(i);
-                RequestStatuslFragment.newInstance(request).show(getActivity().getSupportFragmentManager(), "Edit");
+                //RequestStatuslFragment.newInstance(request).show(getActivity().getSupportFragmentManager(), "Edit");
                 //requestAdapter.notifyDataSetChanged();
+                Intent intent = new Intent(getContext(), ViewRequestActivity.class);
+                intent.putExtra("User Name", request.getRequestUser());
+                startActivity(intent);
 
             }
         });

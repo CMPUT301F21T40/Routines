@@ -67,6 +67,11 @@ public class SearchProfileActivity extends AppCompatActivity {
         //enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        habitDataList = new ArrayList<>();
+        habitArrayAdapter = new SearchHabitList(this, habitDataList);
+        habitIdList = new ArrayList<>();
+        follow = false;
+
         habitList= findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);

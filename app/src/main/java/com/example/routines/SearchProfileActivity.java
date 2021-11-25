@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -75,6 +76,13 @@ public class SearchProfileActivity extends AppCompatActivity {
         habitList= findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
+
+        habitList.setAdapter(habitArrayAdapter);
+        habitLabel = findViewById(R.id.habit_label);
+
+        myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        actualUserId = user.getUid();
 
         requestReference = db.collection("Notification");
         requestId = db.collection(String.valueOf(requestReference)).document().getId();

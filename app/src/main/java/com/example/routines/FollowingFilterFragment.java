@@ -1,5 +1,6 @@
 package com.example.routines;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -73,7 +74,11 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
 
     @Override
     public void onItemClick(int position) {
-
+            Intent intent = new Intent(getContext(), ViewHabitActivity.class);
+            String habitId = habitIdList.get(position);
+            intent.putExtra("sameUser", false);
+            intent.putExtra("habitId", habitId);
+            startActivity(intent);
     }
 
     public void initializeView(){
@@ -117,6 +122,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
         Integer size = followers.size();
         Log.d("TAG", size + "--------1---------");
     }
+
     public void setHabits() {
         Integer size = followers.size();
         Log.d("TAG", size + " in setHabits -----------------");
@@ -158,4 +164,5 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                     });
         }
     }
+
 }

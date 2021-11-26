@@ -186,7 +186,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     }
 
     /**
-     * This will help to switch between HomeFragment and TodayFilterFragment
+     * This will help to switch between HomeFragment, TodayFilterFragment and FollowingFilterFragment
      * @author Shanshan Wei/swei3
      */
     public void switchRadioButton(){
@@ -198,7 +198,6 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
             }
         });
         switchTodayHabits = findViewById(R.id.switch_today);
-        Log.d("TAG", String.valueOf(switchTodayHabits) + "------------------");
         switchTodayHabits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -206,7 +205,6 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
             }
         });
         switchFollowingHabits = findViewById(R.id.switch_following);
-        Log.d("TAG", String.valueOf(switchFollowingHabits) + "------------------");
         switchFollowingHabits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,6 +216,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     /**
      * If the user click on "Habits" of radio button, it will ask fragment manager to attach the HomeFragment.
      * If the user click on "Today" of radio button, it will ask fragment manager to attach the TodayFilterFragment.
+     * If the user clicks on the "Following" radio button, it will ask fragment manager to attach the FollowingFilterFragment.
      * @author Shanshan Wei/swei3
      * @param view
      */
@@ -283,7 +282,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
                     }
                     transaction.replace(R.id.container, followingFragment);
                     transaction.commit();
-                    Toast.makeText(getApplicationContext(), "Today's Habits", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Following Habits", Toast.LENGTH_SHORT).show();
 
                 }
         }

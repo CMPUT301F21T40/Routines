@@ -1,5 +1,7 @@
 package com.example.routines;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +22,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * This activity display the details of a given event
@@ -77,6 +82,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         }*/
 
         showInfo();
+        showImage();
 
 
         /**
@@ -163,5 +169,20 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
                 });
     }
 
+    public void showImage(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("Event photos");
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        StorageReference collectionRef = storageRef.child(userId);
+        StorageReference imageRef = collectionRef.child(eventId);
+        imageRef.getBytes(1024*1024)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        eventImage.setImageBitmap(bitmap);
+                    }
+                });
+    }
 
 }

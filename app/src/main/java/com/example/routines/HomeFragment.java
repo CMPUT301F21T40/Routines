@@ -206,8 +206,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
                     String lastModifiedDate = (String) doc.getData().get("Last Modified Date");
                     String id = (String) doc.getId();
                     habitIdList.add(id);
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, habitProgress));
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate));
+                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress));
                     habitAdapter.notifyDataSetChanged();
                 }
             }

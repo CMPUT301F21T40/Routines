@@ -107,7 +107,16 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
 
-        //Boolean sameUser = Boolean.valueOf(getIntent().getStringExtra("sameUser"));
+
+
+
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
         if (!sameUser) {
@@ -117,22 +126,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         } else {
             userId = actualUserId;
         }
-/*
-        if ((userId != null) && (userId != actualUserId)) {
-            add.setVisibility(View.INVISIBLE);
-            edit.setVisibility(View.INVISIBLE);
-            delete.setVisibility(View.INVISIBLE);
-        } else {
-            userId = actualUserId;
-        }*/
 
-
-    }
-
-    @Override
-    public void onResume() {
-
-        super.onResume();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
                 .collection("Habits")
@@ -222,8 +216,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
-                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate)).show(getSupportFragmentManager(), "EDIT_HABIT");
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
 
             }
         });
@@ -235,8 +228,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate)).show(getSupportFragmentManager(), "DELETE_HABIT");
-                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "DELETE_HABIT");
+                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress)).show(getSupportFragmentManager(), "DELETE_HABIT");
             }
         });
     }

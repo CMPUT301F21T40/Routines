@@ -71,20 +71,7 @@ public class EventListActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * This is called when the up button is pressed. It changes the original
-     * functionality of up button. It let user back to the last activity
-     */
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
 
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onResume() {

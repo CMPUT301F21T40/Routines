@@ -11,6 +11,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -33,7 +35,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -297,16 +306,23 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 .collection("Habits")
                 .document(habitId);
         habitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+
                         String completion = (String) document.getData().get("Completion Time");
-                        
+                        String lastModifiedDate = (String) document.getData().get("Last Modified Date");
+                        ArrayList<String> habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
                         completion = Integer.toString(Integer.parseInt(completion + 1));
-                        habitRef.update("Completion Time", completion)
+
+                        int progress = calculateEstimateCompletionTime(completion, lastModifiedDate, habitFrequency);
+                        habitRef.update("Completion Time", completion,
+                                "Progress", progress)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -328,6 +344,67 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             }
         });
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public int calculateEstimateCompletionTime(String completionTime, String lastModifiedDate, ArrayList<String> habitFrequency) {
+        int differInDay = calculateDifferInDay(lastModifiedDate);
+        int days = differInDay % 7;
+        int weeks = differInDay / 7;
+        ArrayList<String> fullDayOfWeek = new ArrayList<>();
+        fullDayOfWeek.add("Monday");
+        fullDayOfWeek.add("Tuesday");
+        fullDayOfWeek.add("Wednesday");
+        fullDayOfWeek.add("Thursday");
+        fullDayOfWeek.add("Friday");
+        fullDayOfWeek.add("Saturday");
+        fullDayOfWeek.add("Sunday");
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
+        Date d = new Date();
+
+        String currentDayOfWeek = sdf.format(d);
+        LocalDate date = LocalDate.parse(lastModifiedDate);
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        String previousDayOfWeek = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+
+        int count = 0;
+        if (fullDayOfWeek.indexOf(currentDayOfWeek) < fullDayOfWeek.indexOf(previousDayOfWeek)){
+            for(int previousIndex = fullDayOfWeek.indexOf(previousDayOfWeek);previousIndex<7;previousIndex++){
+                if (habitFrequency.contains(fullDayOfWeek.get(previousIndex)))
+                    count++;
+            }
+            for(int currentIndex = 0;currentIndex<=fullDayOfWeek.indexOf(currentDayOfWeek);currentIndex++){
+                if (habitFrequency.contains(fullDayOfWeek.get(currentIndex)))
+                    count++;
+            }
+        }
+        else {
+            if (days !=0){
+                for(int i = fullDayOfWeek.indexOf(previousDayOfWeek);i<=fullDayOfWeek.indexOf(currentDayOfWeek);i++){
+                    if (habitFrequency.contains(fullDayOfWeek.get(i)))
+                        count++;
+                }
+            }
+        }
+        int estimateCompletionTime = Integer.parseInt(completionTime) + weeks * habitFrequency.size() + count;
+        return estimateCompletionTime;
+    }
+
+    public int calculateDifferInDay(String lastModifiedDate){
+        int days = 0;
+        try{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            long diff = new Date().getTime() - sdf.parse(lastModifiedDate).getTime();
+            long seconds = diff / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 60;
+            days = ((int) (long) hours / 24);
+            Log.i(TAG, "Date "+lastModifiedDate+" Difference From Now :"+ days + " days");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return days+1;
     }
 
 

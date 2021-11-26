@@ -40,10 +40,10 @@ public class Habit implements Serializable {
      * @param estimateCompletionTime
      * @param lastCompletionTime
      * @param lastModifiedDate
+     * @param progress
      * @author lwaschuk
      */
-    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, String completionTime, String estimateCompletionTime, String lastCompletionTime, String lastModifiedDate) {
-    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, long progress) {
+    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, String completionTime, String estimateCompletionTime, String lastCompletionTime, String lastModifiedDate, long progress) {
         this.name = name;
         this.reason = reason;
         this.date = date;
@@ -54,6 +54,7 @@ public class Habit implements Serializable {
         this.estimateCompletionDate = estimateCompletionDate;
         this.lastCompletionTime = lastCompletionTime;
         this.lastModifiedDate = lastModifiedDate;
+        this.progress = progress;
     }
 
     /**

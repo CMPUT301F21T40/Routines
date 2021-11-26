@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -12,6 +14,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +28,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +42,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +76,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     boolean loadingLocation = false;
 
     ActivityResultLauncher<String> mGetContent;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,6 +93,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         addButton = findViewById(R.id.add_event_button);
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
+        albumPhoto();
         cameraOrGallery();
 
 
@@ -328,7 +338,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                albumPhoto();
+                mGetContent.launch("image/*");
             }
         });
 
@@ -336,6 +346,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
+                albumPhoto();
             }
         });
 
@@ -350,6 +361,31 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
     public void albumPhoto(){
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        if(uri != null){
+                            try {
+                                imageUri = uri;
+                                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                                addPhoto.setImageBitmap(selectedImage);
+                                uploadImage();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Toast.makeText(AddEventActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                });
+
+    }
+
+    public void uploadImage(){
 
     }
 

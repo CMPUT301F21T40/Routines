@@ -2,8 +2,11 @@ package com.example.routines;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,11 +14,18 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +53,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     EditText eventLocation;
     Button addButton;
     Button getLocationBtn;
+    ImageView addPhoto;
     String habitId;
     String userId;
 
@@ -55,6 +66,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     double longFromMap;
 
     boolean loadingLocation = false;
+
+    ActivityResultLauncher<String> mGetContent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +84,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         addButton = findViewById(R.id.add_event_button);
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
+        cameraOrGallery();
+
 
 
         habitId = (String) getIntent().getStringExtra("habitId");
@@ -282,6 +297,63 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }
 
     }
+
+    public void cameraOrGallery(){
+        addPhoto = findViewById(R.id.imageView_add_event);
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+            }
+        });
+    }
+
+    public void showDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.choice_bottom_dialog);
+        LinearLayout layoutCamera = dialog.findViewById(R.id.camera_layout);
+        LinearLayout layoutAlbum = dialog.findViewById(R.id.album_layout);
+        LinearLayout layoutCancel = dialog.findViewById(R.id.cancel_layout);
+
+        layoutCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                cameraPhoto();
+            }
+        });
+
+        layoutAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                albumPhoto();
+            }
+        });
+
+        layoutCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();;
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    public void cameraPhoto(){
+
+    }
+
+    public void albumPhoto(){
+
+    }
+
+
 
 
 }

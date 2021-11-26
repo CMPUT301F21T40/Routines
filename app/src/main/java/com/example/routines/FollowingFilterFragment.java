@@ -35,7 +35,9 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
     CollectionReference collectionReference;
     FirebaseAuth myAuth;
     String userId;
+    String followingId;
     private ArrayList<String> habitIdList;
+    ArrayList<ArrayList<String>> idList;
     private ArrayList<String> followers;
 
     private  HabitRecyclerAdapter habitAdapter;
@@ -74,11 +76,18 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
 
     @Override
     public void onItemClick(int position) {
-            Intent intent = new Intent(getContext(), ViewHabitActivity.class);
-            String habitId = habitIdList.get(position);
-            intent.putExtra("sameUser", false);
-            intent.putExtra("habitId", habitId);
-            startActivity(intent);
+        Intent intent = new Intent(getContext(), ViewHabitActivity.class);
+        String habitId = habitIdList.get(position);
+        findHabitUserId(habitId);
+        ArrayList<String> list = idList.get(position);
+        String followingId = list.get(1);
+
+        Log.d("TAG", "RIGHT BEFORE INTENT CALL - " + followingId);
+        intent.putExtra("userId", followingId);
+        intent.putExtra("sameUser", false);
+        intent.putExtra("habitId", habitId);
+        startActivity(intent);
+
     }
 
     public void initializeView(){
@@ -86,11 +95,40 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
         habitView = rootView.findViewById(R.id.fragment_habitList);
         habitDataList = new ArrayList<Habit>();
         habitIdList = new ArrayList<>();
+        idList = new ArrayList<>();
         followers = new ArrayList<>();
         habitAdapter = new HabitRecyclerAdapter(habitDataList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         habitView.setLayoutManager(layoutManager);
         habitView.setAdapter(habitAdapter);
+    }
+
+    public void findHabitUserId(String habitId) {
+        for (String follower : followers) {
+            Log.d("TAG", follower + "------------");
+            db.collection("Habits")
+                    .document(follower)
+                    .collection("Habits")
+                    .document(habitId)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Log.d("TAG", "Task is successful-----------");
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d("TAG", "Document exists -----------");
+                                    followingId = follower;
+                                    Log.d("TAG", followingId + " - following ID -----");
+                                    return;
+                                }
+                            }
+                        }
+                    });
+
+        }
+
     }
 
     public void findFollowers(String userId) {
@@ -101,33 +139,33 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            Log.d("TAG", "Got a task ---------------");
+                            //Log.d("TAG", "Got a task ---------------");
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", "Got a document ---------------");
+                                //Log.d("TAG", "Got a document ---------------");
                                 String status = (String) document.getData().get("Status");
                                 if (status.equals("accepted")) {
-                                    Log.d("TAG", "Got an accepted status ---------------");
+                                    //Log.d("TAG", "Got an accepted status ---------------");
                                     String followerId = (String) document.getData().get("Receiver");
                                     followers.add(followerId);
                                     Integer size = followers.size();
-                                    Log.d("TAG", size + "-----------------");
+                                    //Log.d("TAG", size + "-----------------");
                                 }
                             }
                         }
                         Integer size = followers.size();
-                        Log.d("TAG", size + " after iteration-----------------");
+                        //Log.d("TAG", size + " after iteration-----------------");
                         setHabits();
                     }
                 });
         Integer size = followers.size();
-        Log.d("TAG", size + "--------1---------");
+        //Log.d("TAG", size + "--------1---------");
     }
 
     public void setHabits() {
         Integer size = followers.size();
-        Log.d("TAG", size + " in setHabits -----------------");
+        //Log.d("TAG", size + " in setHabits -----------------");
         for (String follower : followers) {
-            Log.d("TAG", follower + "-------------------");
+            //Log.d("TAG", follower + "-------------------");
             collectionReference
                     .document(follower)
                     .collection("Habits")
@@ -148,6 +186,12 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                                                     (String) value.getData().get("Habit Reason"),
                                                                     (String) value.getData().get("Start Date"),
                                                                     (long) value.getData().get("Progress")));
+                                                            String habitId = document.getId();
+                                                            String userId = follower;
+                                                            ArrayList<String> tempList = new ArrayList<>();
+                                                            tempList.add(habitId);
+                                                            tempList.add(userId);
+                                                            idList.add(tempList);
                                                             habitIdList.add((String) document.getId());
                                                             habitAdapter.notifyDataSetChanged();
                                                         }

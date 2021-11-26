@@ -242,6 +242,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
                     transaction.replace(R.id.container, homeFragment);
                     transaction.commit();
                     Toast.makeText(getApplicationContext(), "All Habits", Toast.LENGTH_SHORT).show();
+                    break;
                 }
                 break;
             case R.id.switch_today:
@@ -263,6 +264,8 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
                     transaction.replace(R.id.container, filterFragment);
                     transaction.commit();
                     Toast.makeText(getApplicationContext(), "Today's Habits", Toast.LENGTH_SHORT).show();
+                    break;
+
                 }
             case R.id.switch_following:
                 if(isSelected) {
@@ -283,6 +286,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
                     transaction.replace(R.id.container, followingFragment);
                     transaction.commit();
                     Toast.makeText(getApplicationContext(), "Following Habits", Toast.LENGTH_SHORT).show();
+                    break;
 
                 }
         }

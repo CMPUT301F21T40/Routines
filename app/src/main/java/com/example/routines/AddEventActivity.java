@@ -3,6 +3,7 @@ package com.example.routines;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -36,12 +37,18 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -64,6 +71,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     ImageView addPhoto;
     String habitId;
     String userId;
+    String eventID;
 
     LocationManager locationManager;
 
@@ -174,7 +182,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     data.put("date", date);
 
                     //generate an unique id for each event
-                    String eventID = eventReference.document().getId();
+                    eventID = eventReference.document().getId();
                     eventReference
                             .document(eventID)
                             .set(data)
@@ -194,11 +202,13 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                     //after successfully add a event, update the event list under the habit collection
                     if (eventID != null) {
+                        uploadImage();
                         DocumentReference habitReference = db
                                 .collection("Habits").document(userId)
                                 .collection("Habits").document(habitId);
                         Log.d("Success", "field added with ID: " + eventID);
                         habitReference.update("eventList", FieldValue.arrayUnion(eventID));
+
                     }
 
                     //return to the last activity after everything is done
@@ -371,7 +381,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                                 addPhoto.setImageBitmap(selectedImage);
-                                uploadImage();
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
@@ -386,7 +395,24 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
     public void uploadImage(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("Event photos");
 
+        StorageReference collectionRef = storageRef.child(userId);
+        StorageReference fileRef = collectionRef.child(eventID);
+        fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String url = uri.toString();
+                        Log.d("Download url", url);
+                        Toast.makeText(getApplicationContext(),"Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
 

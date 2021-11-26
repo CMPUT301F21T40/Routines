@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FloatingActionButton editButton;
     FloatingActionButton deleteButton;
     String eventId;
+    ImageView eventImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventLocation = findViewById(R.id.view_event_location);
         editButton = findViewById(R.id.edit_event_button);
         deleteButton = findViewById(R.id.delete_habit_event_button);
+        eventImage = findViewById(R.id.image_show_event);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
@@ -159,4 +162,6 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
 
                 });
     }
+
+
 }

@@ -149,6 +149,11 @@ public class ProfileActivity extends AppCompatActivity {
                         overridePendingTransition(0,0);
                         return true;
 
+                    case R.id.notification:
+                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
                     case R.id.profile:
                         return true;
 

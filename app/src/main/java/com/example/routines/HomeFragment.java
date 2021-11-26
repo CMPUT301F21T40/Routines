@@ -155,6 +155,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
     public void onItemClick(int position) {
         Intent intent = new Intent(getContext(), ViewHabitActivity.class);
         String habitId = habitIdList.get(position);
+        intent.putExtra("sameUser", true);
         intent.putExtra("habitId", habitId);
         Log.d("Intent habit id", habitId);
         startActivity(intent);
@@ -184,6 +185,16 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 clear();
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    /**
+                    int habitProgress = 0;
+                    try {
+                        habitProgress = (int)doc.getData().get("Progress");
+                    } catch (Exception e) {
+                        System.out.println("TESTTT");
+                        System.out.println(e);
+                    }**/
+
+                    long habitProgress = (long)doc.getData().get("Progress");
                     String habitName = (String)doc.getData().get("Habit Name");
                     String habitReason = (String)doc.getData().get("Habit Reason");
                     String habitDate = (String)doc.getData().get("Start Date");
@@ -195,6 +206,7 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
                     String lastModifiedDate = (String) doc.getData().get("Last Modified Date");
                     String id = (String) doc.getId();
                     habitIdList.add(id);
+                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, habitProgress));
                     habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate));
                     habitAdapter.notifyDataSetChanged();
                 }

@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,7 +71,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     FloatingActionButton delete;
     FirebaseAuth myAuth;
     String userId;
+    String actualUserId;
     String habitId;
+    long habitProgress;
 
     HomeFragment homeFragment;
     ViewHabitActivity viewActivity;
@@ -87,7 +90,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
-        userId = user.getUid();
+        actualUserId = user.getUid();
+
+        userId = (String) getIntent().getStringExtra("userId");
+
+
 
         habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
@@ -99,6 +106,25 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
+
+        //Boolean sameUser = Boolean.valueOf(getIntent().getStringExtra("sameUser"));
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+        if (!sameUser) {
+            add.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);
+        } else {
+            userId = actualUserId;
+        }
+/*
+        if ((userId != null) && (userId != actualUserId)) {
+            add.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);
+        } else {
+            userId = actualUserId;
+        }*/
 
 
     }
@@ -127,6 +153,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
                                 habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
+                                habitProgress = (long)document.getData().get("Progress");
                                 Collections.sort(habitFrequency,comparator);
                                 habitPrivacy = (String) document.getData().get("Privacy");
                                 frequency = "";
@@ -181,6 +208,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             public void onClick(View view) {
                 Intent intent = new Intent(ViewHabitActivity.this, EventListActivity.class);
                 intent.putExtra("habitId", habitId);
+                intent.putExtra("userId", userId);
+                intent.putExtra("sameUser", sameUser);
+                intent.putExtra("actualUserId", actualUserId);
                 startActivity(intent);
             }
         });
@@ -192,6 +222,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
                 EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate)).show(getSupportFragmentManager(), "EDIT_HABIT");
 
             }
@@ -205,6 +236,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             @Override
             public void onClick(View view) {
                 new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate)).show(getSupportFragmentManager(), "DELETE_HABIT");
+                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "DELETE_HABIT");
             }
         });
     }

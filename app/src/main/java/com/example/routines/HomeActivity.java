@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -111,6 +112,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         String habitReason = newHabit.getReason();
         String habitDate = newHabit.getDate();
         String habitPrivacy = newHabit.getPrivacy();
+        long habitProgress = newHabit.getProgress();
         ArrayList<String> frequencyList = (ArrayList<String>) newHabit.getFrequency();
         if (frequencyList.isEmpty()) {
             frequencyList.add("Null");
@@ -134,6 +136,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         data.put("Last Modified Date", lastModifiedDate);
 
         data.put("Index", 10000);
+        data.put("Progress", habitProgress);
         currentUserHabitCol.document(habitId)
                 .set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -187,6 +190,11 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
 
                     case R.id.search:
                         startActivity(new Intent(getApplicationContext(),SearchActivity.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.notification:
+                        startActivity(new Intent(getApplicationContext(), NotificationActivity.class));
                         overridePendingTransition(0,0);
                         return true;
 

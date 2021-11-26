@@ -28,6 +28,8 @@ public class Habit implements Serializable {
     public String completionTime;
     public String estimateCompletionDate;
 
+    private long progress;
+
     /**
      * @param name
      * @param reason
@@ -41,11 +43,13 @@ public class Habit implements Serializable {
      * @author lwaschuk
      */
     public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, String completionTime, String estimateCompletionTime, String lastCompletionTime, String lastModifiedDate) {
+    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, long progress) {
         this.name = name;
         this.reason = reason;
         this.date = date;
         this.frequency = frequency;
         this.privacy = privacy;
+        this.progress = progress;
         this.completionTime = completionTime;
         this.estimateCompletionDate = estimateCompletionDate;
         this.lastCompletionTime = lastCompletionTime;
@@ -60,10 +64,11 @@ public class Habit implements Serializable {
      * @see Habit Class
      * @author lwaschuk
      */
-    public Habit(String name, String reason, String date) {
+    public Habit(String name, String reason, String date, long progress) {
         this.name = name;
         this.reason = reason;
         this.date = date;
+        this.progress = progress;
     }
 
     /**
@@ -181,6 +186,25 @@ public class Habit implements Serializable {
         return reason.replace(" ", "").length() <= 30;
     }
 
+    /**
+     * Returns the percentage of habit we are completing on time
+     * @return long progress
+     * @author lukas
+     * @see Habit
+     */
+    public long getProgress() {
+        return this.progress;
+    }
+
+    /**
+     * Allows the progress to be set and savaed to firebase
+     * @param progress
+     * @author lukas
+     * @see Habit
+     */
+    public void setProgress(long progress) {
+        this.progress = progress;
+    }
 
     public String getLastCompletionTime() {
         return lastCompletionTime;

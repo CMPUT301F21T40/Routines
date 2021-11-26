@@ -90,6 +90,11 @@ public class EventListActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         String habitId = (String) getIntent().getStringExtra("habitId");
+        String userId = (String) getIntent().getStringExtra("userId");
+        String actualUserId = (String) getIntent().getStringExtra("actualUserId");
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+        //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db.collection("Events");
         eventArrayList.clear();
         eventArrayAdapter.notifyDataSetChanged();
@@ -119,6 +124,43 @@ public class EventListActivity extends AppCompatActivity {
                     }
                 });
 
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
+                String eventId = eventIdList.get(i);
+                intent.putExtra("userId", userId);
+                intent.putExtra("eventId", eventId);
+                intent.putExtra("sameUser", sameUser);
+                intent.putExtra("actualUserId", actualUserId);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
+    /**
+     * This is called when the up button is pressed. It changes the original
+     * functionality of up button. It let user back to the last activity
+     */
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

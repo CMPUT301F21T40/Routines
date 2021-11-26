@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -59,6 +61,26 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
         eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
+
+        FirebaseAuth myAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = myAuth.getCurrentUser();
+        //String actualUserId = user.getUid();
+        String actualUserId = getIntent().getStringExtra("actualUserId");
+        String userId = getIntent().getStringExtra("userId");
+        Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+        if (!sameUser) {
+            editButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.INVISIBLE);
+        }
+        /*
+        if (userId != actualUserId) {
+            editButton.setVisibility(View.INVISIBLE);
+            deleteButton.setVisibility(View.INVISIBLE);
+        } else {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+        }*/
 
         showInfo();
 
@@ -111,6 +133,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
 
 
     }
+
 
 
 

@@ -49,6 +49,7 @@ public class EditHabitFragment extends DialogFragment {
     private int day;
     private int month;
     private int year;
+    long defaultProgress;
 
     private Switch privacySwitch;
     private Switch monSwitch;
@@ -105,6 +106,7 @@ public class EditHabitFragment extends DialogFragment {
         currentDate = originalHabit.getDate();
         currentReason = originalHabit.getReason();
         currentPrivacy = originalHabit.getPrivacy();
+        defaultProgress = originalHabit.getProgress();
 
 //      Set the attributes to their actual values
         habitName = view.findViewById(R.id.habitNameEditText);
@@ -298,6 +300,7 @@ public class EditHabitFragment extends DialogFragment {
                         String newLastCompletionTime = "0";
                         String newLastModifiedDate = habitName.getText().toString();
                         listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy,newCompletionTime,newEstimateCompletionTime,newLastCompletionTime,newLastModifiedDate));
+                        listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy, defaultProgress));
                     }
                 }).create();
     }

@@ -49,6 +49,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <EditText
             android:id="@+id/view_habit_name"
             android:layout_width="match_parent"

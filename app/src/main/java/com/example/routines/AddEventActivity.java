@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,6 +20,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -55,9 +57,13 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -91,6 +97,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     ActivityResultLauncher<String> mGetContent;
     ActivityResultLauncher<Intent> nGetContent;
     private Uri imageUri;
+    String filename;
+    FirebaseStorage storage;
+    StorageReference fileRef;
+    StorageReference storageRef;
+    private String pictureImagePath = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,14 +118,17 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         addButton = findViewById(R.id.add_event_button);
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("Event photos");
         albumPhoto();
         cameraPhoto();
         cameraOrGallery();
 
 
-
         habitId = (String) getIntent().getStringExtra("habitId");
         userId = (String) getIntent().getStringExtra("userId");
+        StorageReference collectionRef = storageRef.child(userId);
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -137,11 +151,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent = new Intent(AddEventActivity.this, Map.class);
-                    intent.putExtra("currentLat", currentLatitude);
-                    intent.putExtra("currentLong", currentLongitude);
+                Intent intent = new Intent(AddEventActivity.this, Map.class);
+                intent.putExtra("currentLat", currentLatitude);
+                intent.putExtra("currentLong", currentLongitude);
 
-                    startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -190,6 +204,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                     //generate an unique id for each event
                     eventID = eventReference.document().getId();
+                    fileRef = collectionRef.child(eventID);
                     eventReference
                             .document(eventID)
                             .set(data)
@@ -350,6 +365,14 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             public void onClick(View view) {
                 dialog.dismiss();
                 //'dispatchTakePictureIntent();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String imageFileName = timeStamp + ".jpg";
+                File storageDir = Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES);
+                pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+                File file = new File(pictureImagePath);
+                Uri outputFileUri = Uri.fromFile(file);
+                Intent cameraIntent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
                 nGetContent.launch(new Intent( MediaStore.ACTION_IMAGE_CAPTURE));
             }
         });
@@ -384,8 +407,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                         if(intent != null){
                             Bundle extras = intent.getExtras();
                             Bitmap imageBitmap = (Bitmap) extras.get("data");
-                            imageUri = getImageUri(getApplicationContext(),imageBitmap);
                             addPhoto.setImageBitmap(imageBitmap);
+
                         }else{
                             Toast.makeText(getApplicationContext(), "You haven't taken a photo", Toast.LENGTH_SHORT).show();
                         }
@@ -393,14 +416,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     }
                 });
     }
-
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
-
-
 
     public void albumPhoto(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
@@ -426,13 +441,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
-
     public void uploadImage(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("Event photos");
-
-        StorageReference collectionRef = storageRef.child(userId);
-        StorageReference fileRef = collectionRef.child(eventID);
         fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {

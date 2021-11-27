@@ -381,17 +381,22 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     @Override
                     public void onActivityResult(ActivityResult result) {
                         Intent intent = result.getData();
-                        Bundle extras = intent.getExtras();
-                        Bitmap imageBitmap = (Bitmap) extras.get("data");
-                        imageUri = getImageUri(getApplicationContext(),imageBitmap);
-                        addPhoto.setImageBitmap(imageBitmap);
+                        if(intent != null){
+                            Bundle extras = intent.getExtras();
+                            Bitmap imageBitmap = (Bitmap) extras.get("data");
+                            imageUri = getImageUri(getApplicationContext(),imageBitmap);
+                            addPhoto.setImageBitmap(imageBitmap);
+                        }else{
+                            Toast.makeText(getApplicationContext(), "You haven't taken a photo", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
-        //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        //inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }

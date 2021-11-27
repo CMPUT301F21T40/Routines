@@ -49,6 +49,9 @@ public class SearchProfileActivity extends AppCompatActivity {
     String currentUserName;
     String userId;
 
+    String to;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -64,7 +67,6 @@ public class SearchProfileActivity extends AppCompatActivity {
 
         requestReference = db.collection("Notification");
         requestId = db.collection(String.valueOf(requestReference)).document().getId();
-
 
         //get user id from last activity
         String id = (String) getIntent().getStringExtra("userId");
@@ -96,6 +98,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
 
         getCurrentUserName();
+
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,10 +106,13 @@ public class SearchProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"You can't follow yourself", Toast.LENGTH_SHORT).show();
                 }else{
                     addPendingFollower();
+
                 }
             }
         });
-
+        Log.d("Lukas", "BEFORE BUTTON STATUS");
+        buttonStatusPending(); //  check if pending request
+        buttonStatusAccepted(); // check if already following
 
 
     }
@@ -137,7 +143,97 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Function to set the string value of the button to it will display the correct values
+     * (Pending)
+     * @see SearchProfileActivity
+     * @author Lukas Waschuk
+     * Todo: If there is time we can add a remove function here
+     */
+    public void buttonStatusPending() {
+        db.collection("Users")
+                .whereEqualTo("User Name", userName.getText().toString())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                requestReceiver = document.getId();
+                                Log.d("requestReceiver", requestReceiver);
+                            }
+                            requestReference
+                                    .whereEqualTo("Receiver Name", userName.getText().toString() )
+                                    .whereEqualTo("Sender Name", currentUserName)
+                                    .whereEqualTo("Status", "pending")
+                                    .limit(1)
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            Log.d("Lukas", currentUserName);
+                                            Log.d("Lukas", userName.getText().toString());
+                                            if (task.isSuccessful()) {
+                                                Log.d("Lukas", "Please work1 ");
+                                                boolean isEmpty = task.getResult().isEmpty();
+                                                if(!isEmpty){
+                                                    followButton.setText("Request Sent");
+                                                    Log.d("Lukas", "Please work2 ");
+                                                }
+                                            }else{onComplete(task);} // wait for firebase, DO NOT LEAVE YET
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
 
+    /**
+     * Function to set the string value of the button to it will display the correct values
+     *  (Accepted)
+     * @see SearchProfileActivity
+     * @author Lukas Waschuk
+     * Todo: If there is time we can add a remove function here
+     */
+    public void buttonStatusAccepted(){
+        db.collection("Users")
+                .whereEqualTo("User Name", userName.getText().toString())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                requestReceiver = document.getId();
+                                Log.d("requestReceiver", requestReceiver);
+                            }
+
+                    // check for accepted flag and change the value
+                    requestReference
+                            .whereEqualTo("Receiver Name", userName.getText().toString() )
+                            .whereEqualTo("Sender Name", currentUserName)
+                            .whereEqualTo("Status", "accepted")
+                            .limit(1)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    Log.d("Lukas", currentUserName);
+                                    Log.d("Lukas", userName.getText().toString());
+                                    if (task.isSuccessful()) {
+                                        Log.d("Lukas", "Please work1 ");
+                                        boolean isEmpty = task.getResult().isEmpty();
+                                        if(!isEmpty){
+                                            followButton.setText("Accepted");
+                                            Log.d("Lukas", "Please work2 ");
+                                        }
+                                    }else{onComplete(task);} // wait for firebase, DO NOT LEAVE YET
+                                }
+                            });
+                        }
+                    }
+                });
+    }
 
 
     public void addPendingFollower(){
@@ -165,7 +261,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                 if(!isEmpty){
                                                     Log.d("Follow", "There is request doc");
                                                     Toast.makeText(getApplicationContext(),
-                                                            "You have already send request to this user", Toast.LENGTH_SHORT)
+                                                            "You have already sent a request to this user", Toast.LENGTH_SHORT)
                                                             .show();
                                                 }else{
                                                     HashMap<String, Object> data = new HashMap<>();
@@ -189,18 +285,13 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                     Toast.makeText(getApplicationContext(),
                                                             "Request sent successfully", Toast.LENGTH_SHORT)
                                                             .show();
-
-
+                                                    followButton.setText("Request Sent"); // change button after req sent
                                                 }
-
                                             }
-
                                         }
                                     });
-
                         }
                     }
                 });
-
     }
 }

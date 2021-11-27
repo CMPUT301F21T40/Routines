@@ -17,7 +17,7 @@ public class HabitUnitTest {
     public void createHabit(){
         frequency.add("Monday");
         frequency.add("Thursday");
-        habit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private", 0);
+        habit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private","20", "15","10", "2021-01-01",  0);
     }
 
     @Test

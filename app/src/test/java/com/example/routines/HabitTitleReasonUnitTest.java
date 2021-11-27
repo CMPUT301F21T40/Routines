@@ -16,7 +16,7 @@ public class HabitTitleReasonUnitTest {
     @BeforeEach
     public void createHabit() {
         frequency.add("Monday");
-        habit = new Habit("school", "I hate myself", "2020-01-01", frequency, "Private", 0);
+        habit = new Habit("school", "I hate myself", "2020-01-01", frequency, "Private", "20", "15","10", "2021-01-01", 0);
     }
 
     @Test

@@ -34,7 +34,7 @@ public class EditHabitUnitTest {
     public void createHabit(){ // create a new mock habit list for every test
         frequency.add("Monday");
         frequency.add("Thursday");
-        mockHabit = new Habit("Piano", "Good for me", "2020-05-27",frequency, "Private", 0);
+        mockHabit = new Habit("Piano", "Good for me", "2020-05-27",frequency, "Private", "20", "15","10", "2021-01-01", 0);
     }
 
     @Test

@@ -34,7 +34,7 @@ public class EditHabitUnitTest {
     public void createHabit(){ // create a new mock habit list for every test
         frequency.add("Monday");
         frequency.add("Thursday");
-        mockHabit = new Habit("Piano", "Good for me", "2020-05-27",frequency, "Private", "20", "15","10", "2021-01-01", 0);
+        mockHabit = new Habit("Piano", "Good for me", "2020-05-27",frequency, "Private", "20", "2021-01-12","10", "2021-01-01", 0);
     }
 
     @Test
@@ -52,6 +52,14 @@ public class EditHabitUnitTest {
         assertEquals("Public", mockHabit.getPrivacy());
         mockHabit.setProgress(10);
         assertEquals(10, mockHabit.getProgress());
+        mockHabit.setCompletionTime("30");
+        assertEquals("30", mockHabit.getCompletionTime());
+        mockHabit.setEstimateCompletionDate("2021-01-10");
+        assertEquals("2021-01-10", mockHabit.getEstimateCompletionDate());
+        mockHabit.setLastCompletionTime("13");
+        assertEquals("13", mockHabit.getLastCompletionTime());
+        mockHabit.setLastModifiedDate("2020-04-04");
+        assertEquals("2020-04-04", mockHabit.getLastModifiedDate());
     }
 
 }

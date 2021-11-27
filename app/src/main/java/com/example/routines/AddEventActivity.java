@@ -395,8 +395,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
     }
@@ -418,7 +417,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                                 e.printStackTrace();
                             }
                         }else{
-                            Toast.makeText(AddEventActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddEventActivity.this, "You haven't picked an image",Toast.LENGTH_LONG).show();
                         }
 
 

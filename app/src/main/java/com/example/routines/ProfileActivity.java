@@ -232,7 +232,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }else{
-                            Toast.makeText(ProfileActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProfileActivity.this, "You haven't picked an image",Toast.LENGTH_LONG).show();
                         }
 
 

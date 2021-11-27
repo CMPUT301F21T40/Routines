@@ -180,7 +180,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                                     followButton.setText("Request Sent");
                                                     Log.d("Lukas", "Please work2 ");
                                                 }
-                                            }else{onComplete(task);} // wait for firebase, DO NOT LEAVE YET
+                                            }else{
+                                                Log.d("Lukas", "Redo");
+                                                onComplete(task);
+                                            } // wait for firebase, DO NOT LEAVE YET
                                         }
                                     });
                         }
@@ -227,7 +230,10 @@ public class SearchProfileActivity extends AppCompatActivity {
                                             followButton.setText("Accepted");
                                             Log.d("Lukas", "Please work2 ");
                                         }
-                                    }else{onComplete(task);} // wait for firebase, DO NOT LEAVE YET
+                                    }else{
+                                        Log.d("Lukas", "Redo");
+                                        onComplete(task);
+                                    }// wait for firebase, DO NOT LEAVE YET
                                 }
                             });
                         }

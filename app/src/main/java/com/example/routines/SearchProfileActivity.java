@@ -1,5 +1,6 @@
 package com.example.routines;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -233,6 +234,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                         boolean isEmpty = task.getResult().isEmpty();
                                         if(!isEmpty){
                                             followButton.setText("Accepted");
+//                                            followButton.setBackgroundColor(Color.RED); // to change color but i dont think we need to 
                                             Log.d("Lukas", "Inside If statement on accepted ");
                                         }
                                     }else{

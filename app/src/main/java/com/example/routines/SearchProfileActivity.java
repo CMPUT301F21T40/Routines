@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -171,17 +172,19 @@ public class SearchProfileActivity extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            Log.d("Lukas", "inside onComplete1");
                                             Log.d("Lukas", currentUserName);
                                             Log.d("Lukas", userName.getText().toString());
                                             if (task.isSuccessful()) {
-                                                Log.d("Lukas", "Please work1 ");
+                                                Log.d("Lukas", "Inside task successful");
                                                 boolean isEmpty = task.getResult().isEmpty();
                                                 if(!isEmpty){
                                                     followButton.setText("Request Sent");
-                                                    Log.d("Lukas", "Please work2 ");
+                                                    //followButton.setBackgroundColor(0xff0000);
+                                                    Log.d("Lukas", "Inside !ifEmpty statement");
                                                 }
                                             }else{
-                                                Log.d("Lukas", "Redo");
+                                                Log.d("Lukas", "Need to redo, not successful");
                                                 onComplete(task);
                                             } // wait for firebase, DO NOT LEAVE YET
                                         }
@@ -205,6 +208,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("Lukas", "Inside onComplete1 on accepted");
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 requestReceiver = document.getId();
@@ -221,14 +225,15 @@ public class SearchProfileActivity extends AppCompatActivity {
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    Log.d("Lukas", "Inside onComplete2 on accepted");
                                     Log.d("Lukas", currentUserName);
                                     Log.d("Lukas", userName.getText().toString());
                                     if (task.isSuccessful()) {
-                                        Log.d("Lukas", "Please work1 ");
+                                        Log.d("Lukas", "Inside task successful on accepted");
                                         boolean isEmpty = task.getResult().isEmpty();
                                         if(!isEmpty){
                                             followButton.setText("Accepted");
-                                            Log.d("Lukas", "Please work2 ");
+                                            Log.d("Lukas", "Inside If statement on accepted ");
                                         }
                                     }else{
                                         Log.d("Lukas", "Redo");

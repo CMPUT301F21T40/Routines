@@ -13,7 +13,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -174,13 +176,20 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         StorageReference storageRef = storage.getReference().child("Event photos");
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference collectionRef = storageRef.child(userId);
-        StorageReference imageRef = collectionRef.child(eventId);
-        imageRef.getBytes(1024*1024)
+
+
+        collectionRef.child(eventId).getBytes(1024*1024)
                 .addOnSuccessListener(new OnSuccessListener<byte[]>() {
                     @Override
                     public void onSuccess(byte[] bytes) {
                         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         eventImage.setImageBitmap(bitmap);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event image", "Doesn't exist");
                     }
                 });
     }

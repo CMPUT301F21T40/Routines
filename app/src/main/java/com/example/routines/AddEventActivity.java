@@ -2,8 +2,10 @@ package com.example.routines;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -29,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -50,6 +54,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Calendar;
@@ -84,6 +89,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     boolean loadingLocation = false;
 
     ActivityResultLauncher<String> mGetContent;
+    ActivityResultLauncher<Intent> nGetContent;
     private Uri imageUri;
 
     @Override
@@ -102,6 +108,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
         albumPhoto();
+        cameraPhoto();
         cameraOrGallery();
 
 
@@ -202,7 +209,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                     //after successfully add a event, update the event list under the habit collection
                     if (eventID != null) {
-                        uploadImage();
+                        if(imageUri!=null){
+                            uploadImage();
+                        }
                         DocumentReference habitReference = db
                                 .collection("Habits").document(userId)
                                 .collection("Habits").document(habitId);
@@ -340,7 +349,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                cameraPhoto();
+                //'dispatchTakePictureIntent();
+                nGetContent.launch(new Intent( MediaStore.ACTION_IMAGE_CAPTURE));
             }
         });
 
@@ -356,7 +366,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                albumPhoto();
             }
         });
 
@@ -367,8 +376,27 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
     public void cameraPhoto(){
-
+        nGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        Intent intent = result.getData();
+                        Bundle extras = intent.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+                        imageUri = getImageUri(getApplicationContext(),imageBitmap);
+                        addPhoto.setImageBitmap(imageBitmap);
+                    }
+                });
     }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        //inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+
 
     public void albumPhoto(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
@@ -393,6 +421,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 });
 
     }
+
 
     public void uploadImage(){
         FirebaseStorage storage = FirebaseStorage.getInstance();

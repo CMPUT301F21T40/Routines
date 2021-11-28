@@ -13,7 +13,7 @@ android {
         //Firebase: Targets API level 16 (Jelly Bean) or higher
         minSdk 21
         multiDexEnabled true
-        targetSdk 23 // no tests will work with SDK 30 dont use
+        targetSdk 23 // no tests will work with SDK 30 dont use //shouldn't be higher than 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

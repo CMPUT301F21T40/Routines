@@ -186,15 +186,14 @@ public class EditEventFragment extends DialogFragment implements LocationListene
      * @param requestCode
      * @param resultCode
      * @param data
+     * @return void
+     * @author yyang13
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 101) {
-            String test = "Testing";
-            eventLocation.setText(test);
-
             latFromMap = data.getDoubleExtra("currentLat", 0);
             longFromMap = data.getDoubleExtra("currentLong", 0);
 
@@ -221,6 +220,7 @@ public class EditEventFragment extends DialogFragment implements LocationListene
     /**
      * create DatePicker
      * @return void
+     * @author yyang13
      *
      */
     public void createDatePicker() {
@@ -240,6 +240,8 @@ public class EditEventFragment extends DialogFragment implements LocationListene
 
     /**
      * Check Location Permission
+     * @return void
+     * @author yyang13
      */
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -254,6 +256,8 @@ public class EditEventFragment extends DialogFragment implements LocationListene
     /**
      * Get Address From Location
      * @param location
+     * @return void
+     * @author yyang13
      */
     @Override
     public void onLocationChanged(@NonNull Location location) {

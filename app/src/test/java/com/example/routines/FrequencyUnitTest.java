@@ -9,6 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+/**
+ * Unit tests of Habit frequency
+ * @author yyang13
+ */
+
 public class FrequencyUnitTest {
     private ArrayList<String> freuency;
 

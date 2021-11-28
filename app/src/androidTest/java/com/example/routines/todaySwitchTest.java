@@ -16,7 +16,7 @@ import org.junit.Test;
 /**
  * INTENT TESTING FOR US 01.07.01, US 01.08.01
  */
-public class todaySwitchTest {
+public class TodaySwitchTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =

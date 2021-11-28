@@ -15,12 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * NYI: CANNOT GET ROBOTIUM TO LONG PRESS -> DRAG
- * NYI: On 2021-11-28 this still seem like we cannot test it based on how we implemented the functionality
- * < long press + drag >
- * US 01.08.02
+ * INTENT TESTING US 01.01.01, US 01.02.01, 01.06.01,
  */
-public class ReorderHabitTest {
+public class AddHabitBackButtonTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -48,31 +45,18 @@ public class ReorderHabitTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    public void addHabit(){
-        // click the floating action button
+    @Test
+    public void addHabitFragmentBackButton(){ // test canceling adding a habit
+        login();
+        // click floating action button
         View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.container); // get the frame layout
         View fab= floatingButtonView.findViewById(R.id.addHabitButton); // get the button inside the frame layout
         solo.clickOnView(fab);  // press the button
-        // inside the fragment
-        solo.clickOnButton("CONFIRM DATE");
-        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "TEST HABIT");
-        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "TEST REASON");
-        // test all the date switch's
-        solo.clickOnButton("Private Habit");
-        solo.clickOnButton("Monday");
-        solo.clickOnButton("OK");
-        solo.sleep(1000);
+        solo.sleep(500);
+        solo.clickOnButton("Cancel");
+        solo.sleep(500);
     }
-    @Test
-    public void reorderHabitTest(){
-        login();
-        //addHabit();
-        //solo.clickLongOnText("TEST HABIT");
-        solo.sleep(1000);
-        solo.drag(250, 250,800,1000,1);
 
-        solo.sleep(1000);
-    }
     /**
      * Closes the activity after every test
      * @throws Exception
@@ -81,5 +65,5 @@ public class ReorderHabitTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
-
 }
+

@@ -45,11 +45,11 @@ public class EventCustomList extends ArrayAdapter<Event> {
         Event event = events.get(position);
         TextView eventName = view.findViewById(R.id.event_name);
         TextView eventDate = view.findViewById(R.id.event_date);
-
+        TextView eventLocation = view.findViewById(R.id.event_location);
 
         eventName.setText(event.getEventName());
         eventDate.setText(event.getEventDate());
-
+        eventLocation.setText(event.getEventLocation());
 
         return view;
     }

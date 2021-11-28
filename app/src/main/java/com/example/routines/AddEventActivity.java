@@ -4,21 +4,42 @@ import static android.content.ContentValues.TAG;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -35,6 +56,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
@@ -59,8 +89,10 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     EditText eventLocation;
     Button addButton;
     Button getLocationBtn;
+    ImageView addPhoto;
     String habitId;
     String userId;
+    String eventID;
 
     LocationManager locationManager;
 
@@ -71,6 +103,16 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     double longFromMap;
 
     boolean loadingLocation = false;
+
+    ActivityResultLauncher<String> mGetContent;
+    ActivityResultLauncher<Intent> nGetContent;
+    private Uri imageUri;
+    private Bitmap imageBitmap;
+    private String pictureImagePath = "";
+    StorageReference fileRef;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    StorageReference collectionRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,11 +130,18 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
 
+        albumPhoto();
+        cameraOrGallery();
+
+
 
         habitId = (String) getIntent().getStringExtra("habitId");
         userId = (String) getIntent().getStringExtra("userId");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("Event photos");
+        collectionRef = storageRef.child(userId);
 
 
 
@@ -117,11 +166,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    Intent intent = new Intent(AddEventActivity.this, Map.class);
-                    intent.putExtra("currentLat", currentLatitude);
-                    intent.putExtra("currentLong", currentLongitude);
+                Intent intent = new Intent(AddEventActivity.this, Map.class);
+                intent.putExtra("currentLat", currentLatitude);
+                intent.putExtra("currentLong", currentLongitude);
 
-                    startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -169,7 +218,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     data.put("date", date);
 
                     //generate an unique id for each event
-                    String eventID = eventReference.document().getId();
+                    eventID = eventReference.document().getId();
+                    fileRef = collectionRef.child(eventID);
                     eventReference
                             .document(eventID)
                             .set(data)
@@ -189,11 +239,17 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                     //after successfully add a event, update the event list under the habit collection
                     if (eventID != null) {
+                        if(imageUri!=null){
+                            uploadImage();
+                        }else{
+                            uploadCameraPhoto();
+                        }
                         DocumentReference habitReference = db
                                 .collection("Habits").document(userId)
                                 .collection("Habits").document(habitId);
                         Log.d("Success", "field added with ID: " + eventID);
                         habitReference.update("eventList", FieldValue.arrayUnion(eventID));
+
                     }
 
                     //return to the last activity after everything is done
@@ -239,6 +295,15 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
             }
         }
+        if (requestCode == 100) {
+            File imgFile = new  File(pictureImagePath);
+            if(imgFile.exists()){
+                imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                addPhoto.setImageBitmap(imageBitmap);
+
+            }
+        }
+
     }
 
 
@@ -253,6 +318,23 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             }, 100);
         }
     }
+
+    private void checkCameraPermission(){
+        if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, 100);
+        }
+        if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, 100);
+        }
+
+    }
+
 
     /**
      * Get Location Service
@@ -304,6 +386,135 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }
 
     }
+
+    public void cameraOrGallery(){
+        addPhoto = findViewById(R.id.imageView_add_event);
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+            }
+        });
+    }
+
+    public void showDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.choice_bottom_dialog);
+        LinearLayout layoutCamera = dialog.findViewById(R.id.camera_layout);
+        LinearLayout layoutAlbum = dialog.findViewById(R.id.album_layout);
+        LinearLayout layoutCancel = dialog.findViewById(R.id.cancel_layout);
+
+        layoutCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                //'dispatchTakePictureIntent();
+                checkCameraPermission();
+                openBackCamera();
+            }
+        });
+
+        layoutAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                mGetContent.launch("image/*");
+            }
+        });
+
+        layoutCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();;
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+
+    private void openBackCamera() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+        File file = new File(pictureImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, 100);
+    }
+
+
+
+
+    public void albumPhoto(){
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        if(uri != null){
+                            try {
+                                imageUri = uri;
+                                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                                addPhoto.setImageBitmap(selectedImage);
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Toast.makeText(AddEventActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                });
+
+    }
+
+
+    public void uploadImage(){
+        fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String url = uri.toString();
+                        Log.d("Download url", url);
+                        Toast.makeText(getApplicationContext(),"Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    public void uploadCameraPhoto(){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = fileRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.w("Upload photos", "failure");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.d("Uploading", "successful");
+            }
+        });
+
+    }
+
+
 
     public void updateCompletion(String habitId, String userId, FirebaseFirestore db){
         DocumentReference habitRef = db

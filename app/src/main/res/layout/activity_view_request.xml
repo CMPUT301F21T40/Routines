@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ViewRequestActivity">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_request"
         android:layout_width="125dp"
         android:layout_height="167dp"
@@ -14,7 +14,7 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/default_image" />
+        android:src="@drawable/default_image" />
 
     <TextView
         android:id="@+id/textView_request_user"

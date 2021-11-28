@@ -1,57 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/search_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_pink"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/search_profile_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <TextView
-                android:id="@+id/search_profile_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="100dp"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="100dp"
-                android:text="User Profile"
-                android:textColor="@color/white"
-                android:textSize="25sp" />
-
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:id="@+id/linear_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:layout_marginLeft="20dp"
                 android:src="@drawable/default_image"
 
                 />
@@ -66,11 +40,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textAlignment="center"
-                    android:textSize="30dp"
-                    android:hint="User Name"
                     android:layout_weight="1"
-                    />
+                    android:hint="User Name"
+                    android:textAlignment="center"
+                    android:textSize="30dp" />
 
                 <Button
                     android:id="@+id/follow"
@@ -87,21 +60,29 @@
             android:id="@+id/habit_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30dp"
-            android:text="User Habits"
-            android:ems="6"
             android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:ems="6"
+            android:text="User Habits"
+            android:textSize="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-        <ListView
-            android:id="@+id/search_event_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-        </ListView>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/search_container"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/habit_label"
+        app:layout_constraintVertical_bias="0.0"
+        tools:context=".SearchProfileActivity"/>
+
 
 </LinearLayout>

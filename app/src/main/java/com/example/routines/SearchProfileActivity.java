@@ -304,7 +304,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                                 if (status.equals("accepted")) {
                                     Log.d("TAG", "print habits here -------------");
                                     //showList(id);
-                                    habitLabel.setText("User's Habits");
+                                    habitLabel.setText(userName.getText().toString() + "'s Habits");
                                     habitLabel.setTextSize(25);
                                     searchHabitFragment = SearchHabitsFragment.newInstance(id);
                                     FragmentManager manager = getSupportFragmentManager();
@@ -313,7 +313,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                                     transaction.commit();
                                 }
                             }
-
                         }
                     }
                 });

@@ -176,22 +176,27 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         StorageReference storageRef = storage.getReference().child("Event photos");
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference collectionRef = storageRef.child(userId);
+        StorageReference imageRef;
+        try{
+            imageRef = collectionRef.child(eventId);
+            imageRef.getBytes(1024*1024)
+                    .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            eventImage.setImageBitmap(bitmap);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Event image", "Doesn't exist");
+                        }
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-
-        collectionRef.child(eventId).getBytes(1024*1024)
-                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        eventImage.setImageBitmap(bitmap);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Event image", "Doesn't exist");
-                    }
-                });
     }
 
 }

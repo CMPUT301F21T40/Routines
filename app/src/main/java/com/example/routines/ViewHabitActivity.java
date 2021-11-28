@@ -155,6 +155,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 for (int i = 0; i < habitFrequency.size(); i++){
                                     frequency += habitFrequency.get(i) + " ";
                                 }
+                                completionTime = (String) document.getData().get("Completion Time");
+                                estimateCompletionTime = (String) document.getData().get("Estimate Completion Time");
+                                lastCompletionTime = (String) document.getData().get("Last Completion Time");
+                                lastModifiedDate = (String) document.getData().get("Last Modified Date");
 
                                 hideButton(habitFrequency, habitId, add, db);
 

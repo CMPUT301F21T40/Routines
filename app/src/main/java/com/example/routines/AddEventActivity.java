@@ -93,7 +93,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     boolean loadingLocation = false;
 
     ActivityResultLauncher<String> mGetContent;
-    ActivityResultLauncher<Intent> nGetContent;
+
     private Uri imageUri;
     private Bitmap imageBitmap;
     private String pictureImagePath = "";

@@ -44,8 +44,8 @@ public class LoginTest {
         solo.clickOnButton("LOGIN");
         solo.sleep(500);
         solo.assertCurrentActivity("Activity needs to be loginActivity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editText_email), "testEmail@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "testPassword123456");
+        solo.enterText((EditText) solo.getView(R.id.editText_email), "testUserNew@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "123456");
         solo.sleep(500);
         solo.clickOnButton("LOGIN");
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);

@@ -1,7 +1,15 @@
 package com.example.routines;
 
+
+import static android.app.appsearch.AppSearchResult.RESULT_OK;
+
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -9,8 +17,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +36,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.List;
 
 /**
  * This activity display the details of a given event
@@ -96,7 +108,9 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             public void onClick(View view) {
                 String nameShowed = eventName.getText().toString();
                 String commentShowed = eventComment.getText().toString();
-                Event eventNow = new Event(nameShowed, commentShowed);
+                String dateShowed = eventDate.getText().toString();
+                String locationShowed = eventLocation.getText().toString();
+                Event eventNow = new Event(nameShowed, commentShowed, dateShowed, locationShowed);
                 EditEventFragment.newInstance(eventNow).show(getSupportFragmentManager(), "Edit_Event");
             }
         });
@@ -126,9 +140,11 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     public void onOkPressed(Event event) {
         String nameEdited = event.getEventName();
         String descriptionEdited = event.getDescription();
+        String dateEdit = event.getEventDate();
+        String locationEdit = event.getEventLocation();
         Log.d("Edited event", nameEdited+descriptionEdited);
         db.collection("Events").document(eventId)
-                .update("name", nameEdited, "description", descriptionEdited);
+                .update("name", nameEdited, "description", descriptionEdited, "date", dateEdit, "location", locationEdit);
         showInfo();
 
     }

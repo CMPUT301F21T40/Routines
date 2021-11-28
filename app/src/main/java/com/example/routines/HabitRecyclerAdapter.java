@@ -113,9 +113,8 @@ implements ReorderHabits.RecyclerTouchHelper {
     public void onBindViewHolder(@NonNull HabitRecyclerAdapter.MyViewHolder holder, int position) {
         String name = habits.get(position).getName();
         long progress = habits.get(position).getProgress(); // stored as a long must convert it to update it
-        //String reason = habits.get(position).getReason();
-        //String date = habits.get(position).getDate();
         holder.habitNameText.setText(name);
+
         if (userName != null) {
             String user = userName.get(position);
             holder.habitUserText.setText(user);
@@ -126,11 +125,10 @@ implements ReorderHabits.RecyclerTouchHelper {
         // habit.setProgress(long(yourNumber))
         // progressbar.setProgress(habit.getProgress());
 
+
         int i = (int) progress; // convert to int, must store as long
         holder.progressbar.setProgress(i);
 
-        //holder.habitReasonText.setText(reason);
-        //holder.habitDateText.setText(date);
     }
 
     /**
@@ -187,6 +185,7 @@ implements ReorderHabits.RecyclerTouchHelper {
      * This clears the background color of selected item row
      * @author Shanshan Wei/swei3
      * @param myViewHolder
+     * TODO: 2021-11-27 this is changing the color to white after we click and not the current background color
      */
     @Override
     public void onRowClear(MyViewHolder myViewHolder) {

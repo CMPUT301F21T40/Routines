@@ -7,8 +7,15 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 
+import android.Manifest;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 
 import static android.content.ContentValues.TAG;
 
@@ -18,20 +25,31 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,6 +65,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import java.util.List;
 
@@ -70,6 +96,18 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FloatingActionButton deleteButton;
     String eventId;
     ImageView eventImage;
+    String userId;
+
+    ActivityResultLauncher<String> mGetContent;
+
+    private Uri imageUri;
+    private Bitmap imageBitmap;
+    private String pictureImagePath = "";
+    StorageReference fileRef;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    StorageReference collectionRef;
+
     String habitId;
     String userId;
 
@@ -98,8 +136,16 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         //String actualUserId = user.getUid();
         String actualUserId = getIntent().getStringExtra("actualUserId");
         String userId = getIntent().getStringExtra("userId");
-        Log.d("ABCD", userId);
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("Event photos");
+        collectionRef = storageRef.child(userId);
+        fileRef = collectionRef.child(eventId);
+
+        cameraOrGallery();
 
         if (!sameUser) {
             editButton.setVisibility(View.INVISIBLE);
@@ -113,7 +159,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             editButton.setVisibility(View.VISIBLE);
             deleteButton.setVisibility(View.VISIBLE);
         }*/
-
+        albumPhoto();
         showInfo();
         showImage();
 
@@ -240,6 +286,166 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         return super.onOptionsItemSelected(item);
     }
 
+    private void checkCameraPermission(){
+        if (ContextCompat.checkSelfPermission(ViewEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ViewEventActivity.this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, 100);
+        }
+        if (ContextCompat.checkSelfPermission(ViewEventActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ViewEventActivity.this, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, 100);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100) {
+            File imgFile = new  File(pictureImagePath);
+            if(imgFile.exists()){
+                imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                if(imageBitmap!=null){
+                    eventImage.setImageBitmap(imageBitmap);
+                    uploadCameraPhoto();
+                }
+
+
+            }
+        }
+    }
+
+    public void cameraOrGallery(){
+        eventImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+            }
+        });
+    }
+
+    public void showDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.choice_bottom_dialog);
+        LinearLayout layoutCamera = dialog.findViewById(R.id.camera_layout);
+        LinearLayout layoutAlbum = dialog.findViewById(R.id.album_layout);
+        LinearLayout layoutCancel = dialog.findViewById(R.id.cancel_layout);
+
+        layoutCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                //'dispatchTakePictureIntent();
+                checkCameraPermission();
+                openBackCamera();
+            }
+        });
+
+        layoutAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                mGetContent.launch("image/*");
+            }
+        });
+
+        layoutCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();;
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+
+    private void openBackCamera() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+        File file = new File(pictureImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, 100);
+    }
+
+    public void albumPhoto(){
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
+                new ActivityResultCallback<Uri>() {
+                    @Override
+                    public void onActivityResult(Uri uri) {
+                        if(uri != null){
+                            try {
+                                imageUri = uri;
+                                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                                eventImage.setImageBitmap(selectedImage);
+                                uploadImage();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            Toast.makeText(ViewEventActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                });
+
+    }
+
+
+    public void uploadImage(){
+        fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        String url = uri.toString();
+                        Log.d("Download url", url);
+                        Toast.makeText(getApplicationContext(),"Image uploaded successfully", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    public void uploadCameraPhoto(){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = fileRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.w("Upload photos", "failure");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Log.d("Uploading", "successful");
+            }
+        });
+
+    }
+
+
+
     /**
      * This overrides the listener onOkPressed.
      * If the user edits the event details on EditEventFragment and clicks OK, this will start to work
@@ -303,22 +509,27 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         StorageReference storageRef = storage.getReference().child("Event photos");
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         StorageReference collectionRef = storageRef.child(userId);
+        StorageReference imageRef;
+        try{
+            imageRef = collectionRef.child(eventId);
+            imageRef.getBytes(1024*1024)
+                    .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            eventImage.setImageBitmap(bitmap);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Event image", "Doesn't exist");
+                        }
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-
-        collectionRef.child(eventId).getBytes(1024*1024)
-                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        eventImage.setImageBitmap(bitmap);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Event image", "Doesn't exist");
-                    }
-                });
     }
 
 }

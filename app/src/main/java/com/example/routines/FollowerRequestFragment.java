@@ -107,6 +107,7 @@ public class FollowerRequestFragment extends Fragment {
     public void showInfo() {
         requestReference
                 .whereEqualTo("Receiver", userId)
+                .whereEqualTo("Status", "pending")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -105,7 +105,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     boolean loadingLocation = false;
 
     ActivityResultLauncher<String> mGetContent;
-    ActivityResultLauncher<Intent> nGetContent;
+
     private Uri imageUri;
     private Bitmap imageBitmap;
     private String pictureImagePath = "";
@@ -198,7 +198,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     locaiton = "null";
                 }
 
-                //        Set current date as default
+//               Set current date as default
                 Calendar c = Calendar.getInstance();
                 int day = c.get(Calendar.DAY_OF_MONTH);
                 int month = c.get(Calendar.MONTH) + 1;
@@ -268,10 +268,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
     /**
-     * Get result back from Map activity
+     * Get result back from activity
      * @param requestCode
      * @param resultCode
      * @param data
+     * @author yyang13
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -299,7 +300,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             File imgFile = new  File(pictureImagePath);
             if(imgFile.exists()){
                 imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                addPhoto.setImageBitmap(imageBitmap);
+                if(imageBitmap != null){
+                    addPhoto.setImageBitmap(imageBitmap);
+                }
 
             }
         }
@@ -309,6 +312,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     /**
      * Check Location Permission
+     * @author yyang13
      */
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -338,6 +342,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     /**
      * Get Location Service
+     * @author yyang13
      */
     @SuppressLint("MissingPermission")
     public void getLocation() {
@@ -369,6 +374,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     /**
      * Get Address From Location
      * @param location
+     * @author yyang13
      */
     @Override
     public void onLocationChanged(@NonNull Location location) {

@@ -1,5 +1,6 @@
 package com.example.routines;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +50,9 @@ public class SearchProfileActivity extends AppCompatActivity {
     String requestReceiver;
     String currentUserName;
     String userId;
+
+    String to;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,7 @@ public class SearchProfileActivity extends AppCompatActivity {
          * @author Shanshan Wei
          */
         getCurrentUserName();
+
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,10 +115,13 @@ public class SearchProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"You can't follow yourself", Toast.LENGTH_SHORT).show();
                 }else{
                     addPendingFollower();
+
                 }
             }
         });
-
+        Log.d("Lukas", "BEFORE BUTTON STATUS");
+        buttonStatusPending(); //  check if pending request
+        buttonStatusAccepted(); // check if already following
 
 
     }
@@ -143,6 +152,109 @@ public class SearchProfileActivity extends AppCompatActivity {
                             Log.d("Current user name", "Current data: null");
                         }
 
+                    }
+                });
+    }
+
+    /**
+     * Function to set the string value of the button to it will display the correct values
+     * (Pending)
+     * @see SearchProfileActivity
+     * @author Lukas Waschuk
+     * Todo: If there is time we can add a remove function here
+     */
+    public void buttonStatusPending() {
+        db.collection("Users")
+                .whereEqualTo("User Name", userName.getText().toString())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                requestReceiver = document.getId();
+                                Log.d("requestReceiver", requestReceiver);
+                            }
+                            requestReference
+                                    .whereEqualTo("Receiver Name", userName.getText().toString() )
+                                    .whereEqualTo("Sender Name", currentUserName)
+                                    .whereEqualTo("Status", "pending")
+                                    .limit(1)
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            Log.d("Lukas", "inside onComplete1");
+                                            Log.d("Lukas", currentUserName);
+                                            Log.d("Lukas", userName.getText().toString());
+                                            if (task.isSuccessful()) {
+                                                Log.d("Lukas", "Inside task successful");
+                                                boolean isEmpty = task.getResult().isEmpty();
+                                                if(!isEmpty){
+                                                    followButton.setText("Request Sent");
+                                                    //followButton.setBackgroundColor(0xff0000);
+                                                    Log.d("Lukas", "Inside !ifEmpty statement");
+                                                }
+                                            }else{
+                                                Log.d("Lukas", "Need to redo, not successful");
+                                                onComplete(task);
+                                            } // wait for firebase, DO NOT LEAVE YET
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
+
+    /**
+     * Function to set the string value of the button to it will display the correct values
+     *  (Accepted)
+     * @see SearchProfileActivity
+     * @author Lukas Waschuk
+     * Todo: If there is time we can add a remove function here
+     */
+    public void buttonStatusAccepted(){
+        db.collection("Users")
+                .whereEqualTo("User Name", userName.getText().toString())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("Lukas", "Inside onComplete1 on accepted");
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                requestReceiver = document.getId();
+                                Log.d("requestReceiver", requestReceiver);
+                            }
+
+                    // check for accepted flag and change the value
+                    requestReference
+                            .whereEqualTo("Receiver Name", userName.getText().toString() )
+                            .whereEqualTo("Sender Name", currentUserName)
+                            .whereEqualTo("Status", "accepted")
+                            .limit(1)
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    Log.d("Lukas", "Inside onComplete2 on accepted");
+                                    Log.d("Lukas", currentUserName);
+                                    Log.d("Lukas", userName.getText().toString());
+                                    if (task.isSuccessful()) {
+                                        Log.d("Lukas", "Inside task successful on accepted");
+                                        boolean isEmpty = task.getResult().isEmpty();
+                                        if(!isEmpty){
+                                            followButton.setText("Accepted");
+//                                            followButton.setBackgroundColor(Color.RED); // to change color but i dont think we need to
+                                            Log.d("Lukas", "Inside If statement on accepted ");
+                                        }
+                                    }else{
+                                        Log.d("Lukas", "Redo");
+                                        onComplete(task);
+                                    }// wait for firebase, DO NOT LEAVE YET
+                                }
+                            });
+                        }
                     }
                 });
     }
@@ -215,9 +327,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-    }
-    public void showHabits(){
 
     }
 }

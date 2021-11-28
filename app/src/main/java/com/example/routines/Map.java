@@ -29,6 +29,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/** Purpose: A map activity that allows user to place a marker on map or search address,
+ *  the result location will be returned to AddEventActivity or EditEventActivity
+ * @author yyang13
+ */
+
 public class Map extends FragmentActivity implements OnMapReadyCallback {
     GoogleMap map;
     MarkerOptions userMarker;

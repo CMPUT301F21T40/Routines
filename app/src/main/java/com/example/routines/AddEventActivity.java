@@ -258,7 +258,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -280,8 +279,5 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
 }

@@ -227,6 +227,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                             uploadImage();
                         }else{
                             uploadCameraPhoto();
+
+
                         }
                         DocumentReference habitReference = db
                                 .collection("Habits").document(userId)
@@ -484,21 +486,24 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     public void uploadCameraPhoto(){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        if(imageBitmap!=null){
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = fileRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Log.w("Upload photos", "failure");
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Log.d("Uploading", "successful");
-            }
-        });
+            UploadTask uploadTask = fileRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.w("Upload photos", "failure");
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.d("Uploading", "successful");
+                }
+            });
+        }
+
 
     }
 

@@ -69,7 +69,6 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         collectionReference = db.collection("Habits");
         findFollowers(userId);
-        //setHabits();
 
 
     }
@@ -139,33 +138,22 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            //Log.d("TAG", "Got a task ---------------");
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d("TAG", "Got a document ---------------");
                                 String status = (String) document.getData().get("Status");
                                 if (status.equals("accepted")) {
-                                    //Log.d("TAG", "Got an accepted status ---------------");
                                     String followerId = (String) document.getData().get("Receiver");
                                     followers.add(followerId);
-                                    Integer size = followers.size();
-                                    //Log.d("TAG", size + "-----------------");
                                 }
                             }
                         }
                         Integer size = followers.size();
-                        //Log.d("TAG", size + " after iteration-----------------");
                         setHabits();
                     }
                 });
-        Integer size = followers.size();
-        //Log.d("TAG", size + "--------1---------");
     }
 
     public void setHabits() {
-        Integer size = followers.size();
-        //Log.d("TAG", size + " in setHabits -----------------");
         for (String follower : followers) {
-            //Log.d("TAG", follower + "-------------------");
             collectionReference
                     .document(follower)
                     .collection("Habits")
@@ -199,10 +187,8 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                                 }
                                             });
 
-                                    //Log.d(TAG, document.getId() + " => " + document.getData());
                                 }
                             } else {
-                                //Log.d(TAG, "Error getting documents: ", task.getException());
                             }
                         }
                     });

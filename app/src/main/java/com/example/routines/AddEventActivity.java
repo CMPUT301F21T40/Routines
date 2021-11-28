@@ -19,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -55,9 +56,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -91,6 +95,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     ActivityResultLauncher<String> mGetContent;
     ActivityResultLauncher<Intent> nGetContent;
     private Uri imageUri;
+    private Bitmap imageBitmap;
+    private String pictureImagePath = "";
+    StorageReference fileRef;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    StorageReference collectionRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,8 +117,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         addButton = findViewById(R.id.add_event_button);
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
+
         albumPhoto();
-        cameraPhoto();
         cameraOrGallery();
 
 
@@ -117,6 +127,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         userId = (String) getIntent().getStringExtra("userId");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("Event photos");
+        collectionRef = storageRef.child(userId);
 
 //        Check location permission
         checkLocationPermission();
@@ -190,6 +203,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                     //generate an unique id for each event
                     eventID = eventReference.document().getId();
+                    fileRef = collectionRef.child(eventID);
                     eventReference
                             .document(eventID)
                             .set(data)
@@ -211,6 +225,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     if (eventID != null) {
                         if(imageUri!=null){
                             uploadImage();
+                        }else{
+                            uploadCameraPhoto();
                         }
                         DocumentReference habitReference = db
                                 .collection("Habits").document(userId)
@@ -261,6 +277,15 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
             }
         }
+        if (requestCode == 100) {
+            File imgFile = new  File(pictureImagePath);
+            if(imgFile.exists()){
+                imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                addPhoto.setImageBitmap(imageBitmap);
+
+            }
+        }
+
     }
 
 
@@ -350,7 +375,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             public void onClick(View view) {
                 dialog.dismiss();
                 //'dispatchTakePictureIntent();
-                nGetContent.launch(new Intent( MediaStore.ACTION_IMAGE_CAPTURE));
+                openBackCamera();
             }
         });
 
@@ -375,33 +400,20 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-    public void cameraPhoto(){
-        nGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        Intent intent = result.getData();
-                        if(intent != null){
-                            if(intent.getExtras()!= null){
-                                Bundle extras = intent.getExtras();
-                                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                                imageUri = getImageUri(getApplicationContext(),imageBitmap);
-                                addPhoto.setImageBitmap(imageBitmap);
-                            }
-                        }else{
-                            Toast.makeText(getApplicationContext(), "You haven't taken a photo", Toast.LENGTH_SHORT).show();
-                        }
 
-                    }
-                });
+    private void openBackCamera() {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = timeStamp + ".jpg";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
+        File file = new File(pictureImagePath);
+        Uri outputFileUri = Uri.fromFile(file);
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        startActivityForResult(cameraIntent, 100);
     }
 
-    public Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
 
 
 
@@ -431,11 +443,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
 
     public void uploadImage(){
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference().child("Event photos");
-
-        StorageReference collectionRef = storageRef.child(userId);
-        StorageReference fileRef = collectionRef.child(eventID);
         fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -449,6 +456,27 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 });
             }
         });
+    }
+
+    public void uploadCameraPhoto(){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = fileRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        });
+
     }
 
 

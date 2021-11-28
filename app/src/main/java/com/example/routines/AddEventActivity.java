@@ -301,6 +301,15 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }
     }
 
+    private void checkCameraPermission(){
+        if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            }, 100);
+        }
+    }
+
     /**
      * Get Location Service
      */

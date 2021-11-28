@@ -308,7 +308,15 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, 100);
         }
+        if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+            }, 100);
+        }
+
     }
+
 
     /**
      * Get Location Service
@@ -384,6 +392,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             public void onClick(View view) {
                 dialog.dismiss();
                 //'dispatchTakePictureIntent();
+                checkCameraPermission();
                 openBackCamera();
             }
         });

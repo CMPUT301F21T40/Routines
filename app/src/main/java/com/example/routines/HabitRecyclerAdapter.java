@@ -1,34 +1,25 @@
 package com.example.routines;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This extends RecyclerView.Adapter and customized the adapter
@@ -39,6 +30,7 @@ public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdap
 implements ReorderHabits.RecyclerTouchHelper {
     private ArrayList<Habit> habits;
     private OnHabitClickListener onHabitClickListener;
+    private ArrayList<String> userName;
 
     /**
      * Constructor of this adapter is used to initialzied the adapter in other activities
@@ -52,12 +44,27 @@ implements ReorderHabits.RecyclerTouchHelper {
     }
 
     /**
+     * Constructor used to view the habits of all users the current user follows
+     * @param habits
+     * @param userName
+     * @param onHabitClickListener
+     * @author ipaterso
+     */
+    public HabitRecyclerAdapter(ArrayList<Habit> habits, ArrayList<String> userName, OnHabitClickListener onHabitClickListener) {
+        this.habits = habits;
+        this.userName = userName;
+        this.onHabitClickListener = onHabitClickListener;
+    }
+
+
+    /**
      * This view holder extends Recycler.ViewHolder and sets the attributes for items to show
      * It also override the click listener.
      * @author Shanshan Wei/swei3
      */
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView habitNameText;
+        private TextView habitUserText;
         private TextView habitReasonText;
         private TextView habitDateText;
         OnHabitClickListener onHabitClickListener;
@@ -67,7 +74,7 @@ implements ReorderHabits.RecyclerTouchHelper {
         public MyViewHolder(View view, OnHabitClickListener onHabitClickListener){
             super(view);
             habitNameText = view.findViewById(R.id.habitName);
-
+            habitUserText = view.findViewById(R.id.habitUser);
             progressbar = view.findViewById(R.id.progressBar3);
 
             //habitReasonText = view.findViewById(R.id.habitReason);
@@ -107,6 +114,17 @@ implements ReorderHabits.RecyclerTouchHelper {
         String name = habits.get(position).getName();
         long progress = habits.get(position).getProgress(); // stored as a long must convert it to update it
         holder.habitNameText.setText(name);
+
+        if (userName != null) {
+            String user = userName.get(position);
+            holder.habitUserText.setText(user);
+        }
+
+        // this will be how you update the progress bar in w.e function you need to
+        // generally ProgressBar progressbar = view.FindViewBtId()
+        // habit.setProgress(long(yourNumber))
+        // progressbar.setProgress(habit.getProgress());
+
 
         int i = (int) progress; // convert to int, must store as long
         holder.progressbar.setProgress(i);

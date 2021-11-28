@@ -2,26 +2,20 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,6 +38,7 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -93,7 +88,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         actualUserId = user.getUid();
 
         userId = (String) getIntent().getStringExtra("userId");
-
+        Log.d("TAG", "user ID: " + userId);
 
 
         habitId = getIntent().getStringExtra("habitId");
@@ -126,6 +121,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         } else {
             userId = actualUserId;
         }
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db

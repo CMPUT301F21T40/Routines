@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:hint="Name of Habit Event" />
 
     <EditText
         android:id="@+id/editText_event_comment"
@@ -20,8 +20,26 @@
         android:layout_height="wrap_content"
         android:maxLength="20"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Comment" />
+        android:hint="Comments"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editText_event_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="20"
+        android:ems="10"
+        android:hint="Date Started"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/editText_event_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLength="20"
+        android:ems="10"
+        android:hint="Location"
+        android:inputType="textPersonName"/>
 
 
 </LinearLayout>

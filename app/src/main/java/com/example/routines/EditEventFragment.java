@@ -86,7 +86,7 @@ public class EditEventFragment extends DialogFragment {
 
         return builder
                 .setView(view)
-                .setTitle("Edit Event")
+                .setTitle("Edit Habit Event")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override

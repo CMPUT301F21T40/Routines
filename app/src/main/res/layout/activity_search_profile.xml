@@ -79,7 +79,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habit_label"
         app:layout_constraintVertical_bias="0.0"
-        tools:context=".SearchProfileActivity"></FrameLayout>
+        tools:context=".SearchProfileActivity"/>
 
 
 </LinearLayout>

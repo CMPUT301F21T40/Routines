@@ -46,6 +46,7 @@
             android:parentActivityName=".NotificationActivity"/>
         <activity
             android:name=".NotificationActivity"
+            android:label="Notifications"
             android:exported="false" />
         <activity
             android:name=".ViewEventActivity"
@@ -73,13 +74,14 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
+            android:label="Profile" />
         <activity
             android:name=".SearchActivity"
-            android:exported="true"
-            android:parentActivityName=".WelcomeActivity" />
+            android:label="Search"
+            android:exported="true" />
         <activity
             android:name=".HomeActivity"
+            android:label="Routines Home"
             android:exported="true" />
         <activity
             android:name=".SignupActivity"
@@ -94,7 +96,7 @@
             android:exported="true" />
         <activity
             android:name=".WelcomeActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
     </application>
 
 </manifest>

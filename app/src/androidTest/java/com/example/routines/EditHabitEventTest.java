@@ -109,7 +109,7 @@ public class EditHabitEventTest {
         solo.sleep(2000);
         solo.goBack();
         solo.goBack();
-        deleteHabit(); // delete the habit so it does not cause errors in the future 
+        deleteHabit(); // delete the habit so it does not cause errors in the future
     }
 
     /**

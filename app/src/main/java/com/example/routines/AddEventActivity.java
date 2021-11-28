@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -20,7 +19,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -43,7 +41,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -58,14 +55,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -99,12 +91,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     ActivityResultLauncher<String> mGetContent;
     ActivityResultLauncher<Intent> nGetContent;
     private Uri imageUri;
-    FirebaseStorage storage;
-    StorageReference fileRef;
-    StorageReference storageRef;
-    static final int REQUEST_IMAGE_CAPTURE = 2;
-    static final int REQUEST_TAKE_PHOTO = 3;
-    String currentPhotoPath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,17 +107,14 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         addButton = findViewById(R.id.add_event_button);
         getLocationBtn = findViewById(R.id.get_location_btn);
         openMap = findViewById(R.id.open_map);
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference().child("Event photos");
         albumPhoto();
-        //cameraPhoto();
+        cameraPhoto();
         cameraOrGallery();
+
 
 
         habitId = (String) getIntent().getStringExtra("habitId");
         userId = (String) getIntent().getStringExtra("userId");
-        StorageReference collectionRef = storageRef.child(userId);
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -157,6 +140,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 Intent intent = new Intent(AddEventActivity.this, Map.class);
                 intent.putExtra("currentLat", currentLatitude);
                 intent.putExtra("currentLong", currentLongitude);
+
                 startActivityForResult(intent, 1);
             }
         });
@@ -206,7 +190,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                     //generate an unique id for each event
                     eventID = eventReference.document().getId();
-                    fileRef = collectionRef.child(eventID);
                     eventReference
                             .document(eventID)
                             .set(data)
@@ -278,17 +261,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
             }
         }
-        Log.d("test1", "test camera");
-        if (requestCode == REQUEST_TAKE_PHOTO ) {
-            Log.d("test2", "test camera");
-            if(resultCode == RESULT_OK){
-                Log.d("test3", "test camera");
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                addPhoto.setImageBitmap(imageBitmap);
-            }
-
-        }
     }
 
 
@@ -301,14 +273,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION
             }, 100);
-        }
-    }
-
-    private void checkCameraPermission(){
-        if(ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-        PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
         }
     }
 
@@ -385,9 +349,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                checkCameraPermission();
-                dispatchTakePictureIntent();
-
+                //'dispatchTakePictureIntent();
+                nGetContent.launch(new Intent( MediaStore.ACTION_IMAGE_CAPTURE));
             }
         });
 
@@ -412,49 +375,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "com.example.android.fileprovider",
-                        photoFile);
-
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-
-        }else{
-            Log.w("Camera Intent", "failure");
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-/*
     public void cameraPhoto(){
         nGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -462,10 +382,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     public void onActivityResult(ActivityResult result) {
                         Intent intent = result.getData();
                         if(intent != null){
-                            Bundle extras = intent.getExtras();
-                            Bitmap imageBitmap = (Bitmap) extras.get("data");
-                            addPhoto.setImageBitmap(imageBitmap);
-
+                            if(intent.getExtras()!= null){
+                                Bundle extras = intent.getExtras();
+                                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                                imageUri = getImageUri(getApplicationContext(),imageBitmap);
+                                addPhoto.setImageBitmap(imageBitmap);
+                            }
                         }else{
                             Toast.makeText(getApplicationContext(), "You haven't taken a photo", Toast.LENGTH_SHORT).show();
                         }
@@ -474,8 +396,15 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 });
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 
- */
+
+
     public void albumPhoto(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
@@ -491,7 +420,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                                 e.printStackTrace();
                             }
                         }else{
-                            Toast.makeText(AddEventActivity.this, "You haven't picked an image",Toast.LENGTH_LONG).show();
+                            Toast.makeText(AddEventActivity.this, "You haven't picked Image",Toast.LENGTH_LONG).show();
                         }
 
 
@@ -500,7 +429,13 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
+
     public void uploadImage(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("Event photos");
+
+        StorageReference collectionRef = storageRef.child(userId);
+        StorageReference fileRef = collectionRef.child(eventID);
         fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {

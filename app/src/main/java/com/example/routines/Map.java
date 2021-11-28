@@ -52,6 +52,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+//        get latitude and longitude from the class that called Map activity
         Intent intent = getIntent();
         currentLat = intent.getDoubleExtra("currentLat", 0);
         currentLong = intent.getDoubleExtra("currentLong", 0);
@@ -61,6 +62,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
         mapFragment.getMapAsync(this);
 
+//        Confirm button returns data back to the parent activity
         confirmLocationBtn = findViewById(R.id.confirm_location_btn);
         confirmLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,16 +80,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
         addressEditText = findViewById(R.id.address_search_editText);
 
-//        Initialize
+//        Initialize Place from Google Map API
         Places.initialize(getApplicationContext(), "AIzaSyCvHbudRqKKcUArzx2lnA_nS16vZJfLYi4");
         addressEditText.setFocusable(false);
         addressEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME);
-
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(Map.this);
-
                 startActivityForResult(intent, 100);
             }
         });
@@ -96,6 +96,14 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Get result from activity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     * @return void
+     * @author yyang13
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -121,12 +129,20 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
+    /**
+     * Create Map
+     * @param googleMap
+     * @return void
+     * @author yyang13
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         LatLng latLng = new LatLng(53.4397, -113.625);
         map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
+//        Allows user to put a marker on map, when return to parent activity,
+//        Latitude and longitude will be translated into address
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng latLng) {

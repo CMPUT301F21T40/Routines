@@ -37,11 +37,24 @@
             android:layout_height="30dp"
             android:layout_gravity="top"
             android:layout_weight="1"
-            android:background="@drawable/radio_button_right_selector"
+            android:background="@drawable/radio_button_centre_selector"
             android:button="@android:color/transparent"
             android:checked="false"
             android:gravity="center"
             android:text="Today"
+            android:textColor="@color/black" />
+
+        <androidx.appcompat.widget.AppCompatRadioButton
+            android:id="@+id/switch_following"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="top"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_right_selector"
+            android:button="@android:color/transparent"
+            android:checked="false"
+            android:gravity="center"
+            android:text="Following"
             android:textColor="@color/black" />
 
     </RadioGroup>

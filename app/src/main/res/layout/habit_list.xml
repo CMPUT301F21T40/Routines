@@ -8,12 +8,19 @@
 
     <TextView
         android:id="@+id/habitName"
-        android:layout_width="wrap_content"
+        android:layout_width="149dp"
         android:layout_height="wrap_content"
         android:ems="8"
         android:text="Name"
-        android:textSize="25sp">
-    </TextView>
+        android:textSize="25sp"></TextView>
+
+    <TextView
+        android:id="@+id/habitUser"
+        android:layout_width="6dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="15sp"
+        />
 
     <ProgressBar
         android:id="@+id/progressBar3"

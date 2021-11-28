@@ -29,6 +29,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
+/**
+ * This is a filter fragment that will find all the habits of all the users that the current user is following
+ * @author ipaterso
+ * @see HomeActivity
+ */
 public class FollowingFilterFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener {
     private View rootView;
     FirebaseFirestore db;
@@ -39,7 +44,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
     private ArrayList<String> habitIdList;
     ArrayList<ArrayList<String>> idList;
     private ArrayList<String> followers;
-    private ArrayList<String> followersIDs;
+    private ArrayList<String> followerUserNames;
 
     private  HabitRecyclerAdapter habitAdapter;
     private RecyclerView habitView;
@@ -47,7 +52,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
     private ArrayList<String> followingIdList;
 
     public FollowingFilterFragment() {
-
+        // Required empty public constructor
     }
 
     public static FollowingFilterFragment newInstance() {
@@ -91,13 +96,17 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
 
     }
 
+    /**
+     * Initializes the view of the fragment
+     * @author ipaterso
+     */
     public void initializeView(){
         Log.d("TAG", "Init View -----------------");
         habitView = rootView.findViewById(R.id.fragment_habitList);
-        habitDataList = new ArrayList<Habit>();
+        habitDataList = new ArrayList<>();
         habitIdList = new ArrayList<>();
         idList = new ArrayList<>();
-        followersIDs = new ArrayList<>();
+        followerUserNames = new ArrayList<>();
         followers = new ArrayList<>();
         followingIdList = new ArrayList<>();
         habitAdapter = new HabitRecyclerAdapter(habitDataList, followingIdList, this);
@@ -106,6 +115,12 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
         habitView.setAdapter(habitAdapter);
     }
 
+    /**
+     * This function finds the ID of the user who's habit was clicked on. This is done to pass it through to ViewHabitActivity
+     * @see ViewHabitActivity
+     * @author ipaterso
+     * @param habitId
+     */
     public void findHabitUserId(String habitId) {
         for (String follower : followers) {
             Log.d("TAG", follower + "------------");
@@ -134,6 +149,13 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
 
     }
 
+    /**
+     * This function will find all users that the current user is following
+     * It then proceeds to call setHabits() to display their habits
+     * @param userId
+     * @author ipaterso
+     */
+
     public void findFollowers(String userId) {
         db.collection("Notification")
                 .whereEqualTo("Sender", userId)
@@ -148,7 +170,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                     String followerId = (String) document.getData().get("Receiver");
                                     followers.add(followerId);
                                     String followerUser = (String) document.getData().get("Receiver Name");
-                                    followersIDs.add(followerUser);
+                                    followerUserNames.add(followerUser);
                                 }
                             }
                         }
@@ -157,22 +179,12 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                 });
     }
 
-    public void getUserName(String follower) {
-        db.collection("Users")
-                .document(follower)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            userName = (String) document.getData().get("User Name");
-                            Log.d("TAG", userName);
-                        }
-                        }
-                    });
-    }
 
+    /**
+     * This function will get all public habits of followed users and display them for the user
+     * @author ipaterso
+     * @see HabitRecyclerAdapter
+     */
     public void setHabits() {
         for (String follower : followers) {
             collectionReference
@@ -198,7 +210,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                                                     (long) value.getData().get("Progress")));
                                                             IntStream.range(0, followers.size()).forEachOrdered(n -> {
                                                                 if (followers.get(n) == follower) {
-                                                                    userName = followersIDs.get(n);
+                                                                    userName = followerUserNames.get(n);
                                                                 }
                                                             });
                                                             String habitId = document.getId();
@@ -206,7 +218,6 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                                             ArrayList<String> tempList = new ArrayList<>();
                                                             tempList.add(habitId);
                                                             tempList.add(userId);
-                                                            //getUserName(follower);
                                                             Log.d("TAG", "Username : " + userName);
                                                             followingIdList.add(userName);
                                                             idList.add(tempList);

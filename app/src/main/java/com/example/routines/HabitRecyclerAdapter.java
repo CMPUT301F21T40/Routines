@@ -43,6 +43,13 @@ implements ReorderHabits.RecyclerTouchHelper {
         this.onHabitClickListener = onHabitClickListener;
     }
 
+    /**
+     * Constructor used to view the habits of all users the current user follows
+     * @param habits
+     * @param userName
+     * @param onHabitClickListener
+     * @author ipaterso
+     */
     public HabitRecyclerAdapter(ArrayList<Habit> habits, ArrayList<String> userName, OnHabitClickListener onHabitClickListener) {
         this.habits = habits;
         this.userName = userName;

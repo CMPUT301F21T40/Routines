@@ -72,7 +72,10 @@ public class EventListActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Override the onResume to allow APP refresh event list if the user delete any
+     * event in the event list
+     */
     @Override
     public void onResume() {
         super.onResume();

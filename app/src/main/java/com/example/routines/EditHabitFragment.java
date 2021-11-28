@@ -40,6 +40,10 @@ public class EditHabitFragment extends DialogFragment {
     private String currentDate;
     private String currentReason;
     private String currentPrivacy;
+    private String currentCompletionTime;
+    private String currentEstimateCompletionTime;
+    private String currentLastCompletionTime;
+    private String currentLastModifiedDate;
     private EditText habitName;
     private EditText habitDate;
     private EditText habitReason;
@@ -101,12 +105,17 @@ public class EditHabitFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.add_habit_fragment, null);
         Bundle bundle = getArguments();
+
         originalHabit = (Habit) bundle.getSerializable("habit");
         currentName = originalHabit.getName();
         currentDate = originalHabit.getDate();
         currentReason = originalHabit.getReason();
         currentPrivacy = originalHabit.getPrivacy();
-        defaultProgress = originalHabit.getProgress();
+        currentPrivacy = originalHabit.getPrivacy();
+        currentCompletionTime = originalHabit.getCompletionTime();
+        currentEstimateCompletionTime = originalHabit.getEstimateCompletionDate();
+        currentLastCompletionTime = originalHabit.getLastCompletionTime();
+        currentLastModifiedDate = originalHabit.getLastModifiedDate();
 
 //      Set the attributes to their actual values
         habitName = view.findViewById(R.id.habitNameEditText);
@@ -175,7 +184,7 @@ public class EditHabitFragment extends DialogFragment {
                 month = (datePicker.getMonth() + 1);
                 year = datePicker.getYear();
 //                Format entered date
-                habitDate.setText(String.format("%d-%02d-%d", year, month, day));
+                habitDate.setText(String.format("%d-%02d-%02d", year, month, day));
             }
         });
 
@@ -295,10 +304,10 @@ public class EditHabitFragment extends DialogFragment {
                         newReason = check(newReason);
                         String newPrivacy = currentPrivacy;
                         newPrivacy = check(newPrivacy);
-                        String newCompletionTime = "0";
-                        String newEstimateCompletionTime = "0";
-                        String newLastCompletionTime = "0";
-                        String newLastModifiedDate = habitName.getText().toString();
+                        String newCompletionTime = currentCompletionTime;
+                        String newEstimateCompletionTime = currentEstimateCompletionTime;
+                        String newLastCompletionTime = currentEstimateCompletionTime;
+                        String newLastModifiedDate = habitDate.getText().toString();
                         listener.onEditPressed(originalHabit, new Habit(newName, newReason, newDate, frequencyList, newPrivacy,newCompletionTime,newEstimateCompletionTime,newLastCompletionTime,newLastModifiedDate, defaultProgress));
 
                     }

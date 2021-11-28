@@ -11,7 +11,14 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
+/**
+ * Response when user clicks the delete icon after selecting a event.
+ * This prompts the user to confirm whether they want to delete the
+ * event. If yes, the selected event is deleted. If no, the user is returned
+ * to previous screen.
+ * @author zezhou
+ * @see ViewEventActivity
+ */
 public class DeleteEventFragment extends DialogFragment {
     String eventId;
 

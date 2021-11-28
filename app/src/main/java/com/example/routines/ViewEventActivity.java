@@ -99,6 +99,11 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             }
         });
 
+
+        /**
+         * This sets a button listener and pops a dialog for the user to delete the event details
+         * @auther Zezhou Xiong
+         */
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,6 +115,11 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
 
     }
 
+    /**
+     * This function receive a event id and delete the corresponding event in the firebase
+     * @param eventId
+     * @auther Zezhou Xiong
+     */
     public void onDeletePressedEvent(String eventId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Events")

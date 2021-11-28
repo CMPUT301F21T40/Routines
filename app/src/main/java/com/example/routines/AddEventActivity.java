@@ -35,6 +35,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -60,6 +61,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     Button getLocationBtn;
     String habitId;
     String userId;
+    Boolean alreadyFinish = false;
 
     LocationManager locationManager;
 
@@ -92,6 +94,24 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         userId = (String) getIntent().getStringExtra("userId");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Date date = new Date();
+        String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+
+        CollectionReference eventRef = db.collection("Events");
+        eventRef.whereEqualTo("HabitId", habitId)
+                .whereEqualTo("date", todayDate)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.getResult().isEmpty()){
+                            alreadyFinish = true;
+                        }
+                    }
+                });
+
+
 
 //        Check location permission
         checkLocationPermission();
@@ -155,7 +175,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 if (currentLongitude == 0 && currentLatitude == 0 && loadingLocation == true) {
                     Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
                 } else {
-                    String date = String.format("%d-%02d-%d", year, month, day);
+                    String date = String.format("%d-%02d-%02d", year, month, day);
                     HashMap<String, String> data = new HashMap<>();
                     data.put("name", name);
                     data.put("description", description);
@@ -195,7 +215,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     eventName.setText("");
                     eventDescription.setText("");
                     eventLocation.setText("");
-                    updateCompletion(habitId, userId, db);
+                    //if the user has not yet add any event today, increment completion by 1
+                    if (!alreadyFinish)
+                        updateCompletion(habitId, userId, db);
                     onBackPressed();
                 }
 
@@ -316,13 +338,17 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
 
                         String completion = (String) document.getData().get("Completion Time");
+                        String lastCompletionTime = (String) document.getData().get("Last Completion Time");
                         String lastModifiedDate = (String) document.getData().get("Last Modified Date");
                         ArrayList<String> habitFrequency = (ArrayList<String>) document.getData().get("Frequency");
-                        completion = Integer.toString(Integer.parseInt(completion + 1));
+                        completion = Integer.toString(Integer.parseInt(completion)+1);
+                        int estimateCompletion = calculateEstimateCompletionTime(lastCompletionTime, lastModifiedDate, habitFrequency);
 
-                        int progress = calculateEstimateCompletionTime(completion, lastModifiedDate, habitFrequency);
+                        int progress = (Integer.parseInt(completion) *100 / estimateCompletion);
+
                         habitRef.update("Completion Time", completion,
-                                "Progress", progress)
+                                "Progress", progress,
+                                "Estimate Completion Time", Integer.toString(progress))
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -346,8 +372,17 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
+    /**
+     * This date receive the lastCompletionTime, lastModifiedDate and frequency to calculate the estimate completion time
+     * of a habit. It calculates the times of completion the user should finish from the time they edit the frequency
+     * and then plus the times of completion the user should finish before they edit the frequency
+     * @param lastCompletionTime
+     * @param lastModifiedDate
+     * @param habitFrequency
+     * @return int estimateCompletionTime
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public int calculateEstimateCompletionTime(String completionTime, String lastModifiedDate, ArrayList<String> habitFrequency) {
+    public int calculateEstimateCompletionTime(String lastCompletionTime, String lastModifiedDate, ArrayList<String> habitFrequency) {
         int differInDay = calculateDifferInDay(lastModifiedDate);
         int days = differInDay % 7;
         int weeks = differInDay / 7;
@@ -387,10 +422,17 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 }
             }
         }
-        int estimateCompletionTime = Integer.parseInt(completionTime) + weeks * habitFrequency.size() + count;
+        int estimateCompletionTime = Integer.parseInt(lastCompletionTime) + weeks * habitFrequency.size() + count;
         return estimateCompletionTime;
     }
 
+    /**
+     * This function receive a date and calculator the difference in days between the current date and
+     * the given date
+     * @param lastModifiedDate
+     * @return String days
+     * @author zezhou
+     */
     public int calculateDifferInDay(String lastModifiedDate){
         int days = 0;
         try{

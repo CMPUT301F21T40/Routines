@@ -207,34 +207,82 @@ public class Habit implements Serializable {
         this.progress = progress;
     }
 
+    /**
+     * return the times of completion the user should finish before the user edit the frequency
+     * @return String lastCompletionTime
+     * @author zezhou
+     * @see Habit
+     */
     public String getLastCompletionTime() {
         return lastCompletionTime;
     }
 
+    /**
+     * set the times of completion the user should finish before the user edit the frequency
+     * @param lastCompletionTime
+     * @author zezhou
+     * @see Habit
+     */
     public void setLastCompletionTime(String lastCompletionTime) {
         this.lastCompletionTime = lastCompletionTime;
     }
 
+    /**
+     * return the times of completion the user already finished
+     * @return String completionTime
+     * @author zezhou
+     * @see Habit
+     */
     public String getCompletionTime() {
         return completionTime;
     }
 
+    /**
+     * set the times of completion the user already finished
+     * @param completionTime
+     * @author zezhou
+     * @see Habit
+     */
     public void setCompletionTime(String completionTime) {
         this.completionTime = completionTime;
     }
 
+    /**
+     * return the times of completion the user should finish in total
+     * @return String estimateCompletionDate
+     * @author zezhou
+     * @see Habit
+     */
     public String getEstimateCompletionDate() {
         return estimateCompletionDate;
     }
 
+    /**
+     * set the times of completion the user should finish in total
+     * @param estimateCompletionDate
+     * @author zezhou
+     * @see Habit
+     */
     public void setEstimateCompletionDate(String estimateCompletionDate) {
         this.estimateCompletionDate = estimateCompletionDate;
     }
 
+    /**
+     * return the last date the user change the frequency
+     * @return String lastModifiedDate
+     * @author zezhou
+     * @see Habit
+     */
     public String getLastModifiedDate() {
         return lastModifiedDate;
     }
 
+    /**
+     * set the last date the user change the frequency
+     * @param lastModifiedDate
+     * @author zezhou
+     * @see Habit
+     */
     public void setLastModifiedDate(String lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }

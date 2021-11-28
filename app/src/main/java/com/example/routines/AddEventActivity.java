@@ -43,6 +43,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -60,6 +61,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -97,11 +99,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     ActivityResultLauncher<String> mGetContent;
     ActivityResultLauncher<Intent> nGetContent;
     private Uri imageUri;
-    String filename;
     FirebaseStorage storage;
     StorageReference fileRef;
     StorageReference storageRef;
-    private String pictureImagePath = "";
+    static final int REQUEST_IMAGE_CAPTURE = 2;
+    static final int REQUEST_TAKE_PHOTO = 3;
+    String currentPhotoPath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +124,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child("Event photos");
         albumPhoto();
-        cameraPhoto();
+        //cameraPhoto();
         cameraOrGallery();
 
 
@@ -154,7 +157,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 Intent intent = new Intent(AddEventActivity.this, Map.class);
                 intent.putExtra("currentLat", currentLatitude);
                 intent.putExtra("currentLong", currentLongitude);
-
                 startActivityForResult(intent, 1);
             }
         });
@@ -276,6 +278,17 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
             }
         }
+        Log.d("test1", "test camera");
+        if (requestCode == REQUEST_TAKE_PHOTO ) {
+            Log.d("test2", "test camera");
+            if(resultCode == RESULT_OK){
+                Log.d("test3", "test camera");
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                addPhoto.setImageBitmap(imageBitmap);
+            }
+
+        }
     }
 
 
@@ -288,6 +301,14 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION
             }, 100);
+        }
+    }
+
+    private void checkCameraPermission(){
+        if(ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+        PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(AddEventActivity.this, new String[]{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE}, 4);
         }
     }
 
@@ -364,16 +385,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                //'dispatchTakePictureIntent();
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                String imageFileName = timeStamp + ".jpg";
-                File storageDir = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES);
-                pictureImagePath = storageDir.getAbsolutePath() + "/" + imageFileName;
-                File file = new File(pictureImagePath);
-                Uri outputFileUri = Uri.fromFile(file);
-                Intent cameraIntent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE);
-                nGetContent.launch(new Intent( MediaStore.ACTION_IMAGE_CAPTURE));
+                checkCameraPermission();
+                dispatchTakePictureIntent();
+
             }
         });
 
@@ -398,6 +412,49 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+
+        }else{
+            Log.w("Camera Intent", "failure");
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+/*
     public void cameraPhoto(){
         nGetContent = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -417,6 +474,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                 });
     }
 
+
+ */
     public void albumPhoto(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {

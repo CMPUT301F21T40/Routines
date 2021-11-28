@@ -2,8 +2,11 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
+import static com.google.firebase.firestore.FieldValue.arrayRemove;
+
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -13,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +31,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 /**
  * This activity display the details of a given event
@@ -45,6 +51,8 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FloatingActionButton editButton;
     FloatingActionButton deleteButton;
     String eventId;
+    String habitId;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +69,16 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
         eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
+        habitId = (String) getIntent().getStringExtra("habitId"); //fetch habit id from last activity
+
+
 
         FirebaseAuth myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
         //String actualUserId = user.getUid();
         String actualUserId = getIntent().getStringExtra("actualUserId");
         String userId = getIntent().getStringExtra("userId");
+        Log.d("ABCD", userId);
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
         if (!sameUser) {
@@ -118,13 +130,17 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     /**
      * This function receive a event id and delete the corresponding event in the firebase
      * @param eventId
-     * @auther Zezhou Xiong
+     * @auther zezhou
      */
     public void onDeletePressedEvent(String eventId) {
+        String userId = getIntent().getStringExtra("userId");
+        String habitId = getIntent().getStringExtra("habitId");
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("Events")
+        DocumentReference eventRef = db.collection("Events")
                 .document(eventId);
-        docRef
+        eventRef
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -138,6 +154,50 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
                         Log.w(TAG, "Error deleting document", e);
                     }
                 });
+
+        DocumentReference habitRef = db.collection("Habits")
+                .document(userId)
+                .collection("Habits")
+                .document(habitId);
+
+        habitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                        String completion = (String) document.getData().get("Completion Time");
+                        String estimateCompletion = (String) document.getData().get("Estimate Completion Time");
+                        completion = Integer.toString(Integer.parseInt(completion)-1);
+                        int progress = (Integer.parseInt(completion) *100 / Integer.parseInt(estimateCompletion));
+
+
+                        habitRef.update("Completion Time", completion,
+                                "Progress", progress,
+                                "eventList", arrayRemove(eventId))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
         onBackPressed();
 
 

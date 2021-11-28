@@ -61,7 +61,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     Button getLocationBtn;
     String habitId;
     String userId;
-    Boolean alreadyFinish = false;
 
     LocationManager locationManager;
 
@@ -95,21 +94,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Date date = new Date();
-        String todayDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
 
-        CollectionReference eventRef = db.collection("Events");
-        eventRef.whereEqualTo("HabitId", habitId)
-                .whereEqualTo("date", todayDate)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (!task.getResult().isEmpty()){
-                            alreadyFinish = true;
-                        }
-                    }
-                });
 
 
 
@@ -215,9 +200,8 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     eventName.setText("");
                     eventDescription.setText("");
                     eventLocation.setText("");
-                    //if the user has not yet add any event today, increment completion by 1
-                    if (!alreadyFinish)
-                        updateCompletion(habitId, userId, db);
+
+                    updateCompletion(habitId, userId, db);
                     onBackPressed();
                 }
 
@@ -348,7 +332,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
                         habitRef.update("Completion Time", completion,
                                 "Progress", progress,
-                                "Estimate Completion Time", Integer.toString(progress))
+                                "Estimate Completion Time", Integer.toString(estimateCompletion))
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

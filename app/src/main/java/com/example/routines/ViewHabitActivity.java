@@ -143,6 +143,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
                                 // concatenated strings we should to this in the XML later
+
                                 habitName = (String) document.getData().get("Habit Name");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
@@ -155,7 +156,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                     frequency += habitFrequency.get(i) + " ";
                                 }
 
-                                hideButton(habitFrequency, add);
+                                hideButton(habitFrequency, habitId, add, db);
 
                                 nameView.setText(habitName);
                                 reasonView.setText(habitReason);
@@ -405,10 +406,29 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * @param add
      * @author Zezhou Xiong
      */
-    public void hideButton(ArrayList<String> habitFrequency, Button add){
+    public void hideButton(ArrayList<String> habitFrequency, String habitId, Button add, FirebaseFirestore db){
+        Boolean hide = false;
+
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
         Date d = new Date();
         String currentDayOfWeek = sdf.format(d);
+
+        d = new Date();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(d);
+        CollectionReference eventRef = db.collection("Events");
+        eventRef.whereEqualTo("habitId", habitId)
+                .whereEqualTo("date", date)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                add.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
         if (! habitFrequency.contains(currentDayOfWeek)){
             add.setVisibility(View.GONE);
         }

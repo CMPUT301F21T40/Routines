@@ -123,6 +123,7 @@ public class EventListActivity extends AppCompatActivity {
                 intent.putExtra("eventId", eventId);
                 intent.putExtra("sameUser", sameUser);
                 intent.putExtra("actualUserId", actualUserId);
+                intent.putExtra("habitId", habitId);
                 startActivity(intent);
             }
         });

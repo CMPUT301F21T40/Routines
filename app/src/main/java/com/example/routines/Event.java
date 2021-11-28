@@ -42,10 +42,11 @@ public class Event implements Serializable {
      * @param eventName
      * @param description
      */
-    public Event(String eventName, String description) {
+    public Event(String eventName, String description, String eventDate, String eventLocation) {
         this.eventName = eventName;
         this.description = description;
         this.eventDate = eventDate;
+        this.eventLocation = eventLocation;
     }
 
     /**

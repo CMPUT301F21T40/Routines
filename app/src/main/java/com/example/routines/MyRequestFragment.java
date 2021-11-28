@@ -88,6 +88,7 @@ public class MyRequestFragment extends Fragment {
         requestReference = db.collection("Notification");
         requestReference
                 .whereEqualTo("Sender", userId)
+                .whereEqualTo("Status", "pending")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

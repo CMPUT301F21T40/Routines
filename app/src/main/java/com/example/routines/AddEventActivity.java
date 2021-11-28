@@ -93,7 +93,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     boolean loadingLocation = false;
 
     ActivityResultLauncher<String> mGetContent;
-    ActivityResultLauncher<Intent> nGetContent;
+
     private Uri imageUri;
     private Bitmap imageBitmap;
     private String pictureImagePath = "";
@@ -282,7 +282,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             File imgFile = new  File(pictureImagePath);
             if(imgFile.exists()){
                 imageBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                addPhoto.setImageBitmap(imageBitmap);
+                if(imageBitmap != null){
+                    addPhoto.setImageBitmap(imageBitmap);
+                }
 
             }
         }

@@ -20,6 +20,11 @@ import org.mockito.Mockito;
 
 import java.util.ArrayList;
 
+/**
+ * Unit tests for Event list
+ * @author yyang13
+ */
+
 public class EventListUnitTest {
     private EventCustomList eventList;
     private Context mockContext = mock(Context.class);

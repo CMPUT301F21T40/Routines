@@ -5,6 +5,11 @@ import static org.testng.Assert.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for Event
+ * @author yyang13
+ */
+
 public class EventUnitTest {
     private Event event;
 

@@ -54,6 +54,7 @@
             android:parentActivityName=".EventListActivity" />
         <activity
             android:name=".SearchProfileActivity"
+            android:label="User Profile"
             android:exported="false"
             android:parentActivityName=".SearchActivity" />
         <activity

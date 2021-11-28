@@ -39,10 +39,10 @@
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_profile"
-        android:layout_width="127dp"
-        android:layout_height="148dp"
+        android:layout_width="145dp"
+        android:layout_height="145dp"
         android:layout_marginTop="120dp"
         android:src="@drawable/default_image"
         app:layout_constraintEnd_toEndOf="parent"

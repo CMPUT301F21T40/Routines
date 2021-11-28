@@ -8,6 +8,21 @@
     android:background="@drawable/background_pink"
     android:orientation="vertical">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="10dp">
+
+        <ImageView
+            android:id="@+id/image_show_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     <LinearLayout
@@ -19,7 +34,7 @@
         <TextView
             android:id="@+id/habit_event_name_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:hint="Name"
             android:layout_gravity="left"
@@ -30,7 +45,7 @@
             android:id="@+id/view_event_name"
             android:layout_width="wrap_content"
             android:layout_gravity="left"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:hint="Name:"
             android:layout_marginLeft="20dp"
             android:textSize="20sp" />
@@ -38,7 +53,7 @@
         <TextView
             android:id="@+id/habit_event_reason_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:hint="Reason"
             android:textStyle="bold|italic"
@@ -49,7 +64,7 @@
             android:id="@+id/view_event_comment"
             android:layout_width="wrap_content"
             android:layout_gravity="left"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:hint="Reason:"
             android:layout_marginLeft="20dp"
             android:textSize="20sp" />
@@ -57,7 +72,7 @@
         <TextView
             android:id="@+id/habit_event_data_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:hint="Date Completed"
             android:layout_gravity="left"
@@ -68,7 +83,7 @@
             android:id="@+id/view_event_date"
             android:layout_width="wrap_content"
             android:layout_gravity="left"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:hint="Complete Date:"
             android:textSize="20sp" />
@@ -76,7 +91,7 @@
         <TextView
             android:id="@+id/habit_event_location_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="3dp"
             android:hint="Location of Event"
             android:layout_gravity="left"
@@ -85,49 +100,39 @@
 
         <TextView
             android:id="@+id/view_event_location"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:hint="Location: "
-            android:textSize="20dp">
+            android:textSize="20sp">
 
         </TextView>
 
-
-
-
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="177dp">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/edit_event_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_habit_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
+            android:layout_marginLeft="290dp"
             android:clickable="true"
             android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.842"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@android:drawable/ic_menu_delete" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:srcCompat="@android:drawable/ic_menu_delete"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_event_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    </LinearLayout>
+
+
 </LinearLayout>

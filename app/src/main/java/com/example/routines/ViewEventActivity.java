@@ -1,15 +1,21 @@
 package com.example.routines;
 
+
 import static android.app.appsearch.AppSearchResult.RESULT_OK;
 
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +23,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +34,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -45,6 +56,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FloatingActionButton editButton;
     FloatingActionButton deleteButton;
     String eventId;
+    ImageView eventImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventLocation = findViewById(R.id.view_event_location);
         editButton = findViewById(R.id.edit_event_button);
         deleteButton = findViewById(R.id.delete_habit_event_button);
+        eventImage = findViewById(R.id.image_show_event);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
@@ -83,6 +96,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         }*/
 
         showInfo();
+        showImage();
 
 
         /**
@@ -173,6 +187,27 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
                 });
     }
 
+    public void showImage(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("Event photos");
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        StorageReference collectionRef = storageRef.child(userId);
 
+
+        collectionRef.child(eventId).getBytes(1024*1024)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        eventImage.setImageBitmap(bitmap);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event image", "Doesn't exist");
+                    }
+                });
+    }
 
 }

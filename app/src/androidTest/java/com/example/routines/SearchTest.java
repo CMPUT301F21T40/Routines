@@ -55,13 +55,14 @@ public class SearchTest {
         solo.clickOnView(search);
         solo.sleep(500);
         solo.assertCurrentActivity("Activity needs to be search activity", SearchActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.search_text), "testUserName");
+        solo.enterText((EditText) solo.getView(R.id.search_text), "testUserNew"); // just find myself for now
         solo.clickOnButton("SEARCH");
         solo.sleep(1000);
         solo.clickInList(0);
         solo.assertCurrentActivity("Activity needs to be SearchProfileActivity", SearchProfileActivity.class);
         solo.sleep(1000);
     }
+    
     /**
      * Closes the activity after every test
      * @throws Exception

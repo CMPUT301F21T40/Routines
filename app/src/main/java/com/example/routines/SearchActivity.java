@@ -76,10 +76,13 @@ public class SearchActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                userArrayList.clear();
+                userIdArrayList.clear();
                 String userName = inputUserName.getText().toString();
                 CollectionReference userRef = db.collection("Users");
                 userRef
-                        .whereEqualTo("User Name", userName)
+                        .whereGreaterThanOrEqualTo("User Name", userName)
+                        .whereLessThanOrEqualTo("User Name", userName+"\uF7FF")
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override

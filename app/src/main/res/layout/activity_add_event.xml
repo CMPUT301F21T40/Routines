@@ -84,17 +84,9 @@
             android:id="@+id/event_location_editText"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:hint="Current Location">
+            android:hint="Location">
         </EditText>
 
-
-        <Button
-            android:id="@+id/get_location_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="GET CURRENT LOCATION">
-
-        </Button>
 
         <Button
             android:id="@+id/open_map"

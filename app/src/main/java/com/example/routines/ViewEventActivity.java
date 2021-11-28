@@ -1,5 +1,12 @@
 package com.example.routines;
 
+
+import static android.app.appsearch.AppSearchResult.RESULT_OK;
+
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -54,6 +62,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import java.util.List;
 
 /**
  * This activity display the details of a given event
@@ -107,7 +117,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         FirebaseUser user = myAuth.getCurrentUser();
         //String actualUserId = user.getUid();
         String actualUserId = getIntent().getStringExtra("actualUserId");
-        userId = getIntent().getStringExtra("userId");
+        String userId = getIntent().getStringExtra("userId");
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
 
@@ -145,7 +155,9 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             public void onClick(View view) {
                 String nameShowed = eventName.getText().toString();
                 String commentShowed = eventComment.getText().toString();
-                Event eventNow = new Event(nameShowed, commentShowed);
+                String dateShowed = eventDate.getText().toString();
+                String locationShowed = eventLocation.getText().toString();
+                Event eventNow = new Event(nameShowed, commentShowed, dateShowed, locationShowed);
                 EditEventFragment.newInstance(eventNow).show(getSupportFragmentManager(), "Edit_Event");
             }
         });
@@ -335,9 +347,11 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     public void onOkPressed(Event event) {
         String nameEdited = event.getEventName();
         String descriptionEdited = event.getDescription();
+        String dateEdit = event.getEventDate();
+        String locationEdit = event.getEventLocation();
         Log.d("Edited event", nameEdited+descriptionEdited);
         db.collection("Events").document(eventId)
-                .update("name", nameEdited, "description", descriptionEdited);
+                .update("name", nameEdited, "description", descriptionEdited, "date", dateEdit, "location", locationEdit);
         showInfo();
 
     }

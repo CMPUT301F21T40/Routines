@@ -17,7 +17,7 @@ import org.junit.Test;
 /**
  * Unit testing for US 02.04.01
  */
-public class ViewHabitEvent {
+public class ViewHabitEventTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =

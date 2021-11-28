@@ -17,7 +17,7 @@ public class HabitUnitTest {
     public void createHabit(){
         frequency.add("Monday");
         frequency.add("Thursday");
-        habit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private", 0);
+        habit = new Habit("Soccer", "It is fun", "2020-01-01", frequency, "Private","20", "15","10", "2021-01-01",  0);
     }
 
     @Test
@@ -108,6 +108,42 @@ public class HabitUnitTest {
         long updatedProgress = habit.getProgress();
         habit.setProgress(updatedProgress);
         assertEquals(12, updatedProgress);
+    }
+
+    @Test
+    public void setCompletionTime() {
+        String newCompletionTime = "30";
+        habit.setCompletionTime(newCompletionTime);
+        String updatedCompletionTime = "33";
+        habit.setCompletionTime(updatedCompletionTime);
+        assertEquals("33", updatedCompletionTime);
+    }
+
+    @Test
+    public void setEstimateCompletionDate (){
+        String newEstimateCompletionDate = "2030-01-01";
+        habit.setEstimateCompletionDate(newEstimateCompletionDate);
+        String updatedEstimateCompletionDate = "2040-01-01";
+        habit.setEstimateCompletionDate(updatedEstimateCompletionDate);
+        assertEquals("2040-01-01", updatedEstimateCompletionDate);
+    }
+
+    @Test
+    public void setLastCompletionTime (){
+        String newLastCompletionTime = "40";
+        habit.setLastCompletionTime(newLastCompletionTime);
+        String updatedLastCompletionTime = "50";
+        habit.setLastCompletionTime(updatedLastCompletionTime);
+        assertEquals("50", updatedLastCompletionTime);
+    }
+
+    @Test
+    public void setLastModifiedDate () {
+        String newLastModifiedDate = "2010-01-01";
+        habit.setLastModifiedDate(newLastModifiedDate);
+        String updatedLastModifiedDate = "2000-01-01";
+        habit.setLastModifiedDate(updatedLastModifiedDate);
+        assertEquals("2000-01-01", updatedLastModifiedDate);
     }
 
 }

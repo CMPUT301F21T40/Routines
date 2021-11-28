@@ -31,10 +31,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener , DeleteHabitFragment.OnFragmentInteractionListener{
     TextView nameView;
@@ -48,6 +55,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String habitReason;
     ArrayList<String> habitFrequency;
     String habitPrivacy;
+    String completionTime;
+    String estimateCompletionTime;
+    String lastCompletionTime;
+    String lastModifiedDate;
+
     Button add;
     Button view;
     FloatingActionButton edit;
@@ -90,7 +102,16 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
 
-        //Boolean sameUser = Boolean.valueOf(getIntent().getStringExtra("sameUser"));
+
+
+
+    }
+
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
         if (!sameUser) {
@@ -111,12 +132,14 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         habitRef
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
                                 // concatenated strings we should to this in the XML later
+
                                 habitName = (String) document.getData().get("Habit Name");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
@@ -124,15 +147,23 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 habitProgress = (long)document.getData().get("Progress");
                                 Collections.sort(habitFrequency,comparator);
                                 habitPrivacy = (String) document.getData().get("Privacy");
+                                frequency = "";
                                 for (int i = 0; i < habitFrequency.size(); i++){
                                     frequency += habitFrequency.get(i) + " ";
                                 }
+                                completionTime = (String) document.getData().get("Completion Time");
+                                estimateCompletionTime = (String) document.getData().get("Estimate Completion Time");
+                                lastCompletionTime = (String) document.getData().get("Last Completion Time");
+                                lastModifiedDate = (String) document.getData().get("Last Modified Date");
+
+                                hideButton(habitFrequency, habitId, add, db);
 
                                 nameView.setText(habitName);
                                 reasonView.setText(habitReason);
                                 dateView.setText(habitDate);
                                 privacyView.setText(habitPrivacy);
                                 frequencyView.setText(frequency);
+
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }
                             else {
@@ -176,7 +207,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
+                EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
 
             }
         });
@@ -188,10 +219,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, habitProgress)).show(getSupportFragmentManager(), "DELETE_HABIT");
+                new DeleteHabitFragment().newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress)).show(getSupportFragmentManager(), "DELETE_HABIT");
             }
         });
-
     }
 
     /**
@@ -247,6 +277,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         habitDate = newHabit.getDate();
         habitPrivacy = newHabit.getPrivacy();
         habitFrequency = (ArrayList<String>) newHabit.getFrequency();
+        String completionTime = newHabit.getCompletionTime();
+        String estimateCompletionTime = newHabit.getEstimateCompletionDate();
+        String lastCompletionTime = newHabit.getLastCompletionTime();
+        String lastModifiedDate = newHabit.getLastModifiedDate();
+
         if (habitFrequency.isEmpty()) {
             habitFrequency.add("Null");
         }
@@ -291,7 +326,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 "Habit Reason", habitReason,
                 "Start Date", habitDate,
                 "Frequency", habitFrequency,
-                "Privacy", habitPrivacy);
+                "Privacy", habitPrivacy,
+                "Completion Time", completionTime,
+                "Estimate Completion Time", estimateCompletionTime,
+                "Last Completion Time", lastCompletionTime,
+                "Last Modified Date", lastModifiedDate);
 
         Intent intent = getIntent();
         intent.putExtra("Habit Name", habitName);
@@ -313,6 +352,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This function receive two string of day of week and compare them by order
+     */
     Comparator<String> comparator = new Comparator<String>() {
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -357,5 +399,41 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 });
 
     }
+
+    /**
+     * This function will hide the add button if the current day of week is not in the frequency list
+     * @param habitFrequency
+     * @param add
+     * @author Zezhou Xiong
+     */
+    public void hideButton(ArrayList<String> habitFrequency, String habitId, Button add, FirebaseFirestore db){
+        Boolean hide = false;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
+        Date d = new Date();
+        String currentDayOfWeek = sdf.format(d);
+
+        d = new Date();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(d);
+        CollectionReference eventRef = db.collection("Events");
+        eventRef.whereEqualTo("habitId", habitId)
+                .whereEqualTo("date", date)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                add.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                });
+        if (! habitFrequency.contains(currentDayOfWeek)){
+            add.setVisibility(View.GONE);
+        }
+    }
+
+
 
 }

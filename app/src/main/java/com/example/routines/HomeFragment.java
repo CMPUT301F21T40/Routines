@@ -200,9 +200,13 @@ public class HomeFragment extends Fragment implements HabitRecyclerAdapter.OnHab
                     String habitDate = (String)doc.getData().get("Start Date");
                     ArrayList<String> frequency = (ArrayList<String>) doc.getData().get("Frequency");
                     String privacy = (String) doc.getData().get("Privacy"); // recently added
+                    String completionTime = (String) doc.getData().get("Completion Time");
+                    String estimateCompletionTime = (String) doc.getData().get("Estimate Completion Time");
+                    String lastCompletionTime = (String) doc.getData().get("Last Completion Time");
+                    String lastModifiedDate = (String) doc.getData().get("Last Modified Date");
                     String id = (String) doc.getId();
                     habitIdList.add(id);
-                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, habitProgress));
+                    habitDataList.add(new Habit(habitName, habitReason, habitDate, frequency, privacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress));
                     habitAdapter.notifyDataSetChanged();
                 }
             }

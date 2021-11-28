@@ -23,23 +23,37 @@ public class Habit implements Serializable {
     public String date;
     public ArrayList<String> frequency;
     public String privacy;
+    public String lastModifiedDate;
+    public String lastCompletionTime;
+    public String completionTime;
+    public String estimateCompletionDate;
 
     private long progress;
 
     /**
-     * Initializer for the habit
-     * @param name String
-     * @param reason String
-     * @param date String
-     * @param privacy String
+     * @param name
+     * @param reason
+     * @param date
+     * @param frequency
+     * @param privacy
+     * @param completionTime
+     * @param estimateCompletionDate
+     * @param lastCompletionTime
+     * @param lastModifiedDate
+     * @param progress
      * @author lwaschuk
      */
-    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, long progress) {
+    public Habit(String name, String reason, String date, ArrayList<String> frequency, String privacy, String completionTime, String estimateCompletionDate, String lastCompletionTime, String lastModifiedDate, long progress) {
         this.name = name;
         this.reason = reason;
         this.date = date;
         this.frequency = frequency;
         this.privacy = privacy;
+        this.progress = progress;
+        this.completionTime = completionTime;
+        this.estimateCompletionDate = estimateCompletionDate;
+        this.lastCompletionTime = lastCompletionTime;
+        this.lastModifiedDate = lastModifiedDate;
         this.progress = progress;
     }
 
@@ -191,5 +205,85 @@ public class Habit implements Serializable {
      */
     public void setProgress(long progress) {
         this.progress = progress;
+    }
+
+    /**
+     * return the times of completion the user should finish before the user edit the frequency
+     * @return String lastCompletionTime
+     * @author zezhou
+     * @see Habit
+     */
+    public String getLastCompletionTime() {
+        return lastCompletionTime;
+    }
+
+    /**
+     * set the times of completion the user should finish before the user edit the frequency
+     * @param lastCompletionTime
+     * @author zezhou
+     * @see Habit
+     */
+    public void setLastCompletionTime(String lastCompletionTime) {
+        this.lastCompletionTime = lastCompletionTime;
+    }
+
+    /**
+     * return the times of completion the user already finished
+     * @return String completionTime
+     * @author zezhou
+     * @see Habit
+     */
+    public String getCompletionTime() {
+        return completionTime;
+    }
+
+    /**
+     * set the times of completion the user already finished
+     * @param completionTime
+     * @author zezhou
+     * @see Habit
+     */
+    public void setCompletionTime(String completionTime) {
+        this.completionTime = completionTime;
+    }
+
+    /**
+     * return the times of completion the user should finish in total
+     * @return String estimateCompletionDate
+     * @author zezhou
+     * @see Habit
+     */
+    public String getEstimateCompletionDate() {
+        return estimateCompletionDate;
+    }
+
+    /**
+     * set the times of completion the user should finish in total
+     * @param estimateCompletionDate
+     * @author zezhou
+     * @see Habit
+     */
+    public void setEstimateCompletionDate(String estimateCompletionDate) {
+        this.estimateCompletionDate = estimateCompletionDate;
+    }
+
+    /**
+     * return the last date the user change the frequency
+     * @return String lastModifiedDate
+     * @author zezhou
+     * @see Habit
+     */
+    public String getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    /**
+     * set the last date the user change the frequency
+     * @param lastModifiedDate
+     * @author zezhou
+     * @see Habit
+     */
+    public void setLastModifiedDate(String lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 }

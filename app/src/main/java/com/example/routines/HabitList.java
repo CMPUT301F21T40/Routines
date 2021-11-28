@@ -1,6 +1,10 @@
 package com.example.routines;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +14,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * A custom list to add the habits into
@@ -50,6 +61,7 @@ public class HabitList extends ArrayAdapter<Habit> {
      * @author lwaschuk
      * @return view View
      */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
@@ -61,14 +73,20 @@ public class HabitList extends ArrayAdapter<Habit> {
         // a habit list to store the habits
         Habit habit = habits.get(position);
         TextView habitName = view.findViewById(R.id.habitName);
+
+
         //TextView habitDate = view.findViewById(R.id.habitDate);
         //TextView habitReason = view.findViewById(R.id.habitReason);
 
         // this is testing for progress bar
         ProgressBar progress = view.findViewById(R.id.progressBar3);
-        progress.setProgress(5);
+
 
         habitName.setText(habit.getName());
+        progress.setProgress(0);
+        progress.setMax(100);
+        progress.setProgress(60);
+
         //habitDate.setText(habit.getDate());
         //habitReason.setText(habit.getReason());
 
@@ -107,5 +125,9 @@ public class HabitList extends ArrayAdapter<Habit> {
     public boolean containsHabit(Habit habit){
         return habits.contains(habit);
     }
+
+
+
+
 }
 

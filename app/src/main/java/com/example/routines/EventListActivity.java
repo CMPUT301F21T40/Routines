@@ -58,6 +58,27 @@ public class EventListActivity extends AppCompatActivity {
         eventArrayAdapter = new EventCustomList(this, eventArrayList);
         eventList.setAdapter(eventArrayAdapter);
 
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), ViewEventActivity.class);
+                String eventId = eventIdList.get(i);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
+            }
+        });
+
+
+    }
+
+
+    /**
+     * Override the onResume to allow APP refresh event list if the user delete any
+     * event in the event list
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
         String habitId = (String) getIntent().getStringExtra("habitId");
         String userId = (String) getIntent().getStringExtra("userId");
         String actualUserId = (String) getIntent().getStringExtra("actualUserId");
@@ -65,7 +86,8 @@ public class EventListActivity extends AppCompatActivity {
 
         //fetch all the events which stores corresponding habit id
         CollectionReference eventRef = db.collection("Events");
-
+        eventArrayList.clear();
+        eventArrayAdapter.notifyDataSetChanged();
         eventRef
                 .whereEqualTo("habitId", habitId)
                 .get()
@@ -101,6 +123,7 @@ public class EventListActivity extends AppCompatActivity {
                 intent.putExtra("eventId", eventId);
                 intent.putExtra("sameUser", sameUser);
                 intent.putExtra("actualUserId", actualUserId);
+                intent.putExtra("habitId", habitId);
                 startActivity(intent);
             }
         });

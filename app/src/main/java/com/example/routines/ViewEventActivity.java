@@ -17,6 +17,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 
+import static android.content.ContentValues.TAG;
+
+import static com.google.firebase.firestore.FieldValue.arrayRemove;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,6 +31,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
@@ -36,17 +44,20 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -65,13 +76,15 @@ import java.util.Date;
 
 import java.util.List;
 
+import java.util.ArrayList;
+
 /**
  * This activity display the details of a given event
  * It allows user to edit the details of the event
  * @author Zezhou Xiong
  * @see Event
  */
-public class ViewEventActivity extends AppCompatActivity implements EditEventFragment.OnFragmentInteractionalListener{
+public class ViewEventActivity extends AppCompatActivity implements EditEventFragment.OnFragmentInteractionalListener, DeleteEventFragment.OnFragmentInteractionListener{
 
     //Text views for the details of given event
     TextView eventName;
@@ -83,7 +96,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FloatingActionButton deleteButton;
     String eventId;
     ImageView eventImage;
-    String userId;
+
 
     ActivityResultLauncher<String> mGetContent;
 
@@ -94,6 +107,8 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FirebaseStorage storage;
     StorageReference storageRef;
     StorageReference collectionRef;
+
+    String habitId;
 
 
     @Override
@@ -112,6 +127,9 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button
 
         eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
+        habitId = (String) getIntent().getStringExtra("habitId"); //fetch habit id from last activity
+
+
 
         FirebaseAuth myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -163,7 +181,99 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         });
 
 
+        /**
+         * This sets a button listener and pops a dialog for the user to delete the event details
+         * @auther Zezhou Xiong
+         */
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DeleteEventFragment();
+                DeleteEventFragment.newInstance(eventId).show(getSupportFragmentManager(),"Delete Event");
+            }
+        });
+
+
     }
+
+    /**
+     * This function receive a event id and delete the corresponding event in the firebase
+     * @param eventId
+     * @auther zezhou
+     */
+    public void onDeletePressedEvent(String eventId) {
+        String userId = getIntent().getStringExtra("userId");
+        String habitId = getIntent().getStringExtra("habitId");
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference eventRef = db.collection("Events")
+                .document(eventId);
+        eventRef
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+
+        DocumentReference habitRef = db.collection("Habits")
+                .document(userId)
+                .collection("Habits")
+                .document(habitId);
+
+        habitRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                        String completion = (String) document.getData().get("Completion Time");
+                        String estimateCompletion = (String) document.getData().get("Estimate Completion Time");
+                        completion = Integer.toString(Integer.parseInt(completion)-1);
+                        int progress = (Integer.parseInt(completion) *100 / Integer.parseInt(estimateCompletion));
+
+
+                        habitRef.update("Completion Time", completion,
+                                "Progress", progress,
+                                "eventList", arrayRemove(eventId))
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+        onBackPressed();
+
+
+
+    }
+
+
 
 
     public boolean onOptionsItemSelected(MenuItem item) {

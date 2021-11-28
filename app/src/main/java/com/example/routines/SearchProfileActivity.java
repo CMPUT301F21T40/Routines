@@ -69,10 +69,6 @@ public class SearchProfileActivity extends AppCompatActivity {
     String actualUserId;
     ArrayList<String> habitIdList;
     ArrayList<Habit> habitDataList;
-    ArrayAdapter<Habit> habitArrayAdapter;
-
-    String to;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,18 +87,10 @@ public class SearchProfileActivity extends AppCompatActivity {
         follow = false;
 
         String id = (String) getIntent().getStringExtra("userId");
-
-
-        //habitList = findViewById(R.id.search_event_list);
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
         habitLabel = findViewById(R.id.habit_label);
-        //habitList.setAdapter(habitArrayAdapter);
-        //habitAdapter = new HabitRecyclerAdapter(habitDataList, (HabitRecyclerAdapter.OnHabitClickListener) this);
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        //habitView = rootView.findViewById(R.id.fragment_habitList);
-        //habitView.setLayoutManager(layoutManager);
-        //habitView.setAdapter(habitAdapter);
+
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -111,16 +99,13 @@ public class SearchProfileActivity extends AppCompatActivity {
         requestReference = db.collection("Notification");
         requestId = db.collection(String.valueOf(requestReference)).document().getId();
 
-        //get user id from last activity
-
         //get user document by the given user id
         DocumentReference userRef = db
                 .collection("Users")
                 .document(id);
 
         habitCollection = db.collection("Habits");
-        //userDocument = habitCollection.document(userId);
-//        Sub-collection of Habit under the current user
+
 
 
         //fetch field from the document and set text to text view
@@ -149,24 +134,6 @@ public class SearchProfileActivity extends AppCompatActivity {
         checkFollower(id);
         //updateFragment(id);
 
-
-
-        /*
-        habitList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(getApplicationContext(), ViewHabitActivity.class);
-                String habitId = habitIdList.get(position);
-                intent.putExtra("sameUser", false);
-                intent.putExtra("habitId", habitId);
-                intent.putExtra("userId", id);
-                Log.d("Intent habit id", habitId);
-                startActivity(intent);
-            }
-        });
-
-         */
-
         getCurrentUserName();
 
         followButton.setOnClickListener(new View.OnClickListener() {
@@ -187,94 +154,6 @@ public class SearchProfileActivity extends AppCompatActivity {
 
     }
 
-
-
-
-/*
-    public void showList(String id){
-        // = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        CollectionReference collectionReference = db.collection("Habits")
-                .document(id)
-                .collection("Habits");
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        collectionReference.document(document.getId())
-                                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                        if(value != null && value.exists()){
-                                            String privacy = (String) value.getData().get("Privacy");
-                                            if (privacy != null && privacy.equals("Public")) {                                                habitDataList.add(new Habit( (String)value.getData().get("Habit Name"),
-                                                        (String)value.getData().get("Habit Reason"),
-                                                        (String)value.getData().get("Start Date"),
-                                                        (long)value.getData().get("Progress")));
-                                                habitIdList.add((String) document.getId() );
-                                                habitAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    }
-                                });
-
-                        //Log.d(TAG, document.getId() + " => " + document.getData());
-                    }
-                } else {
-                    //Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
-    }
-*/
-
-
-/*
-    /**
-     * This function will write the user's public habits if and only
-     * if the current user is following the user
-     *
-     * @param id
-     * @author ipaterso
-     */
-    /*
-    public void showHabits(String id) {
-        CollectionReference collectionReference = db.collection("Habits")
-                .document(id)
-                .collection("Habits");
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String docId = document.getId();
-                        collectionReference.document(docId)
-                                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                                        if (value != null && value.exists()) {
-                                            String privacy = (String) value.getData().get("Privacy");
-                                            if (privacy != null && privacy.equals("Public")) {
-                                                habitDataList.add(new Habit((String) value.getData().get("Habit Name"),
-                                                        (String) value.getData().get("Habit Reason"),
-                                                        (String) value.getData().get("Start Date"),
-                                                        (ArrayList<String>) value.getData().get("Frequency"),
-                                                        (String) value.getData().get("Privacy"),
-                                                        (long) value.getData().get("Progress")));
-                                                habitIdList.add(docId);
-                                                habitArrayAdapter.notifyDataSetChanged();
-                                            }
-                                        }
-                                    }
-                                });
-                    }
-                }
-            }
-        });
-    }
-
-
-     */
 
     /**
      * Function to set the string value of the button to it will display the correct values

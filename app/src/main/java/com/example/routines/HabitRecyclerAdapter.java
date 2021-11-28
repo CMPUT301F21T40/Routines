@@ -1,6 +1,7 @@
 package com.example.routines;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class HabitRecyclerAdapter extends RecyclerView.Adapter<HabitRecyclerAdap
 implements ReorderHabits.RecyclerTouchHelper {
     private ArrayList<Habit> habits;
     private OnHabitClickListener onHabitClickListener;
+    private ArrayList<String> userName;
 
     /**
      * Constructor of this adapter is used to initialzied the adapter in other activities
@@ -41,6 +43,13 @@ implements ReorderHabits.RecyclerTouchHelper {
         this.habits = habits;
         this.onHabitClickListener = onHabitClickListener;
     }
+
+    public HabitRecyclerAdapter(ArrayList<Habit> habits, ArrayList<String> userName, OnHabitClickListener onHabitClickListener) {
+        this.habits = habits;
+        this.userName = userName;
+        this.onHabitClickListener = onHabitClickListener;
+    }
+
 
     /**
      * This view holder extends Recycler.ViewHolder and sets the attributes for items to show
@@ -99,7 +108,15 @@ implements ReorderHabits.RecyclerTouchHelper {
         long progress = habits.get(position).getProgress(); // stored as a long must convert it to update it
         //String reason = habits.get(position).getReason();
         //String date = habits.get(position).getDate();
-        holder.habitNameText.setText(name);
+        if (userName != null) {
+            String user = userName.get(position);
+            Log.d("TAG", position + " position ---------");
+            Log.d("TAG", user + " ----------------");
+
+            holder.habitNameText.setText(name + "(" + user + ")");
+        } else {
+            holder.habitNameText.setText(name);
+        }
 
         // this will be how you update the progress bar in w.e function you need to
         // generally ProgressBar progressbar = view.FindViewBtId()

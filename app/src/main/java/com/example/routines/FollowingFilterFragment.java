@@ -1,6 +1,7 @@
 package com.example.routines;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class FollowingFilterFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener {
     private View rootView;
@@ -36,6 +39,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
     private ArrayList<String> habitIdList;
     ArrayList<ArrayList<String>> idList;
     private ArrayList<String> followers;
+    private ArrayList<String> followersIDs;
 
     private  HabitRecyclerAdapter habitAdapter;
     private RecyclerView habitView;
@@ -93,9 +97,10 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
         habitDataList = new ArrayList<Habit>();
         habitIdList = new ArrayList<>();
         idList = new ArrayList<>();
+        followersIDs = new ArrayList<>();
         followers = new ArrayList<>();
         followingIdList = new ArrayList<>();
-        habitAdapter = new HabitRecyclerAdapter(habitDataList, this);
+        habitAdapter = new HabitRecyclerAdapter(habitDataList, followingIdList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         habitView.setLayoutManager(layoutManager);
         habitView.setAdapter(habitAdapter);
@@ -142,6 +147,8 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                 if (status.equals("accepted")) {
                                     String followerId = (String) document.getData().get("Receiver");
                                     followers.add(followerId);
+                                    String followerUser = (String) document.getData().get("Receiver Name");
+                                    followersIDs.add(followerUser);
                                 }
                             }
                         }
@@ -160,7 +167,8 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             userName = (String) document.getData().get("User Name");
-                            }
+                            Log.d("TAG", userName);
+                        }
                         }
                     });
     }
@@ -178,6 +186,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     collectionReference.document(follower).collection("Habits").document(document.getId())
                                             .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                                                @RequiresApi(api = Build.VERSION_CODES.N)
                                                 @Override
                                                 public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
                                                     if (value != null && value.exists()) {
@@ -187,25 +196,35 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                                                     (String) value.getData().get("Habit Reason"),
                                                                     (String) value.getData().get("Start Date"),
                                                                     (long) value.getData().get("Progress")));
+                                                            IntStream.range(0, followers.size()).forEachOrdered(n -> {
+                                                                if (followers.get(n) == follower) {
+                                                                    userName = followersIDs.get(n);
+                                                                }
+                                                            });
                                                             String habitId = document.getId();
                                                             String userId = follower;
                                                             ArrayList<String> tempList = new ArrayList<>();
                                                             tempList.add(habitId);
                                                             tempList.add(userId);
-                                                            getUserName(follower);
+                                                            //getUserName(follower);
+                                                            Log.d("TAG", "Username : " + userName);
                                                             followingIdList.add(userName);
                                                             idList.add(tempList);
                                                             habitIdList.add((String) document.getId());
                                                             habitAdapter.notifyDataSetChanged();
+
+
                                                         }
                                                     }
                                                 }
                                             });
 
+
                                 }
                             }
                         }
                     });
+
         }
     }
 

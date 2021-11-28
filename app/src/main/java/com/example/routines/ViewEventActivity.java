@@ -96,7 +96,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     FloatingActionButton deleteButton;
     String eventId;
     ImageView eventImage;
-    String userId;
+
 
     ActivityResultLauncher<String> mGetContent;
 
@@ -109,7 +109,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
     StorageReference collectionRef;
 
     String habitId;
-    String userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

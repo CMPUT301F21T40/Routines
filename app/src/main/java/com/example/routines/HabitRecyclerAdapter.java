@@ -1,34 +1,25 @@
 package com.example.routines;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This extends RecyclerView.Adapter and customized the adapter
@@ -109,6 +100,7 @@ implements ReorderHabits.RecyclerTouchHelper {
         //String reason = habits.get(position).getReason();
         //String date = habits.get(position).getDate();
         holder.habitNameText.setText(name);
+
         // this will be how you update the progress bar in w.e function you need to
         // generally ProgressBar progressbar = view.FindViewBtId()
         // habit.setProgress(long(yourNumber))

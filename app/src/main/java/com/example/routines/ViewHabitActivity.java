@@ -100,14 +100,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         } else {
             userId = actualUserId;
         }
-/*
-        if ((userId != null) && (userId != actualUserId)) {
-            add.setVisibility(View.INVISIBLE);
-            edit.setVisibility(View.INVISIBLE);
-            delete.setVisibility(View.INVISIBLE);
-        } else {
-            userId = actualUserId;
-        }*/
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

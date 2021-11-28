@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,13 +27,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 public class FollowingFilterFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener {
-    final String TAG = "Following filter fragment";
     private View rootView;
-    ListView fragmentHabitsList;
     FirebaseFirestore db;
     CollectionReference collectionReference;
-    FirebaseAuth myAuth;
     String userId;
+    String userName;
     String followingId;
     private ArrayList<String> habitIdList;
     ArrayList<ArrayList<String>> idList;
@@ -43,6 +40,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
     private  HabitRecyclerAdapter habitAdapter;
     private RecyclerView habitView;
     private ArrayList<Habit> habitDataList;
+    private ArrayList<String> followingIdList;
 
     public FollowingFilterFragment() {
 
@@ -96,6 +94,7 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
         habitIdList = new ArrayList<>();
         idList = new ArrayList<>();
         followers = new ArrayList<>();
+        followingIdList = new ArrayList<>();
         habitAdapter = new HabitRecyclerAdapter(habitDataList, this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         habitView.setLayoutManager(layoutManager);
@@ -146,10 +145,24 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                 }
                             }
                         }
-                        Integer size = followers.size();
                         setHabits();
                     }
                 });
+    }
+
+    public void getUserName(String follower) {
+        db.collection("Users")
+                .document(follower)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            userName = (String) document.getData().get("User Name");
+                            }
+                        }
+                    });
     }
 
     public void setHabits() {
@@ -179,6 +192,8 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                                             ArrayList<String> tempList = new ArrayList<>();
                                                             tempList.add(habitId);
                                                             tempList.add(userId);
+                                                            getUserName(follower);
+                                                            followingIdList.add(userName);
                                                             idList.add(tempList);
                                                             habitIdList.add((String) document.getId());
                                                             habitAdapter.notifyDataSetChanged();
@@ -188,7 +203,6 @@ public class FollowingFilterFragment extends Fragment implements HabitRecyclerAd
                                             });
 
                                 }
-                            } else {
                             }
                         }
                     });

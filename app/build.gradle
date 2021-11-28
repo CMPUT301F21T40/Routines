@@ -13,7 +13,7 @@ android {
         //Firebase: Targets API level 16 (Jelly Bean) or higher
         minSdk 21
         multiDexEnabled true
-        targetSdk 30 // no tests will work with SDK 30 dont use
+        targetSdk 23 // no tests will work with SDK 30 dont use //shouldn't be higher than 23
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -71,6 +71,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.0.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.libraries.places:places:2.5.0'
+    implementation 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testImplementation 'org.testng:testng:6.9.6'

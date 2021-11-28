@@ -125,6 +125,7 @@ public class SearchActivity extends AppCompatActivity {
      * @author Shanshan Wei/swei3
      * @see ProfileActivity
      * @see HomeActivity
+     * @see NotificationActivity
      */
     public void switchActivity(){
         bottomNavigator = findViewById(R.id.bottom_navigation);

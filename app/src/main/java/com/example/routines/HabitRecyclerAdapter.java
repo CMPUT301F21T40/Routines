@@ -1,7 +1,6 @@
 package com.example.routines;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +57,7 @@ implements ReorderHabits.RecyclerTouchHelper {
      */
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView habitNameText;
+        private TextView habitUserText;
         private TextView habitReasonText;
         private TextView habitDateText;
         OnHabitClickListener onHabitClickListener;
@@ -67,7 +67,7 @@ implements ReorderHabits.RecyclerTouchHelper {
         public MyViewHolder(View view, OnHabitClickListener onHabitClickListener){
             super(view);
             habitNameText = view.findViewById(R.id.habitName);
-
+            habitUserText = view.findViewById(R.id.habitUser);
             progressbar = view.findViewById(R.id.progressBar3);
 
             //habitReasonText = view.findViewById(R.id.habitReason);
@@ -108,14 +108,10 @@ implements ReorderHabits.RecyclerTouchHelper {
         long progress = habits.get(position).getProgress(); // stored as a long must convert it to update it
         //String reason = habits.get(position).getReason();
         //String date = habits.get(position).getDate();
+        holder.habitNameText.setText(name);
         if (userName != null) {
             String user = userName.get(position);
-            Log.d("TAG", position + " position ---------");
-            Log.d("TAG", user + " ----------------");
-
-            holder.habitNameText.setText(name + "(" + user + ")");
-        } else {
-            holder.habitNameText.setText(name);
+            holder.habitUserText.setText(user);
         }
 
         // this will be how you update the progress bar in w.e function you need to

@@ -62,7 +62,7 @@ public class SearchTest {
         solo.assertCurrentActivity("Activity needs to be SearchProfileActivity", SearchProfileActivity.class);
         solo.sleep(1000);
     }
-    
+
     /**
      * Closes the activity after every test
      * @throws Exception

@@ -52,16 +52,23 @@ public class ViewHabitEvent {
         solo.clickOnView(fab);  // press the button
         // inside the fragment
         solo.clickOnButton("CONFIRM DATE");
-        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "TEST HABIT");
-        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "TEST REASON");
+        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "Test Habit");
+        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "Test Reason");
         // test all the date switch's
         solo.clickOnButton("Private Habit");
         solo.clickOnButton("Monday");
+        solo.clickOnButton("Tuesday");
+        solo.clickOnButton("Wednesday");
+        solo.clickOnButton("Thursday");
+        solo.clickOnButton("Friday");
+        solo.clickOnButton("Saturday");
+        solo.clickOnButton("Sunday");
         solo.clickOnButton("OK");
+        solo.sleep(1000);
         solo.sleep(1000);
     }
     public void deleteHabit(){
-        solo.clickOnText("TEST HABIT");
+        solo.clickOnText("Test Habit");
         //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
         solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
         // click the floating action button
@@ -72,18 +79,19 @@ public class ViewHabitEvent {
     }
 
     public void addHabitEvent(){
-        solo.clickOnText("TEST HABIT");
+        solo.clickOnText("Test Habit");
         solo.clickOnButton("ADD EVENT");
         solo.getView(R.id.add_habit_event);
         solo.enterText((EditText) solo.getView(R.id.view_habit_name), "TEST HABIT EVENT");
         solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
         solo.clickOnButton("ADD");
     }
+
     @Test
     public void viewHabitEventTest(){
         login();
         addHabit();
-        solo.clickOnText("TEST HABIT");
+        solo.clickOnText("Test Habit");
         addHabitEvent();
         solo.clickOnButton("VIEW EVENTS");
         solo.clickOnText("TEST HABIT EVENT");

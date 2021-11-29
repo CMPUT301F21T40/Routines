@@ -327,6 +327,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         intent.putExtra("Habit Reason", habitReason);
         intent.putExtra("Frequency", habitFrequency);
         intent.putExtra("Privacy", habitPrivacy);
+        hideButton(habitFrequency, habitId, add, db);
     }
 
 
@@ -397,7 +398,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * @author Zezhou Xiong
      */
     public void hideButton(ArrayList<String> habitFrequency, String habitId, Button add, FirebaseFirestore db){
-
+        add.setVisibility(View.VISIBLE);
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
         Date d = new Date();
         String currentDayOfWeek = sdf.format(d);

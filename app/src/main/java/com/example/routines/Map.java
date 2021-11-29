@@ -82,6 +82,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         });
 
         cancelLocationBtn = findViewById(R.id.cancel_location_btn);
+        cancelLocationBtn.setBackgroundColor(getResources().getColor(R.color.quantum_googgreen));
         cancelLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,11 +1,6 @@
 package com.example.routines;
 
-import static android.app.appsearch.AppSearchResult.RESULT_OK;
-import static android.content.Context.LOCATION_SERVICE;
-
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,7 +11,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,17 +18,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,17 +48,11 @@ public class EditEventFragment extends DialogFragment implements LocationListene
     private DatePicker datePicker;
     private Button confirmDateButton;
 
-    private FragmentActivity myContext;
-
-    LocationManager locationManager;
-
     Button openMap;
     double currentLatitude = 0;
     double currentLongitude = 0;
     double latFromMap;
     double longFromMap;
-
-    boolean loadingLocation = false;
 
     private int day;
     private int month;

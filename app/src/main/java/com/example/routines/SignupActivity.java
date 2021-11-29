@@ -1,7 +1,5 @@
 package com.example.routines;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 
 /**
@@ -47,7 +50,6 @@ public class SignupActivity extends AppCompatActivity {
     final String TAG = "SignUp";
     private int flag;
 
-    private TextView signUpText;
     private TextView signUserText;
     private TextView signEmailText;
     private TextView signPasswordText;
@@ -141,7 +143,6 @@ public class SignupActivity extends AppCompatActivity {
      * @author Shanshan Wei/swei3
      */
     public void initializeView(){
-        //signUpText = findViewById(R.id.text_signup_page);
         signUserText = findViewById(R.id.text_user);
         signEmailText = findViewById(R.id.text_Email_signup);
         signPasswordText = findViewById(R.id.text_password_signup);

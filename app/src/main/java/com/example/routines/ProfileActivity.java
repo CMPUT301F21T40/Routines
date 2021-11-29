@@ -1,13 +1,6 @@
 package com.example.routines;
 
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +14,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,7 +54,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     CollectionReference Users;
-    CollectionReference userNames;
     FirebaseAuth myAuth;
 
     FirebaseStorage storage;
@@ -92,8 +91,6 @@ public class ProfileActivity extends AppCompatActivity {
         photoPicker();
         switchActivity();
         showInformation();
-
-
 
     }
     /**

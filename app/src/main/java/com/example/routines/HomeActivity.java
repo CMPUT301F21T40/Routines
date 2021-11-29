@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -49,9 +51,6 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     FollowingFilterFragment followingFragment;
     HomeFragment homeFragment;
 
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
-    Toolbar toolbar;
     BottomNavigationView bottomNavigator;
 
     FirebaseFirestore db;
@@ -143,11 +142,6 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         updateFragment();
     }
 
-    public void drawerMenu(){
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-
-    }
 
     /**
      * connect to Firestore, create user collection and habit collection
@@ -168,6 +162,32 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         currentUserHabitCol = userDocument.collection("Habits");
         currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater= getMenuInflater();
+        menuInflater.inflate(R.menu.menu_drawer, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_followers:
+                Toast.makeText(getApplicationContext(), "Followers", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.menu_following:
+                Toast.makeText(getApplicationContext(), "Following", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+
+    }
+
 
     /**
      * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity

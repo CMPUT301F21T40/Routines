@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <group android:checkableBehavior="single">
 
-        <item
+
+
+    <item
             android:id="@+id/menu_followers"
             android:title="Followers"
-            android:icon="@drawable/ic_followers"/>
+            android:icon="@drawable/ic_followers"
+            app:showAsAction="never"/>
 
-        <item
+    <item
             android:id="@+id/menu_following"
             android:title="Following"
-            android:icon="@drawable/ic_following"/>
+            android:icon="@drawable/ic_following"
+            app:showAsAction="never"/>
 
-    </group>
 
 </menu>

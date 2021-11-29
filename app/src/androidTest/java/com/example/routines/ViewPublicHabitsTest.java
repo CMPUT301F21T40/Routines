@@ -30,10 +30,6 @@ public class ViewPublicHabitsTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -52,10 +48,6 @@ public class ViewPublicHabitsTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    /**
-     * use rand to make a new username and allow the new user to be followed by our test account
-     * @return
-     */
     public String signUp(){
         String username = generateUSN();
         String email = concatEmail(username);
@@ -78,10 +70,6 @@ public class ViewPublicHabitsTest {
         return username;
     }
 
-    /**
-     * Add one private habit and one public habit
-     * @author: Lukas Waschuk
-     */
     public void addHabit(){
         solo.sleep(500);
         // make a private habit
@@ -112,11 +100,7 @@ public class ViewPublicHabitsTest {
         solo.clickOnButton("OK");
         solo.sleep(500);
     }
-    /**
-     * search for the user using the USN we created
-     * @param userName
-     * @author Lukas Waschuk
-     */
+
     public void search(String userName){
         // get the profile button from the bottom menu
         View bottomBar= solo.getCurrentActivity().findViewById(R.id.bottom_navigation); // get the button inside the frame layout
@@ -186,11 +170,6 @@ public class ViewPublicHabitsTest {
         solo.sleep(2000);
     }
 
-    /**
-     * Generates a username for the test
-     * @return String userName
-     * @author Lukas Waschuk
-     */
     public String generateUSN(){
         Random random = new Random();
         int upperbound = 1000000000;
@@ -199,21 +178,10 @@ public class ViewPublicHabitsTest {
         return userName;
     }
 
-    /**
-     * makes the username a email
-     * @param usn
-     * @return String -> concaatinated email
-     * @author lukas waschuk
-     */
     public String concatEmail(String usn){
         return usn+"@gmail.com";
     }
 
-
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

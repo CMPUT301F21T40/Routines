@@ -26,6 +26,7 @@ import org.junit.Test;
 
 /**
  * INTENT TESTING US 03.01.01
+ * @author lukas waschuk
  */
 public class SignupTest {
     FirebaseFirestore db;
@@ -37,10 +38,6 @@ public class SignupTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -68,9 +65,6 @@ public class SignupTest {
 
     }
 
-    /**
-     * Deletes the test user so the test can be reused after every iteration
-     */
     public void removeTestUser(){
         myAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -102,10 +96,6 @@ public class SignupTest {
         user.delete();
     }
 
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

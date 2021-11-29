@@ -19,6 +19,8 @@ import org.junit.Test;
  * username: testUserName
  * email: testEmail@gmail.com
  * password: testPassword123456
+ *
+ * @author lukas waschuk
  */
 public class LoginTest {
     private Solo solo;
@@ -26,10 +28,6 @@ public class LoginTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -52,10 +50,6 @@ public class LoginTest {
         solo.sleep(500);
     }
 
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

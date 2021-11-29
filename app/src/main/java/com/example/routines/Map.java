@@ -69,14 +69,13 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
 //        Confirm button returns data back to the parent activity
         confirmLocationBtn = findViewById(R.id.confirm_location_btn);
+        confirmLocationBtn.setBackgroundColor(getResources().getColor(R.color.quantum_googgreen));
         confirmLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent resultIntent = new Intent();
-
                 resultIntent.putExtra("currentLat", currentLat);
                 resultIntent.putExtra("currentLong", currentLong);
-
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }

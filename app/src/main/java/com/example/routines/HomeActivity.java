@@ -4,14 +4,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -20,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -132,6 +137,7 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         updateFragment();
     }
 
+
     /**
      * connect to Firestore, create user collection and habit collection
      * @return void
@@ -151,6 +157,38 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         currentUserHabitCol = userDocument.collection("Habits");
         currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater= getMenuInflater();
+        menuInflater.inflate(R.menu.menu_drawer, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.menu_followers:
+                Toast.makeText(getApplicationContext(), "Followers", Toast.LENGTH_SHORT).show();
+                Intent followersIntent = new Intent(this, ShowUserActivity.class);
+                followersIntent.putExtra("type", "Followers");
+                startActivity(followersIntent);
+                return true;
+            case R.id.menu_following:
+                Toast.makeText(getApplicationContext(), "Following", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ShowUserActivity.class);
+                intent.putExtra("type", "Following");
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+
+
+    }
+
 
     /**
      * This sets a bottom navigation bar for the user to switch between HomeActivity, SearchActivity and ProfileActivity

@@ -25,6 +25,12 @@ import org.junit.Test;
 /**
  * Intent testing for us 05 01 01
  *
+ * The issue is i cannot find how to delete the "Notification field on firebase and that does not
+ * get deleted when you delete a user from firebase.
+ * because of this it changes the button to request sent instead of follow and the test fails and
+ * it wont get to the point where it deletes the user makeing the next test fail.
+ *
+ * 
  * notes: to actually test this right now you have to enter a new username and email on line 74 75
  * have to change line 99 to that username
  * change line 112 to that new email

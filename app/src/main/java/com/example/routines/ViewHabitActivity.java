@@ -33,14 +33,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class ViewHabitActivity extends AppCompatActivity implements EditHabitFragment.OnFragmentInteractionListener , DeleteHabitFragment.OnFragmentInteractionListener{
@@ -70,18 +66,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String habitId;
     long habitProgress;
 
-    HomeFragment homeFragment;
-    ViewHabitActivity viewActivity;
-    Object ViewHabitActivity;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_habit);
-
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -101,9 +89,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
-
-
-
 
     }
 
@@ -185,8 +170,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 startActivity(intent);
             }
         });
-
-
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,7 +294,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 //      Update the Details Screen
         nameView.setText(habitName);
         reasonView.setText(habitReason);
-        String extendedDate = "Date: " + habitDate;
         dateView.setText(habitDate);
         privacyView.setText(habitPrivacy);
         String extendedFrequency = "";
@@ -348,7 +330,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -407,7 +388,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
      * @author Zezhou Xiong
      */
     public void hideButton(ArrayList<String> habitFrequency, String habitId, Button add, FirebaseFirestore db){
-        Boolean hide = false;
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
         Date d = new Date();

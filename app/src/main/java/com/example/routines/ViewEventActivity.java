@@ -1,11 +1,8 @@
 package com.example.routines;
 
 
-import static android.app.appsearch.AppSearchResult.RESULT_OK;
-
-import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
+import static android.content.ContentValues.TAG;
+import static com.google.firebase.firestore.FieldValue.arrayRemove;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -16,13 +13,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-
-import static android.content.ContentValues.TAG;
-
-import static com.google.firebase.firestore.FieldValue.arrayRemove;
-
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,9 +22,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -44,22 +32,18 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -73,10 +57,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import java.util.List;
-
-import java.util.ArrayList;
 
 /**
  * This activity display the details of a given event
@@ -129,15 +109,8 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         eventId = (String) getIntent().getStringExtra("eventId"); //fetch event id from last activity
         habitId = (String) getIntent().getStringExtra("habitId"); //fetch habit id from last activity
 
-
-
-        FirebaseAuth myAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = myAuth.getCurrentUser();
-        //String actualUserId = user.getUid();
-        String actualUserId = getIntent().getStringExtra("actualUserId");
         String userId = getIntent().getStringExtra("userId");
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -151,14 +124,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             editButton.setVisibility(View.INVISIBLE);
             deleteButton.setVisibility(View.INVISIBLE);
         }
-        /*
-        if (userId != actualUserId) {
-            editButton.setVisibility(View.INVISIBLE);
-            deleteButton.setVisibility(View.INVISIBLE);
-        } else {
-            editButton.setVisibility(View.VISIBLE);
-            deleteButton.setVisibility(View.VISIBLE);
-        }*/
+
         albumPhoto();
         showInfo();
         showImage();
@@ -269,8 +235,6 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
         });
         onBackPressed();
 
-
-
     }
 
 
@@ -362,7 +326,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             }
         });
 
-        dialog.show();;
+        dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setGravity(Gravity.BOTTOM);

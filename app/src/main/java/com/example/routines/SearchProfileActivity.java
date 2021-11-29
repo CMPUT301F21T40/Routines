@@ -1,17 +1,13 @@
 package com.example.routines;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,7 +41,6 @@ import java.util.HashMap;
  */
 public class SearchProfileActivity extends AppCompatActivity {
     //initialize the layout
-    ListView habitList;
     TextView userName;
     Button followButton;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
@@ -57,12 +52,8 @@ public class SearchProfileActivity extends AppCompatActivity {
     FrameLayout fragmentLayout;
     String userId;
     SearchHabitsFragment searchHabitFragment;
-    private HabitRecyclerAdapter habitAdapter;
-
 
     CollectionReference habitCollection;
-    DocumentReference userDocument;
-    CollectionReference currentUserHabitCol;
 
     TextView habitLabel;
     Boolean follow;
@@ -82,7 +73,6 @@ public class SearchProfileActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         habitDataList = new ArrayList<>();
-        //habitArrayAdapter = new HabitList(this, habitDataList);
         habitIdList = new ArrayList<>();
         follow = false;
 
@@ -132,8 +122,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
 
         checkFollower(id);
-        //updateFragment(id);
-
         getCurrentUserName();
 
         followButton.setOnClickListener(new View.OnClickListener() {
@@ -316,18 +304,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
-        //updateFragment(id);
     }
-
-    public void updateFragment(String id) {
-        searchHabitFragment = SearchHabitsFragment.newInstance(id);
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.search_container, searchHabitFragment);
-        transaction.commit();
-
-    }
-
 
     public void addPendingFollower() {
         db.collection("Users")

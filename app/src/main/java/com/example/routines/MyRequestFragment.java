@@ -1,12 +1,6 @@
 package com.example.routines;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -36,8 +33,6 @@ import java.util.ArrayList;
 public class MyRequestFragment extends Fragment {
 
     private View rootView;
-    private  HabitRecyclerAdapter habitAdapter;
-    private RecyclerView requestView;
     FrameLayout fragmentLayout;
     FirebaseFirestore db;
     CollectionReference requestReference;

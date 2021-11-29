@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,11 +39,9 @@ import java.util.Calendar;
 public class TodayFilterFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener{
     final String TAG = "Today filter fragment";
     private View rootView;
-    ListView fragmentHabitsList;
     String dayWeek;
     FirebaseFirestore db;
     CollectionReference collectionReference;
-    FirebaseAuth myAuth;
     String userId;
     private ArrayList<String> habitIdList;
 

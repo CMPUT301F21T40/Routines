@@ -119,6 +119,9 @@ implements ReorderHabits.RecyclerTouchHelper {
         }
 
         // this will be how you update the progress bar in w.e function you need to
+        // generally ProgressBar progressBar = view.FindViewById()
+        // habit.setProgress(long(yourNumber))
+        // progressBar.setProgress(habit.getProgress())
 
         int i = (int) progress; // convert to int, must store as long
         holder.progressbar.setProgress(i);

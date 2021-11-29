@@ -32,10 +32,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:progressTint="@color/project_light_purple"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="5dp"
         android:indeterminate="false"
-        android:progressTint="@color/project_purple"
         android:progress="0"
         android:layout_weight="1" />
 

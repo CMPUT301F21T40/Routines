@@ -303,7 +303,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                                 Log.d("TAG", "Status : " + status);
                                 if (status.equals("accepted")) {
                                     Log.d("TAG", "print habits here -------------");
-                                    //showList(id);
                                     habitLabel.setText(userName.getText().toString() + "'s Habits");
                                     habitLabel.setTextSize(25);
                                     searchHabitFragment = SearchHabitsFragment.newInstance(id);

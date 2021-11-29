@@ -216,8 +216,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         });
     }
 
+    /**
+     * This function will check firebase after add habit event updates it to get the current progress
+     * @see ViewHabitActivity
+     * @author Lukas Waschuk
+     */
     public void updateProgress(){
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference habitRef = db
                 .collection("Habits")

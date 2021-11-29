@@ -275,11 +275,7 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
     }
 
-    /**
-     * This function checks if the user is following the searched for user
-     * @param id
-     * @author ipaterso
-     */
+
     public void checkFollower(String id) {
         db.collection("Notification")
                 .whereEqualTo("Receiver", id)

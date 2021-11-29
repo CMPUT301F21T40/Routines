@@ -9,7 +9,7 @@
 
     <RadioGroup
         android:id="@+id/radio_button"
-        android:layout_width="220dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
@@ -20,7 +20,7 @@
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/switch_habits"
-            android:layout_width="0dp"
+            android:layout_width="110dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
             android:layout_weight="1"
@@ -33,7 +33,7 @@
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/switch_today"
-            android:layout_width="0dp"
+            android:layout_width="110dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
             android:layout_weight="1"
@@ -41,12 +41,12 @@
             android:button="@android:color/transparent"
             android:checked="false"
             android:gravity="center"
-            android:text="Today"
+            android:text="Today's Habits"
             android:textColor="@color/black" />
 
         <androidx.appcompat.widget.AppCompatRadioButton
             android:id="@+id/switch_following"
-            android:layout_width="0dp"
+            android:layout_width="110dp"
             android:layout_height="30dp"
             android:layout_gravity="top"
             android:layout_weight="1"
@@ -54,7 +54,7 @@
             android:button="@android:color/transparent"
             android:checked="false"
             android:gravity="center"
-            android:text="Following"
+            android:text="Habit Feed"
             android:textColor="@color/black" />
 
     </RadioGroup>
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:textSize="20dp"
-        android:text="Your Habits"
+        android:text="Habits"
         android:ems="6"
         android:layout_marginLeft="5dp"
         app:layout_constraintEnd_toEndOf="parent"

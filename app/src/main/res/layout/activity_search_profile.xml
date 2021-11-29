@@ -51,7 +51,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:text="Follow" />
+                    android:text="FOLLOW" />
             </LinearLayout>
 
         </LinearLayout>

@@ -56,8 +56,8 @@ public class SignupTest {
         solo.clickOnButton("SIGNUP");
         solo.sleep(500);
         solo.assertCurrentActivity("Wrong activity, needs to be signup activity ", SignupActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editText_userName_signup), "testUserNameWithDelete");
-        solo.enterText((EditText) solo.getView(R.id.editText_email_signup), "testEmailWithDelete@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.editText_userName_signup), "testUserNameWithDelete1");
+        solo.enterText((EditText) solo.getView(R.id.editText_email_signup), "testEmailWithDelete@gmail1.com");
         solo.enterText((EditText) solo.getView(R.id.editText_password_signup), "testPassword123456");
         solo.enterText((EditText) solo.getView(R.id.editText_password_confirm), "testPassword123456");
         solo.sleep(500);
@@ -82,7 +82,7 @@ public class SignupTest {
         String userId = user.getUid();
         // deletes the user name too
         DocumentReference docRef = db.collection("User Names")
-                .document("testUserNameWithDelete");
+                .document("testUserNameWithDelete1");
         //      Delete old habit
         docRef
                 .delete()

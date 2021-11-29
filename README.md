@@ -11,3 +11,4 @@ We have the Pixel 2 Emulator (with google services plugin), it is recommended wh
 ## Issues with Intent Testing 
 Robotium Documentations says it is not capable of testing anything outside of the app, and after spending countless hours trying to get it to work we have failed. The two intent tests affected are the ones that allows the user to take a photo from the camera or choose a photo from the gallery. These were not able to be properly intent tested using Robotium. Because we used Robotium throughout the progress we did not have enough time to learn another testing Framework. Below is a link to the Robotium Documentation. 
 * See: https://github.com/RobotiumTech/robotium/wiki/Questions-&-Answers
+* "Is it possible to write a test case that spans over 2 applications? -- No"

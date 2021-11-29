@@ -26,6 +26,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * This fragment will display all public habits of a given account for the user to view
+ * @author ipaterso
+ * @see SearchProfileActivity
+ */
 public class SearchHabitsFragment extends Fragment implements HabitRecyclerAdapter.OnHabitClickListener{
     private View rootView;
     FirebaseFirestore db;
@@ -41,7 +46,6 @@ public class SearchHabitsFragment extends Fragment implements HabitRecyclerAdapt
 
     public SearchHabitsFragment(String userId) {
         this.userId = userId;
-        // Required empty public constructor
     }
 
 
@@ -116,6 +120,9 @@ public class SearchHabitsFragment extends Fragment implements HabitRecyclerAdapt
         startActivity(intent);
     }
 
+    /**
+     * Initializes the View with necessary variables
+     */
     public void initializeView(){
         habitView = rootView.findViewById(R.id.fragment_habit_search_list);
         habitDataList = new ArrayList<>();

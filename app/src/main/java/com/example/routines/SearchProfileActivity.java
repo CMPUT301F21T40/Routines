@@ -280,7 +280,13 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
     }
 
-
+    /**
+     * This function checks if the user is following the selected account.
+     * This is used to determine if the user has access to the public habits of the account
+     * @param id
+     * @author ipaterso
+     * @see SearchHabitsFragment
+     */
     public void checkFollower(String id) {
         db.collection("Notification")
                 .whereEqualTo("Receiver", id)

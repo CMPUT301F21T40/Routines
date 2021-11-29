@@ -94,8 +94,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
 
-        checkLocationPermission();
-
     }
     //override onResume to let activity refresh every time enter this activity
     @Override
@@ -421,20 +419,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 });
         if (! habitFrequency.contains(currentDayOfWeek)){
             add.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Check Location Permission
-     * @return void
-     * @author yyang13
-     */
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(ViewHabitActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ViewHabitActivity.this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, 100);
         }
     }
 

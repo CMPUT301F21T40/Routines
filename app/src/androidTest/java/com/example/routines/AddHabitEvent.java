@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TEST FOR US 02.02.01
+ * INTENT TEST FOR US 02.02.01 and us 01 09 01 
  */
 
 public class AddHabitEvent {
@@ -95,6 +95,9 @@ public class AddHabitEvent {
         solo.clickOnButton("VIEW EVENTS");
         solo.sleep(1000);
         solo.goBack();
+        solo.goBack();
+        solo.sleep(3000);
+        solo.clickOnText("Test Habit");
         deleteHabit();
     }
 

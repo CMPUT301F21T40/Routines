@@ -88,7 +88,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     EditText eventDescription;
     EditText eventLocation;
     Button addButton;
-    Button getLocationBtn;
     ImageView addPhoto;
     String habitId;
     String userId;
@@ -127,13 +126,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         eventDescription = findViewById(R.id.view_habit_reason);
         eventLocation = findViewById(R.id.event_location_editText);
         addButton = findViewById(R.id.add_event_button);
-        getLocationBtn = findViewById(R.id.get_location_btn);
+
         openMap = findViewById(R.id.open_map);
 
         albumPhoto();
         cameraOrGallery();
-
-
 
         habitId = (String) getIntent().getStringExtra("habitId");
         userId = (String) getIntent().getStringExtra("userId");
@@ -144,23 +141,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         collectionRef = storageRef.child(userId);
 
 
-
-
-
 //        Check location permission
         checkLocationPermission();
 
-//        Get location
-        getLocationBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getLocation();
-                loadingLocation = true;
-                if (currentLongitude == 0 || currentLatitude == 0) {
-                    Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
-                }
-            }
-        });
+//        Get current location
+        getLocation();
 
 //        Open map
         openMap.setOnClickListener(new View.OnClickListener() {
@@ -195,7 +180,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     description = "null";
 
                 if (locaiton == "") {
-                    locaiton = "null";
+                    locaiton = "Location service is denied";
                 }
 
 //               Set current date as default
@@ -274,6 +259,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
      * @param requestCode
      * @param resultCode
      * @param data
+     * @return void
      * @author yyang13
      */
     @Override
@@ -314,6 +300,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     /**
      * Check Location Permission
+     * @return void
      * @author yyang13
      */
     private void checkLocationPermission() {
@@ -344,10 +331,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     /**
      * Get Location Service
+     * @return void
      * @author yyang13
      */
     @SuppressLint("MissingPermission")
     public void getLocation() {
+        loadingLocation = true;
         try {
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, AddEventActivity.this);
@@ -376,6 +365,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     /**
      * Get Address From Location
      * @param location
+     * @return void
      * @author yyang13
      */
     @Override

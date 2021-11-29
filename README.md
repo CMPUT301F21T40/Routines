@@ -2,7 +2,7 @@
 
 
 ## Purpose 
-This is a habit tracking app to make sure you can stay on top of the habits you care about most. You can create a specif habit and choose the days you would like it to occur on. Becuase of the time constraint we chose to allow a user to create a single habit event *PER DAY* of occurance to denote if the habit has been completed on time. The app allows the user to upload a photo and by default will include the current location of where the habit event occured. 
+This is a habit tracking app to make sure you can stay on top of the habits you care about most. You can create a specific habit and choose the days you would like it to occur on. Becuase of the time constraint we chose to allow a user to create a single habit event *PER DAY* of occurance to denote if the habit has been completed on time. The app allows the user to upload a photo and by default will include the current location of where the habit event occured. 
 * Ex. If you wanted to play basketball on Wednesdays and Fridays, the app would keep track of every Wednesday and Friday since its creation and keep track of how many Wednesdays and Fridays you played basketball on. 
 The app 
 ## To run the app:

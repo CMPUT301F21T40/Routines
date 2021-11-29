@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TEST FOR US 02.02.01 and us 01 09 01 
+ * INTENT TEST FOR US 02.02.01 and us 01 09 01
  */
 
 public class AddHabitEvent {

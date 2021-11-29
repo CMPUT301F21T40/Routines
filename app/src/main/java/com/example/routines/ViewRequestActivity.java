@@ -109,8 +109,7 @@ public class ViewRequestActivity extends AppCompatActivity {
 
             case R.id.radio_deny:
                 updatedStatus = "denied";
-                updateStatus(requestUserId);
-                startActivity(new Intent(this, NotificationActivity.class));
+                updateStatus(requestUserId);          
                 break;
 
         }

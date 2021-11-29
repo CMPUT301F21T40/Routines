@@ -1,47 +1,23 @@
 package com.example.routines;
-
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import androidx.annotation.NonNull;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import java.util.Random;
 
 /**
- * Intent testing for us 05 01 01
+ * Intent testing for us 05 01 01 << Request to follow a user >>
  *
- * The issue is i cannot find how to delete the "Notification field on firebase and that does not
- * get deleted when you delete a user from firebase.
- * because of this it changes the button to request sent instead of follow and the test fails and
- * it wont get to the point where it deletes the user makeing the next test fail.
- *
- * 
- * notes: to actually test this right now you have to enter a new username and email on line 74 75
- * have to change line 99 to that username
- * change line 112 to that new email
- * change line 159 to the new user id
  */
 public class FollowUserTest {
-    FirebaseFirestore db;
-    CollectionReference collectionReference;
-    CollectionReference userNames;
-    FirebaseAuth myAuth;
     private Solo solo;
+
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
@@ -68,20 +44,25 @@ public class FollowUserTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    public void signUp(){
+    /**
+     * use rand to make a new username and allow the new user to be followed by our test account
+     * @return
+     */
+    public String signUp(){
+        String username = generateUSN();
+        String email = concatEmail(username);
         solo.assertCurrentActivity("Wrong activity, needs to be welcome activity", WelcomeActivity.class);
         solo.sleep(500);
         solo.clickOnButton("SIGNUP");
         solo.sleep(500);
         solo.assertCurrentActivity("Wrong activity, needs to be signup activity ", SignupActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editText_userName_signup), "newUser0000");
-        solo.enterText((EditText) solo.getView(R.id.editText_email_signup), "newUser0000@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.editText_userName_signup), username);
+        solo.enterText((EditText) solo.getView(R.id.editText_email_signup), email);
         solo.enterText((EditText) solo.getView(R.id.editText_password_signup), "123456");
         solo.enterText((EditText) solo.getView(R.id.editText_password_confirm), "123456");
         solo.sleep(500);
         solo.clickOnButton("SIGNUP");
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
-
         View bottomBar= solo.getCurrentActivity().findViewById(R.id.bottom_navigation); // get the button inside the frame layout
         View profile = bottomBar.findViewById(R.id.profile);
         solo.clickOnView(profile);
@@ -89,16 +70,22 @@ public class FollowUserTest {
         // logout
         solo.assertCurrentActivity("Activity needs to be profile activity", ProfileActivity.class);
         solo.clickOnButton("LOG OUT");
+        return username;
     }
 
-    public void search(){
+    /**
+     * search for the user using the USN we created
+     * @param userName
+     * @author Lukas Waschuk
+     */
+    public void search(String userName){
         // get the profile button from the bottom menu
         View bottomBar= solo.getCurrentActivity().findViewById(R.id.bottom_navigation); // get the button inside the frame layout
         View search = bottomBar.findViewById(R.id.search);
         solo.clickOnView(search);
         solo.sleep(500);
         solo.assertCurrentActivity("Activity needs to be search activity", SearchActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.search_text), "newUser0000"); // just find myself for now
+        solo.enterText((EditText) solo.getView(R.id.search_text), userName);
         solo.clickOnButton("SEARCH");
         solo.sleep(1000);
         solo.clickInList(0);
@@ -106,22 +93,12 @@ public class FollowUserTest {
         solo.sleep(1000);
     }
 
-    public void loginDeleteAccount(){
-        solo.assertCurrentActivity("Wrong activity, needs to be Welcome", WelcomeActivity.class);
-        solo.clickOnButton("LOGIN");
-        solo.assertCurrentActivity("Activity needs to be loginActivity", LoginActivity.class);
-        solo.enterText((EditText) solo.getView(R.id.editText_email), "newUser0000@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.editText_password_login), "123456");
-        solo.clickOnButton("LOGIN");
-        solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
-    }
-
 
     @Test
     public void followUser(){
-        signUp();
+        String username = signUp();
         login();
-        search();
+        search(username);
         solo.clickOnButton("FOLLOW");
         solo.sleep(3000);
         solo.goBack();
@@ -132,60 +109,34 @@ public class FollowUserTest {
         // logout
         solo.assertCurrentActivity("Activity needs to be profile activity", ProfileActivity.class);
         solo.clickOnButton("LOG OUT");
-        loginDeleteAccount();
-        removeTestUser();
+
+//        removeTestUser();
         solo.sleep(1000);
     }
 
-
+    /**
+     * Generates a username for the test
+     * @return String userName
+     * @author Lukas Waschuk
+     */
+    public String generateUSN(){
+        Random random = new Random();
+        int upperbound = 1000000000;
+        int usn = random.nextInt(upperbound);
+        String userName = String.valueOf(usn);
+        return userName;
+    }
 
     /**
-     * Deletes the test user so the test can be reused after every iteration
+     * makes the username a email
+     * @param usn
+     * @return String -> concaatinated email
+     * @author lukas waschuk
      */
-    public void removeTestUser(){
-        myAuth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("Users");
-        userNames = db.collection("User Names");
-        // gets the user
-        myAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = myAuth.getCurrentUser();
-        String userId = user.getUid();
-
-
-        // delete the user name from suer name collection
-        db.collection("User Names").document("newUser0000")
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
-        // delete the user ID from user id collection
-        db.collection("Users").document(userId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                    }
-                });
-        user.delete();
-
+    public String concatEmail(String usn){
+        return usn+"@gmail.com";
     }
+
 
     /**
      * Closes the activity after every test

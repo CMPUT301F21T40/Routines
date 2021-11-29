@@ -14,7 +14,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-public class AddLocationToHabitEvent {
+/**
+ * intent testing for us 06 01 01 add current location to habit event
+ * @author lukas waschuk
+ */
+public class AddCurrentLocationTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -76,7 +80,7 @@ public class AddLocationToHabitEvent {
     }
 
     @Test
-    public void addHabitEventTest(){
+    public void addCurrentLocationEventTest(){
         login();
         addHabit();
         solo.clickOnText("Test Habit");

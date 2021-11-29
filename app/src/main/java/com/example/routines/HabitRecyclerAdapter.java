@@ -77,8 +77,6 @@ implements ReorderHabits.RecyclerTouchHelper {
             habitUserText = view.findViewById(R.id.habitUser);
             progressbar = view.findViewById(R.id.progressBar3);
 
-            //habitReasonText = view.findViewById(R.id.habitReason);
-            //habitDateText = view.findViewById(R.id.habitDate);
             this.onHabitClickListener = onHabitClickListener;
             view.setOnClickListener(this);
         }
@@ -121,10 +119,9 @@ implements ReorderHabits.RecyclerTouchHelper {
         }
 
         // this will be how you update the progress bar in w.e function you need to
-        // generally ProgressBar progressbar = view.FindViewBtId()
+        // generally ProgressBar progressBar = view.FindViewById()
         // habit.setProgress(long(yourNumber))
-        // progressbar.setProgress(habit.getProgress());
-
+        // progressBar.setProgress(habit.getProgress())
 
         int i = (int) progress; // convert to int, must store as long
         holder.progressbar.setProgress(i);

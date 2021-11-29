@@ -36,8 +36,6 @@ import java.util.HashMap;
  */
 public class HomeActivity extends AppCompatActivity  implements AddHabitFragment.OnFragmentInteractionListener{
 
-    private HabitRecyclerAdapter habitAdapter;
-    private ArrayList<Habit> habitDataList;
     AppCompatRadioButton switchHabits;
     AppCompatRadioButton switchTodayHabits;
     AppCompatRadioButton switchFollowingHabits;
@@ -56,13 +54,10 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
     CollectionReference habitCollection;
     DocumentReference userDocument;
     CollectionReference currentUserHabitCol;
-    DocumentReference userHabitDoc;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.activity_home);
 
@@ -309,8 +304,5 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         transaction.commit();
 
     }
-
-
-
 
 }

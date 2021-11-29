@@ -30,7 +30,6 @@ public class SearchHabitsFragment extends Fragment implements HabitRecyclerAdapt
     private View rootView;
     FirebaseFirestore db;
     CollectionReference collectionReference;
-    FirebaseAuth myAuth;
     String userId;
     String actualUserId;
     private ArrayList<String> habitIdList;

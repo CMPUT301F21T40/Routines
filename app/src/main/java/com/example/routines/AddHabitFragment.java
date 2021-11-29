@@ -13,7 +13,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +20,6 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  *     To respond to the user clicking the + button at the bottom of the screen.
@@ -46,7 +44,6 @@ public class AddHabitFragment extends DialogFragment {
     private EditText habitReason;
     private DatePicker datePicker;
     private Button confirmDateButton;
-    private TextView frequencySelector;
 
     private int day;
     private int month;

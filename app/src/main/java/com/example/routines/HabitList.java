@@ -1,10 +1,7 @@
 package com.example.routines;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * A custom list to add the habits into
@@ -74,10 +65,6 @@ public class HabitList extends ArrayAdapter<Habit> {
         Habit habit = habits.get(position);
         TextView habitName = view.findViewById(R.id.habitName);
 
-
-        //TextView habitDate = view.findViewById(R.id.habitDate);
-        //TextView habitReason = view.findViewById(R.id.habitReason);
-
         // this is testing for progress bar
         ProgressBar progress = view.findViewById(R.id.progressBar3);
 
@@ -86,9 +73,6 @@ public class HabitList extends ArrayAdapter<Habit> {
         progress.setProgress(0);
         progress.setMax(100);
         progress.setProgress(60);
-
-        //habitDate.setText(habit.getDate());
-        //habitReason.setText(habit.getReason());
 
         return view;
     }

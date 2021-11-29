@@ -89,7 +89,7 @@ public class AddCurrentLocationTest {
         solo.sleep(1000);
         solo.enterText((EditText) solo.getView(R.id.view_habit_name), "Habit Event");
         solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
-        solo.clickOnButton("GET CURRENT LOCATION");
+        //solo.clickOnButton("GET CURRENT LOCATION");
         solo.sleep(5000);
         solo.clickOnButton("ADD");
         solo.sleep(1000);

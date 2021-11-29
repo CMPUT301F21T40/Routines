@@ -243,12 +243,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     eventName.setText("");
                     eventDescription.setText("");
                     eventLocation.setText("");
-
                     updateCompletion(habitId, userId, db);
                     onBackPressed();
                 }
-
-
             }
         });
 

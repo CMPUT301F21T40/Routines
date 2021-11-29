@@ -112,18 +112,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="74dp"
         android:orientation="horizontal">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/delete_habit_event_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
             android:layout_marginLeft="290dp"
+            android:backgroundTint="@color/red"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@android:drawable/ic_menu_delete"/>
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/edit_event_button"

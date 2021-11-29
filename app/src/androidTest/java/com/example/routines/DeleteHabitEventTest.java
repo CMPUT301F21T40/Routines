@@ -16,6 +16,7 @@ import org.junit.Test;
 
 /**
  * Unit testing for US 02.06.01
+ * @author lukas waschuk
  */
 public class DeleteHabitEventTest {
     private Solo solo;
@@ -23,10 +24,6 @@ public class DeleteHabitEventTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -67,6 +64,7 @@ public class DeleteHabitEventTest {
         solo.sleep(1000);
         solo.sleep(1000);
     }
+
     public void deleteHabit(){
         solo.clickOnText("Test Habit");
         //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
@@ -105,10 +103,7 @@ public class DeleteHabitEventTest {
         solo.goBack();
         deleteHabit(); // just to delete it so its not cluttered
     }
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
+
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

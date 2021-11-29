@@ -15,6 +15,7 @@ import org.junit.Test;
 
 /**
  * INTENT TESTING FOR EXTRA METHOD FOLLOWER FEED
+ * @author lukas waschuk
  */
 public class FollowerFeedSwitchTest {
     private Solo solo;
@@ -22,10 +23,6 @@ public class FollowerFeedSwitchTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -56,10 +53,7 @@ public class FollowerFeedSwitchTest {
         solo.clickOnButton("All Habits");
         solo.sleep(500);
     }
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
+
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

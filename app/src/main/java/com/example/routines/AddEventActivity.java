@@ -94,6 +94,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     String eventID;
 
     LocationManager locationManager;
+    Button getLocationBtn;
 
     Button openMap;
     double currentLatitude = 0;
@@ -126,6 +127,7 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         eventDescription = findViewById(R.id.view_habit_reason);
         eventLocation = findViewById(R.id.event_location_editText);
         addButton = findViewById(R.id.add_event_button);
+        getLocationBtn = findViewById(R.id.get_location_btn);
 
         openMap = findViewById(R.id.open_map);
 
@@ -145,7 +147,16 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         checkLocationPermission();
 
 //        Get current location
-        getLocation();
+        getLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getLocation();
+                loadingLocation = true;
+                if (currentLongitude == 0 || currentLatitude == 0) {
+                    Toast.makeText(getApplicationContext(), "Loading Location", Toast.LENGTH_SHORT ).show();
+                }
+            }
+        });
 
 //        Open map
         openMap.setOnClickListener(new View.OnClickListener() {
@@ -243,12 +254,9 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
                     eventName.setText("");
                     eventDescription.setText("");
                     eventLocation.setText("");
-
                     updateCompletion(habitId, userId, db);
                     onBackPressed();
                 }
-
-
             }
         });
 
@@ -284,6 +292,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
             }
         }
+
+        /**
+         * This will save the returned date from camera capturing photos and use the returned data to set the imageview
+         * @author Shanshan Wei
+         */
         if (requestCode == 100) {
             File imgFile = new  File(pictureImagePath);
             if(imgFile.exists()){
@@ -312,6 +325,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }
     }
 
+    /**
+     * Check the camera permission: WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     private void checkCameraPermission(){
         if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -336,7 +354,6 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
      */
     @SuppressLint("MissingPermission")
     public void getLocation() {
-        loadingLocation = true;
         try {
             locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, AddEventActivity.this);
@@ -385,6 +402,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
+    /**
+     * This sets the imageview click listener
+     * If the user clicks the umageview, the choice dialog will pop up
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void cameraOrGallery(){
         addPhoto = findViewById(R.id.imageView_add_event);
         addPhoto.setOnClickListener(new View.OnClickListener() {
@@ -394,6 +417,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             }
         });
     }
+
+    /**
+     * This will show the choice dialog which allows the user to use camera/ photo gallery
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
 
     public void showDialog(){
         final Dialog dialog = new Dialog(this);
@@ -435,6 +464,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
 
+    /**
+     * This will open the camera and get the photo data if the user takes a photo
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     private void openBackCamera() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = timeStamp + ".jpg";
@@ -449,8 +483,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
 
-
-
+    /**
+     * This will open the photo gallery to allow the user pick an image
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void albumPhoto(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
@@ -475,7 +512,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
-
+    /**
+     * This will upload the user-chosen image in photo gallery to firebase storage
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void uploadImage(){
         fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -492,6 +533,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         });
     }
 
+
+    /**
+     * This will upload the camera capturing photo to forebase storage
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void uploadCameraPhoto(){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if(imageBitmap!=null){

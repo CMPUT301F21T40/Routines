@@ -19,6 +19,7 @@ import org.junit.Test;
  * NYI: On 2021-11-28 this still seem like we cannot test it based on how we implemented the functionality
  * < long press + drag >
  * US 01.08.02
+ * @author lukas waschuk
  */
 public class ReorderHabitTest {
     private Solo solo;
@@ -26,10 +27,6 @@ public class ReorderHabitTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -73,10 +70,7 @@ public class ReorderHabitTest {
 
         solo.sleep(1000);
     }
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
+
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

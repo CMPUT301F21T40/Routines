@@ -158,6 +158,12 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         currentUserHabitCol.orderBy("Index", Query.Direction.ASCENDING);
     }
 
+    /**
+     * Inflate the menu view
+     * @param menu
+     * @return boolean
+     * @author Shanshan Wei/swei3
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater menuInflater= getMenuInflater();
@@ -165,6 +171,16 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
 
         return true;
     }
+
+    /**
+     * This will set the click listeners for the two items inside menu
+     * Click Followers switch to ShowUserActivity and show a list of my followers
+     * Click following switch to ShowUserActivity and show the list of users I am following
+     * @see ShowUserActivity
+     * @param item
+     * @return boolean
+     * @author Shanshan Wei/swei3
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -333,6 +349,12 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
                 }
         }
     }
+
+    /**
+     * This will update the fragment
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
 
     public void updateFragment(){
         homeFragment = HomeFragment.newInstance();

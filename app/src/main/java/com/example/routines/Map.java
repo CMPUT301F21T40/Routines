@@ -39,13 +39,15 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
     MarkerOptions userMarker;
     MarkerOptions searchMarker;
     Button confirmLocationBtn;
+    Button cancelLocationBtn;
 
     Place place;
     EditText addressEditText;
 
-
     double currentLat;
     double currentLong;
+    double oldLat;
+    double oldLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         currentLat = intent.getDoubleExtra("currentLat", 0);
         currentLong = intent.getDoubleExtra("currentLong", 0);
 
+        oldLat = currentLat;
+        oldLong = currentLong;
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -64,18 +69,33 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
 //        Confirm button returns data back to the parent activity
         confirmLocationBtn = findViewById(R.id.confirm_location_btn);
+        confirmLocationBtn.setBackgroundColor(getResources().getColor(R.color.quantum_googgreen));
         confirmLocationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent resultIntent = new Intent();
-
                 resultIntent.putExtra("currentLat", currentLat);
                 resultIntent.putExtra("currentLong", currentLong);
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+        cancelLocationBtn = findViewById(R.id.cancel_location_btn);
+        cancelLocationBtn.setBackgroundColor(getResources().getColor(R.color.quantum_googgreen));
+        cancelLocationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent resultIntent = new Intent();
+
+                resultIntent.putExtra("currentLat", oldLat);
+                resultIntent.putExtra("currentLong", oldLong);
 
                 setResult(RESULT_OK, resultIntent);
                 finish();
             }
         });
+
 
 
         addressEditText = findViewById(R.id.address_search_editText);

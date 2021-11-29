@@ -2,6 +2,11 @@ package com.example.routines;
 
 import java.io.Serializable;
 
+/**
+ * This is the Request object
+ * @author Shanshan wei/swei3
+ */
+
 public class Request implements Serializable {
     private String requestUser;
     private String Status;

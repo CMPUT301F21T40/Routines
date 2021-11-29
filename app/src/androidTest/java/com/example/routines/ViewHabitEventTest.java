@@ -16,6 +16,7 @@ import org.junit.Test;
 
 /**
  * Unit testing for US 02.04.01
+ * @author lukas waschuk
  */
 public class ViewHabitEventTest {
     private Solo solo;
@@ -23,10 +24,6 @@ public class ViewHabitEventTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -100,10 +97,7 @@ public class ViewHabitEventTest {
         solo.goBack();
         deleteHabit(); // just to delete it so its not cluttered 
     }
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
+
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

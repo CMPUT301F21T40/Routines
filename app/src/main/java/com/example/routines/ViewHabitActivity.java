@@ -5,6 +5,8 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,7 +62,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String estimateCompletionTime;
     String lastCompletionTime;
     String lastModifiedDate;
-
+    ProgressBar progressBar;  // THIS WAS ADDED NEED TO ADD TO UML
+    TextView percentText;         // this needs to go uml too
     Button add;
     Button view;
     FloatingActionButton edit;
@@ -94,7 +98,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
 
-        checkLocationPermission();
+        progressBar = findViewById(R.id.progressBar);
+        percentText = findViewById(R.id.progress_text);
+
+
 
     }
     //override onResume to let activity refresh every time enter this activity
@@ -130,8 +137,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                         if (task.isSuccessful()){
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
-                                // concatenated strings we should to this in the XML later
-
                                 habitName = (String) document.getData().get("Habit Name");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
@@ -149,13 +154,13 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 lastModifiedDate = (String) document.getData().get("Last Modified Date");
 
                                 hideButton(habitFrequency, habitId, add, db);
-
                                 nameView.setText(habitName);
                                 reasonView.setText(habitReason);
                                 dateView.setText(habitDate);
                                 privacyView.setText(habitPrivacy);
                                 frequencyView.setText(frequency);
 
+                                updateProgress(); // call this to update the progress bar
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }
                             else {
@@ -198,7 +203,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             @Override
             public void onClick(View view) {
                 EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
-
             }
         });
 
@@ -214,6 +218,45 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         });
     }
 
+    /**
+     * This function will check firebase after add habit event updates it to get the current progress
+     * @see ViewHabitActivity
+     * @author Lukas Waschuk
+     */
+    public void updateProgress(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference habitRef = db
+                .collection("Habits")
+                .document(userId)
+                .collection("Habits")
+                .document(habitId);
+        habitRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()){
+                                habitProgress = (long)document.getData().get("Progress");
+                                // why isnt this updating the bar?
+                                int currentProgress = (int) habitProgress;
+                                progressBar.setProgress((int)habitProgress); // these were added
+                                percentText.setText("Current Progress: "+ String.valueOf(currentProgress)+"%");
+
+                                Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            }
+                            else {
+                                Log.d("TAG", "No such document ", task.getException());
+                            }
+                        }
+                        else {
+                            Log.d("TAG", "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
     /**
      * When the user clicks "CONFIRM" to delete the habit, this function runs.
      * It takes the habit as a parameter then deletes it from the firebase
@@ -421,20 +464,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                 });
         if (! habitFrequency.contains(currentDayOfWeek)){
             add.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Check Location Permission
-     * @return void
-     * @author yyang13
-     */
-    private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(ViewHabitActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(ViewHabitActivity.this, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            }, 100);
         }
     }
 

@@ -249,6 +249,11 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This will get the current user name from firebase
+     * @return void
+     * @author Shanshan wei/swei3
+     */
     public void getCurrentUserName() {
         myAuth = FirebaseAuth.getInstance();
         userId = myAuth.getCurrentUser().getUid();
@@ -313,6 +318,12 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * If the user click the follow-button, this method will write a document of request on firebase
+     * This will also check whether there already exist a request to this user i am viewing
+     * @return void
+     * @author Shanshan wei/swei3
+     */
     public void addPendingFollower() {
         db.collection("Users")
                 .whereEqualTo("User Name", userName.getText().toString())

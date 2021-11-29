@@ -30,9 +30,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FollowerRequestFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This shows the requests of pending status from other users
+ * @see NotificationActivity
+ * @see ViewRequestActivity
+ * @author Shanshan Wei/swei3
  */
 public class FollowerRequestFragment extends Fragment {
     private View rootView;
@@ -45,17 +46,14 @@ public class FollowerRequestFragment extends Fragment {
     private ArrayList<Request> requestList;
     private NotificationAdapter requestAdapter;
 
+    /**
+     * Constructor
+     */
     public FollowerRequestFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment FollowerRequestFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static FollowerRequestFragment newInstance() {
         FollowerRequestFragment fragment = new FollowerRequestFragment();
         Bundle args = new Bundle();
@@ -63,6 +61,14 @@ public class FollowerRequestFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Inflate the view
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View
+     * @author Shanshan Wei/swei3
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,6 +77,12 @@ public class FollowerRequestFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Create the fragmnet view
+     * @param view
+     * @param savedInstanceState
+     * @author Shanshan Wei/swei3
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -104,6 +116,13 @@ public class FollowerRequestFragment extends Fragment {
 
 
     }
+
+    /**
+     * Show the requests of pending status from other users to me
+     * And set the list items click listeners
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void showInfo() {
         requestReference
                 .whereEqualTo("Receiver", userId)

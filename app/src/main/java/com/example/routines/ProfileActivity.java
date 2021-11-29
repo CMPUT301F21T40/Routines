@@ -95,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
     /**
      * This will initialize views for all components like textview, buttons
+     * @author Shanshan wei/swei3
      */
     public void initializeData(){
         emailText = findViewById(R.id.text_email_lable_profile);

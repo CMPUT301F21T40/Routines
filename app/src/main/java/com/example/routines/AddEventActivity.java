@@ -292,6 +292,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
             }
         }
+
+        /**
+         * This will save the returned date from camera capturing photos and use the returned data to set the imageview
+         * @author Shanshan Wei
+         */
         if (requestCode == 100) {
             File imgFile = new  File(pictureImagePath);
             if(imgFile.exists()){
@@ -320,6 +325,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         }
     }
 
+    /**
+     * Check the camera permission: WRITE_EXTERNAL_STORAGE and READ_EXTERNAL_STORAGE
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     private void checkCameraPermission(){
         if (ContextCompat.checkSelfPermission(AddEventActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -392,6 +402,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
+    /**
+     * This sets the imageview click listener
+     * If the user clicks the umageview, the choice dialog will pop up
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void cameraOrGallery(){
         addPhoto = findViewById(R.id.imageView_add_event);
         addPhoto.setOnClickListener(new View.OnClickListener() {
@@ -401,6 +417,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
             }
         });
     }
+
+    /**
+     * This will show the choice dialog which allows the user to use camera/ photo gallery
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
 
     public void showDialog(){
         final Dialog dialog = new Dialog(this);
@@ -442,6 +464,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
 
+    /**
+     * This will open the camera and get the photo data if the user takes a photo
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     private void openBackCamera() {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = timeStamp + ".jpg";
@@ -456,8 +483,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
 
-
-
+    /**
+     * This will open the photo gallery to allow the user pick an image
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void albumPhoto(){
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
                 new ActivityResultCallback<Uri>() {
@@ -482,7 +512,11 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
 
     }
 
-
+    /**
+     * This will upload the user-chosen image in photo gallery to firebase storage
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void uploadImage(){
         fileRef.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -499,6 +533,12 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
         });
     }
 
+
+    /**
+     * This will upload the camera capturing photo to forebase storage
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void uploadCameraPhoto(){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if(imageBitmap!=null){

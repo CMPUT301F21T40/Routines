@@ -26,9 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyRequestFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This fragment will show the requests of pending status I sent to other users
+ * @author Shanshan Wei/swei3
  */
 public class MyRequestFragment extends Fragment {
 
@@ -43,16 +42,14 @@ public class MyRequestFragment extends Fragment {
     private NotificationAdapter requestAdapter;
 
 
+    /**
+     * Constructor
+     */
     public MyRequestFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment MyRequestFragment.
-     */
+
     public static MyRequestFragment newInstance() {
         MyRequestFragment fragment = new MyRequestFragment();
         Bundle args = new Bundle();
@@ -60,6 +57,14 @@ public class MyRequestFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Inflate the view
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return View
+     * @author Shanshan Wei/swei3
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +73,15 @@ public class MyRequestFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Create the view for the fragment
+     * show the requests of pending status I sent to other users
+     * @param view
+     * @param savedInstanceState
+     * @return void
+     * @author Shanshan Wei/swei3
+     *
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view,savedInstanceState);

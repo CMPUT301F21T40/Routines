@@ -7,7 +7,6 @@
     tools:context=".Map">
 
 
-
     <TextView
         android:id="@+id/add_event_title"
         android:layout_width="wrap_content"
@@ -28,10 +27,21 @@
 
     <Button
         android:id="@+id/confirm_location_btn"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="CONFIRM"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cancel_location_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="CANCEL"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <EditText
         android:id="@+id/address_search_editText"

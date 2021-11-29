@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -64,7 +65,7 @@ public class ShowUserActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("Notification");
 
-        if(type == "Followers"){
+        if(type.equals("Followers")){
             showFollowers();
         }else{
             showFollowing();

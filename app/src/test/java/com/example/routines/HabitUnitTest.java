@@ -60,6 +60,30 @@ public class HabitUnitTest {
     }
 
     @Test
+    public void getCompletionTimeTest() {
+        String completionTime = habit.getCompletionTime();
+        assertEquals(completionTime, "20");
+    }
+
+    @Test
+    public void getEstimateCompletionTimeTest() {
+        String estimateCompletionTime = habit.getEstimateCompletionDate();
+        assertEquals(estimateCompletionTime, "15");
+    }
+
+    @Test
+    public void getLastCompletionTimeTest() {
+        String lastCompletionTime = habit.getLastCompletionTime();
+        assertEquals(lastCompletionTime, "10");
+    }
+
+    @Test
+    public void getLastModifiedDateTest() {
+        String lastModifiedDate = habit.getLastModifiedDate();
+        assertEquals(lastModifiedDate, "2021-01-01");
+    }
+
+    @Test
     public void setNameTest(){
         String newName = "Sleeping";
         habit.setName(newName);

@@ -54,17 +54,37 @@ public class EventCustomList extends ArrayAdapter<Event> {
         return view;
     }
 
+    /**
+     * this function add a new event to event list
+     * @param event
+     */
     public void addEvent(Event event) {
         events.add(event);
     }
 
-
+    /**
+     * this function count the size of event list
+     * @return events.size
+     */
     public int eventCount(){
         return events.size();
     }
 
+    /**
+     * this function checks if a list contains a event
+     * @param event
+     * @return boolean
+     */
     public boolean containsEvent(Event event){
         return events.contains(event);
+    }
+
+    /**
+     * this function remove a event from event list
+     * @param event
+     */
+    public void removeEvent(Event event){
+        events.remove(event);
     }
 
 }

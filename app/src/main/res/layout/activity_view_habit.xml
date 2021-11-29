@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/habit_name_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="3dp"
             android:hint="Name"
             android:layout_gravity="left"
@@ -37,7 +37,7 @@
         <TextView
             android:id="@+id/habit_reason_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="3dp"
             android:hint="Reason"
             android:layout_gravity="left"
@@ -55,7 +55,7 @@
         <TextView
             android:id="@+id/habit_date_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="3dp"
             android:hint="Date Started"
             android:layout_gravity="left"
@@ -73,7 +73,7 @@
         <TextView
             android:id="@+id/habit_privacy_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="3dp"
             android:hint="Privacy Setting"
             android:layout_gravity="left"
@@ -91,7 +91,7 @@
         <TextView
             android:id="@+id/habit_frequency_text"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="3dp"
             android:hint="Occurs on"
             android:layout_gravity="left"
@@ -105,6 +105,44 @@
             android:hint="Frequency:"
             android:layout_marginLeft="20dp"
             android:textSize="20sp" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:indeterminate="false"
+
+
+                android:progress="0"
+                android:progressTint="@color/project_purple"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="Progress 0%"
+                android:textColor="@color/project_lightPink"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         <Button
             android:id="@+id/add_event_button"
@@ -122,7 +160,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp">
+            android:layout_height="60dp">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/edit_habit_button"

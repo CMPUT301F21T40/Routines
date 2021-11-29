@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,7 +60,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     String estimateCompletionTime;
     String lastCompletionTime;
     String lastModifiedDate;
-
+    ProgressBar progressBar;  // THIS WAS ADDED NEED TO ADD TO UML
+    TextView percentText;         // this needs to go uml too
     Button add;
     Button view;
     FloatingActionButton edit;
@@ -93,7 +95,8 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
-
+        progressBar = findViewById(R.id.progressBar);
+        percentText = findViewById(R.id.progress_text);
         checkLocationPermission();
 
     }
@@ -155,6 +158,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 dateView.setText(habitDate);
                                 privacyView.setText(habitPrivacy);
                                 frequencyView.setText(frequency);
+
+                                // why isnt this updating the bar? 
+                                int currentProgress = (int) habitProgress;
+                                progressBar.setProgress(currentProgress); // these were added
+                                percentText.setText("Current Progress: "+ String.valueOf(currentProgress)+"%");
+
 
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }

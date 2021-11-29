@@ -6,20 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".Map">
 
+
     <Button
         android:id="@+id/confirm_location_btn"
-        android:layout_width="match_parent"
-
-        android:layout_height="40dp"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
         android:layout_below="@+id/address_search_editText"
         android:text="CONFIRM"
+        android:layout_marginLeft="210dp"
+        android:layout_marginTop="5dp"
+        android:textSize="12dp"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cancel_location_btn"
+        android:layout_width="200dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/address_search_editText"
+        android:text="CANCEL"
+        android:textSize="12dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <EditText
         android:id="@+id/address_search_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:background="#CACACA"
         android:drawableLeft="@drawable/ic_location_foreground"
         android:hint="Search Address">

@@ -4,13 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -65,6 +69,31 @@ public class ShowUserActivity extends AppCompatActivity {
         }else{
             showFollowing();
         }
+
+        usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = usersList.get(i);
+                db.collection("Users")
+                        .whereEqualTo("User Name", name)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()){
+                                        String showUserId = document.getId();
+                                        Intent intent = new Intent(getApplicationContext(), SearchProfileActivity.class);
+                                        intent.putExtra("userId", showUserId);
+                                        startActivity(intent);
+                                    }
+
+
+                                }
+                            }
+                        });
+            }
+        });
     }
 
     public void showFollowers(){

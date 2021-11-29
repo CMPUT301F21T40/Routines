@@ -44,6 +44,8 @@ public class ShowUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_user);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         textLabel = findViewById(R.id.textView_label);
         type = getIntent().getStringExtra("type");
         textLabel.setText(type);

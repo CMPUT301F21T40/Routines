@@ -152,21 +152,13 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 lastModifiedDate = (String) document.getData().get("Last Modified Date");
 
                                 hideButton(habitFrequency, habitId, add, db);
-
-
                                 nameView.setText(habitName);
                                 reasonView.setText(habitReason);
                                 dateView.setText(habitDate);
                                 privacyView.setText(habitPrivacy);
                                 frequencyView.setText(frequency);
 
-                                // why isnt this updating the bar?
-                                int currentProgress = (int) habitProgress;
-                                progressBar.setProgress(currentProgress); // these were added
-                                percentText.setText("Current Progress: "+ String.valueOf(currentProgress)+"%");
-
-
-
+                                updateProgress(); // call this to update the progress bar
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             }
                             else {
@@ -209,7 +201,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
             @Override
             public void onClick(View view) {
                 EditHabitFragment.newInstance(new Habit(habitName, habitReason, habitDate, habitFrequency, habitPrivacy, completionTime, estimateCompletionTime, lastCompletionTime, lastModifiedDate, habitProgress)).show(getSupportFragmentManager(), "EDIT_HABIT");
-
             }
         });
 
@@ -225,6 +216,41 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         });
     }
 
+    public void updateProgress(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference habitRef = db
+                .collection("Habits")
+                .document(userId)
+                .collection("Habits")
+                .document(habitId);
+        habitRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()){
+                                habitProgress = (long)document.getData().get("Progress");
+                                // why isnt this updating the bar?
+                                int currentProgress = (int) habitProgress;
+                                progressBar.setProgress((int)habitProgress); // these were added
+                                percentText.setText("Current Progress: "+ String.valueOf(currentProgress)+"%");
+
+                                Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            }
+                            else {
+                                Log.d("TAG", "No such document ", task.getException());
+                            }
+                        }
+                        else {
+                            Log.d("TAG", "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
     /**
      * When the user clicks "CONFIRM" to delete the habit, this function runs.
      * It takes the habit as a parameter then deletes it from the firebase

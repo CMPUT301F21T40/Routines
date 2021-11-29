@@ -135,8 +135,6 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                         if (task.isSuccessful()){
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()){
-                                // concatenated strings we should to this in the XML later
-
                                 habitName = (String) document.getData().get("Habit Name");
                                 habitDate = (String) document.getData().get("Start Date");
                                 habitReason = (String) document.getData().get("Habit Reason");
@@ -154,6 +152,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 lastModifiedDate = (String) document.getData().get("Last Modified Date");
 
                                 hideButton(habitFrequency, habitId, add, db);
+
 
                                 nameView.setText(habitName);
                                 reasonView.setText(habitReason);

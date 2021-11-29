@@ -176,9 +176,15 @@ public class HomeActivity extends AppCompatActivity  implements AddHabitFragment
         switch(item.getItemId()){
             case R.id.menu_followers:
                 Toast.makeText(getApplicationContext(), "Followers", Toast.LENGTH_SHORT).show();
+                Intent followersIntent = new Intent(this, ShowUserActivity.class);
+                followersIntent.putExtra("type", "Followers");
+                startActivity(followersIntent);
                 return true;
             case R.id.menu_following:
                 Toast.makeText(getApplicationContext(), "Following", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ShowUserActivity.class);
+                intent.putExtra("type", "Following");
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

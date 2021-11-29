@@ -275,6 +275,11 @@ public class SearchProfileActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This function checks if the user is following the searched for user
+     * @param id
+     * @author ipaterso
+     */
     public void checkFollower(String id) {
         db.collection("Notification")
                 .whereEqualTo("Receiver", id)
@@ -291,7 +296,6 @@ public class SearchProfileActivity extends AppCompatActivity {
                                 Log.d("TAG", "Status : " + status);
                                 if (status.equals("accepted")) {
                                     Log.d("TAG", "print habits here -------------");
-                                    //showList(id);
                                     habitLabel.setText(userName.getText().toString() + "'s Habits");
                                     habitLabel.setTextSize(25);
                                     searchHabitFragment = SearchHabitsFragment.newInstance(id);

@@ -15,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING FOR US 01.03.01
+ * INTENT TESTING US 01.01.01, US 01.02.01, 01.06.01,
  */
-public class ViewHabitTest {
+public class AddHabitBackButtonTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -45,40 +45,18 @@ public class ViewHabitTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    public void addHabit(){
-        // click the floating action button
+    @Test
+    public void addHabitFragmentBackButton(){ // test canceling adding a habit
+        login();
+        // click floating action button
         View floatingButtonView = solo.getCurrentActivity().findViewById(R.id.container); // get the frame layout
         View fab= floatingButtonView.findViewById(R.id.addHabitButton); // get the button inside the frame layout
         solo.clickOnView(fab);  // press the button
-        // inside the fragment
-        solo.clickOnButton("CONFIRM DATE");
-        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "Test Habit");
-        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "Test Reason");
-        // test all the date switch's
-        solo.clickOnButton("Private Habit");
-        solo.clickOnButton("Monday");
-        solo.clickOnButton("OK");
-        solo.sleep(1000);
-    }
-    public void deleteHabit(){
-        solo.clickOnText("Test Habit");
-        //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
-        solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
-        // click the floating action button
-        solo.clickOnView(solo.getView(R.id.delete_habit_button)); // click on the floating button
         solo.sleep(500);
-        solo.clickOnButton("Confirm"); // click on the confirm
-        solo.sleep(1000);
+        solo.clickOnButton("Cancel");
+        solo.sleep(500);
     }
 
-    @Test
-    public void viewHabitTest(){
-        login();
-        addHabit();
-        solo.clickOnText("Test Habit");
-        solo.sleep(1000);
-        deleteHabit();
-    }
     /**
      * Closes the activity after every test
      * @throws Exception
@@ -87,5 +65,5 @@ public class ViewHabitTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
-
 }
+

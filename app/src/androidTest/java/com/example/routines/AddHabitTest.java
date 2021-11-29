@@ -48,7 +48,7 @@ public class AddHabitTest {
     }
 
     public void deleteHabit(){
-        solo.clickOnText("12345678901234567890");
+        solo.clickOnText("Test Habit");
         //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
         solo.assertCurrentActivity("Needs to be ViewHabitActivity", ViewHabitActivity.class);
         // click the floating action button
@@ -70,8 +70,8 @@ public class AddHabitTest {
         // inside the fragment
         solo.sleep(500);
         solo.clickOnButton("CONFIRM DATE");
-        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "12345678901234567890");
-        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "123456789012345678901234567890");
+        solo.enterText((EditText) solo.getView(R.id.habitNameEditText), "Test Habit");
+        solo.enterText((EditText) solo.getView(R.id.habitReasonEditText), "Test Reason");
         // test all the date switch's
         solo.clickOnButton("Private Habit");
         solo.clickOnButton("Monday");

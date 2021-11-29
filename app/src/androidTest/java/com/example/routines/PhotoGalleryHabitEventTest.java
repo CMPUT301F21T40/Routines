@@ -15,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING FOR US 01.03.01
+ * this is intent testing for us 02 03 02
  */
-public class ViewHabitTest {
+public class PhotoGalleryHabitEventTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -57,9 +57,16 @@ public class ViewHabitTest {
         // test all the date switch's
         solo.clickOnButton("Private Habit");
         solo.clickOnButton("Monday");
+        solo.clickOnButton("Tuesday");
+        solo.clickOnButton("Wednesday");
+        solo.clickOnButton("Thursday");
+        solo.clickOnButton("Friday");
+        solo.clickOnButton("Saturday");
+        solo.clickOnButton("Sunday");
         solo.clickOnButton("OK");
         solo.sleep(1000);
     }
+
     public void deleteHabit(){
         solo.clickOnText("Test Habit");
         //solo.clickInList(0); cannot use anymore since there is 2 listviews in the activity, there is not abs reference
@@ -71,14 +78,26 @@ public class ViewHabitTest {
         solo.sleep(1000);
     }
 
-    @Test
-    public void viewHabitTest(){
+    // this would be the test but it does not work with robotium
+    public void addPhotoFromGallery(){
         login();
         addHabit();
         solo.clickOnText("Test Habit");
         solo.sleep(1000);
+        solo.clickOnButton("ADD EVENT");
+        solo.sleep(1000);
+        solo.enterText((EditText) solo.getView(R.id.view_habit_name), "Habit Event");
+        solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
+        // this is where we will add photo from the gallery
+
+        solo.clickOnButton("ADD");
+        solo.clickOnButton("VIEW EVENTS");
+        solo.sleep(3000);
+        solo.goBack();
         deleteHabit();
     }
+
+
     /**
      * Closes the activity after every test
      * @throws Exception
@@ -87,5 +106,4 @@ public class ViewHabitTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
-
 }

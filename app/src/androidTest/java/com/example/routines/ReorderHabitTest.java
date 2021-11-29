@@ -16,6 +16,8 @@ import org.junit.Test;
 
 /**
  * NYI: CANNOT GET ROBOTIUM TO LONG PRESS -> DRAG
+ * NYI: On 2021-11-28 this still seem like we cannot test it based on how we implemented the functionality
+ * < long press + drag >
  * US 01.08.02
  */
 public class ReorderHabitTest {

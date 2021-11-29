@@ -526,7 +526,14 @@ public class AddEventActivity extends AppCompatActivity implements LocationListe
     }
 
 
-
+    /**
+     * This function will called after user add an event
+     * update the fire base, including completion time, Estimate completion time, and progress
+     * @param habitId
+     * @param userId
+     * @param db
+     * @author zezhou
+     */
     public void updateCompletion(String habitId, String userId, FirebaseFirestore db){
         DocumentReference habitRef = db
                 .collection("Habits")

@@ -90,7 +90,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         userId = (String) getIntent().getStringExtra("userId");
         Log.d("TAG", "user ID: " + userId);
 
-
+        //initial view
         habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
         reasonView = findViewById(R.id.view_habit_reason);
@@ -106,7 +106,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
 
     }
-
+    //override onResume to let activity refresh every time enter this activity
     @Override
     public void onResume() {
 
@@ -114,6 +114,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
+        //disallow buttons if other user visits the habit
         if (!sameUser) {
             add.setVisibility(View.INVISIBLE);
             edit.setVisibility(View.INVISIBLE);
@@ -403,11 +404,12 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     /**
      * This function will hide the add button if the current day of week is not in the frequency list
      * @param habitFrequency
+     * @param habitId
      * @param add
+     * @param db
      * @author Zezhou Xiong
      */
     public void hideButton(ArrayList<String> habitFrequency, String habitId, Button add, FirebaseFirestore db){
-        Boolean hide = false;
 
         SimpleDateFormat sdf = new SimpleDateFormat("EEEE", Locale.getDefault());
         Date d = new Date();

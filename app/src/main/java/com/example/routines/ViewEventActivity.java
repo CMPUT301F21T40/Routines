@@ -12,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -234,11 +236,7 @@ public class ViewEventActivity extends AppCompatActivity implements EditEventFra
             }
         });
         onBackPressed();
-
     }
-
-
-
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

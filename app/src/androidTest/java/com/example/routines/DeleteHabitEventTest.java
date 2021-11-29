@@ -15,9 +15,9 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * INTENT TESTING FOR US 01.03.01
+ * Unit testing for US 02.06.01
  */
-public class ViewHabitTest {
+public class DeleteHabitEventTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -57,7 +57,14 @@ public class ViewHabitTest {
         // test all the date switch's
         solo.clickOnButton("Private Habit");
         solo.clickOnButton("Monday");
+        solo.clickOnButton("Tuesday");
+        solo.clickOnButton("Wednesday");
+        solo.clickOnButton("Thursday");
+        solo.clickOnButton("Friday");
+        solo.clickOnButton("Saturday");
+        solo.clickOnButton("Sunday");
         solo.clickOnButton("OK");
+        solo.sleep(1000);
         solo.sleep(1000);
     }
     public void deleteHabit(){
@@ -71,13 +78,32 @@ public class ViewHabitTest {
         solo.sleep(1000);
     }
 
+    public void addHabitEvent(){
+        solo.clickOnText("Test Habit");
+        solo.clickOnButton("ADD EVENT");
+        solo.getView(R.id.add_habit_event);
+        solo.enterText((EditText) solo.getView(R.id.view_habit_name), "TEST HABIT EVENT");
+        solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
+        solo.clickOnButton("ADD");
+    }
+
     @Test
-    public void viewHabitTest(){
+    public void viewHabitEventTest(){
         login();
         addHabit();
         solo.clickOnText("Test Habit");
+        addHabitEvent();
+        solo.clickOnButton("VIEW EVENTS");
+        solo.clickOnText("TEST HABIT EVENT");
         solo.sleep(1000);
-        deleteHabit();
+        solo.clickOnView(solo.getView(R.id.delete_habit_event_button)); // click on the floating button
+        solo.sleep(500);
+        solo.clickOnButton("Confirm"); // click on the confirm
+        solo.sleep(1000);
+
+        solo.goBack();
+        solo.goBack();
+        deleteHabit(); // just to delete it so its not cluttered
     }
     /**
      * Closes the activity after every test
@@ -87,5 +113,4 @@ public class ViewHabitTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
-
 }

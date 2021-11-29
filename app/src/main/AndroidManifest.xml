@@ -104,6 +104,7 @@
         <activity
             android:name=".HomeActivity"
             android:label="Routines Home"
+            android:parentActivityName=".WelcomeActivity"
             android:exported="true" />
         <activity
             android:name=".SignupActivity"

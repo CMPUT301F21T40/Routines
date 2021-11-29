@@ -2,7 +2,9 @@ package com.example.routines;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,7 +82,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         userId = (String) getIntent().getStringExtra("userId");
         Log.d("TAG", "user ID: " + userId);
 
-
+        //initial view
         habitId = getIntent().getStringExtra("habitId");
         nameView = findViewById(R.id.view_habit_name);
         reasonView = findViewById(R.id.view_habit_reason);
@@ -90,8 +94,10 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
 
-    }
+        checkLocationPermission();
 
+    }
+    //override onResume to let activity refresh every time enter this activity
     @Override
     public void onResume() {
 
@@ -99,6 +105,7 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
 
         Boolean sameUser = getIntent().getBooleanExtra("sameUser", true);
 
+        //disallow buttons if other user visits the habit
         if (!sameUser) {
             add.setVisibility(View.INVISIBLE);
             edit.setVisibility(View.INVISIBLE);
@@ -384,7 +391,9 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
     /**
      * This function will hide the add button if the current day of week is not in the frequency list
      * @param habitFrequency
+     * @param habitId
      * @param add
+     * @param db
      * @author Zezhou Xiong
      */
     public void hideButton(ArrayList<String> habitFrequency, String habitId, Button add, FirebaseFirestore db){
@@ -414,6 +423,19 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         }
     }
 
+    /**
+     * Check Location Permission
+     * @return void
+     * @author yyang13
+     */
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(ViewHabitActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(ViewHabitActivity.this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            }, 100);
+        }
+    }
 
 
 }

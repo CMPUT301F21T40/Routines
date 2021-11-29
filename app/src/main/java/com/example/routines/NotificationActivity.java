@@ -139,6 +139,12 @@ public class NotificationActivity extends AppCompatActivity  {
         }
     }
 
+    /**
+     * Update the default fragment
+     * @return void
+     * @author Shanshan wei/swei3
+     */
+
     public void updateFollowerRequestFragment(){
         followerRequestFragment = FollowerRequestFragment.newInstance();
         FragmentManager manager = getSupportFragmentManager();

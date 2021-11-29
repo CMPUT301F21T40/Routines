@@ -32,6 +32,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+/**
+ * This will shows the request details from other users to me
+ * This activity also allows me to accept/deny the request
+ * @author Shanshan Wei/swei3
+ */
+
 public class ViewRequestActivity extends AppCompatActivity {
     TextView textName;
     TextView nameShow;
@@ -76,6 +82,11 @@ public class ViewRequestActivity extends AppCompatActivity {
         showInfo();
     }
 
+    /**
+     * Initialize the view
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void initView(){
         textName = findViewById(R.id.textView_request_user);
         nameShow = findViewById(R.id.textView_request_user2);
@@ -99,6 +110,11 @@ public class ViewRequestActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Initialize the view of radio buttons and set the click listeners
+     * @return void
+     * @author Shanshan Wei/swei3
+     */
     public void findRadioButton(int checkedId){
         switch (checkedId){
             case R.id.radio_accept:
@@ -115,6 +131,10 @@ public class ViewRequestActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Show the request sender's information/profile
+     * @author Shanshan Wei/swei3
+     */
     public void showInfo(){
         nameShow.setText(requestFrom);
         CollectionReference userCollection = FirebaseFirestore.getInstance()
@@ -170,6 +190,12 @@ public class ViewRequestActivity extends AppCompatActivity {
 
 
     }
+
+    /**
+     * If the user accepts/ denies the request, this will update the status of this request on firebase
+     * @param senderId
+     * @author Shanshan Wei/swei3
+     */
     public void updateStatus(String senderId){
         if(updatedStatus == "accepted"){
             requestReference
@@ -214,6 +240,11 @@ public class ViewRequestActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Once the user denied the request, the request will be deleted on firebase
+     * @param docId
+     * @author Shanshan Wei/swei3
+     */
     public void deleteDeniedRequest(String docId){
         requestReference
                 .document(docId)

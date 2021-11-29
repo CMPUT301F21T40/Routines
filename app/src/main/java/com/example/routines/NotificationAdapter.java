@@ -12,12 +12,22 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * This is custome adapter for Notification object
+ * @author Shanshan wei/swei3
+ */
+
 public class NotificationAdapter extends ArrayAdapter<Request> {
 
     private ArrayList<Request> requests;
     private Context context;
 
 
+    /**
+     * Constructor
+     * @param context
+     * @param requests
+     */
     public NotificationAdapter(@NonNull Context context,  @NonNull ArrayList<Request> requests) {
         super(context, 0, requests);
         this.requests = requests;

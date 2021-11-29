@@ -30,6 +30,12 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/**
+ * This will either shows a list of my followers/ a list of users i am following
+ * @see HomeActivity
+ * @author Shanshan wei/swei3
+ */
+
 public class ShowUserActivity extends AppCompatActivity {
 
     TextView textLabel;
@@ -71,6 +77,11 @@ public class ShowUserActivity extends AppCompatActivity {
             showFollowing();
         }
 
+        /**
+         * This sets the item click listeners.
+         * When the user click an user item in the list, this directs the user to see the user item's profile
+         * @author Shanshan wei/swei3
+         */
         usersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -97,6 +108,10 @@ public class ShowUserActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This will show the list of followers
+     * @author Shanshan wei/swei3
+     */
     public void showFollowers(){
         collectionReference
                 .whereEqualTo("Receiver", id)
@@ -139,6 +154,10 @@ public class ShowUserActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * This will show the list of users i am following
+     * @author Shanshan wei/swei3
+     */
 
     public void showFollowing(){
         collectionReference

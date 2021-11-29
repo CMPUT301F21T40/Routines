@@ -5,6 +5,8 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -159,10 +161,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
                                 privacyView.setText(habitPrivacy);
                                 frequencyView.setText(frequency);
 
-                                // why isnt this updating the bar? 
+                                // why isnt this updating the bar?
                                 int currentProgress = (int) habitProgress;
                                 progressBar.setProgress(currentProgress); // these were added
                                 percentText.setText("Current Progress: "+ String.valueOf(currentProgress)+"%");
+
 
 
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());

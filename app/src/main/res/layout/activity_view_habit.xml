@@ -116,14 +116,13 @@
                 android:id="@+id/progressBar"
                 style="@android:style/Widget.ProgressBar.Horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:indeterminate="false"
 
-
                 android:progress="0"
-                android:progressTint="@color/project_purple"
+                android:progressTint="@color/color_signup"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -134,7 +133,7 @@
                 android:layout_height="50dp"
                 android:gravity="center"
                 android:text="Progress 0%"
-                android:textColor="@color/project_lightPink"
+                android:textColor="@color/project_white"
                 android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

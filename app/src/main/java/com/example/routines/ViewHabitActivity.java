@@ -97,12 +97,11 @@ public class ViewHabitActivity extends AppCompatActivity implements EditHabitFra
         view = findViewById(R.id.view_event_button);
         edit = findViewById(R.id.edit_habit_button);
         delete = findViewById(R.id.delete_habit_button);
-<<<<<<< HEAD
-=======
+
         progressBar = findViewById(R.id.progressBar);
         percentText = findViewById(R.id.progress_text);
-        checkLocationPermission();
->>>>>>> 153f5e9eb2af899e463ea94ea2a06819d657727a
+
+
 
     }
     //override onResume to let activity refresh every time enter this activity

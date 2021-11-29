@@ -14,12 +14,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-
 /**
- * unit testing for us 06 01 02
- * @author lukas waschuk
+ * this is testing for us 02 03 01
  */
-public class AddLocationFromMapTest {
+public class PhotoCameraEventTest {
     private Solo solo;
     @Rule // start testing on welcome page
     public ActivityTestRule<WelcomeActivity> rule =
@@ -80,8 +78,9 @@ public class AddLocationFromMapTest {
         solo.sleep(1000);
     }
 
-    @Test
-    public void addLocationFromMapTest(){
+
+    // this would be the test but it does not work with robotium
+    public void addPhotoFromCamera(){
         login();
         addHabit();
         solo.clickOnText("Test Habit");
@@ -90,17 +89,17 @@ public class AddLocationFromMapTest {
         solo.sleep(1000);
         solo.enterText((EditText) solo.getView(R.id.view_habit_name), "Habit Event");
         solo.enterText((EditText) solo.getView(R.id.view_habit_reason), "SOME KIND OF REASON");
-        solo.clickOnButton("GET LOCATION FROM MAP");
-        solo.sleep(3000);
-        solo.enterText((EditText) solo.getView(R.id.address_search_editText), "116 St & 85 Ave, Edmonton, AB T6G 2R3");
-        solo.sleep(1000);
-        solo.typeText(0, "116 St & 85 Ave, Edmonton, AB T6G 2R3");
-        solo.clickOnText("116 St & 85 Ave, Edmonton, AB T6G 2R3");
-        solo.sleep(1000);
-        solo.clickOnButton("CONFIRM");
-        solo.sleep(1000);
+        // this is where we will add the photo from the camera
+
+        solo.clickOnView(solo.getView(R.id.imageView_add_event)); // click on the photo
+        solo.clickOnView(solo.getView(R.id.camera_layout)); // click on the camera
+
+        // once the camera opens we cannot test with robotium anymore
+        solo.clickOnScreen(500, 50);
+        solo.clickOnScreen(500, 50);
+
+
         solo.clickOnButton("ADD");
-        solo.sleep(1000);
         solo.clickOnButton("VIEW EVENTS");
         solo.sleep(3000);
         solo.goBack();
@@ -116,4 +115,5 @@ public class AddLocationFromMapTest {
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();
     }
+
 }

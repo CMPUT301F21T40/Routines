@@ -18,6 +18,7 @@ import java.util.Random;
 
 /**
  * intent testing for us 05 02 01 grant a user to follow
+ * @author lukas waschuk
  */
 public class GrantUserFollowTest {
     private Solo solo;
@@ -26,10 +27,6 @@ public class GrantUserFollowTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -48,10 +45,6 @@ public class GrantUserFollowTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    /**
-     * use rand to make a new username and allow the new user to be followed by our test account
-     * @return
-     */
     public String signUp(){
         String username = generateUSN();
         String email = concatEmail(username);
@@ -73,11 +66,6 @@ public class GrantUserFollowTest {
         return username;
     }
 
-    /**
-     * search for the user using the USN we created
-     * @param userName
-     * @author Lukas Waschuk
-     */
     public void search(String userName){
         // get the profile button from the bottom menu
         View bottomBar= solo.getCurrentActivity().findViewById(R.id.bottom_navigation); // get the button inside the frame layout
@@ -89,8 +77,6 @@ public class GrantUserFollowTest {
         solo.clickInList(0);
         solo.assertCurrentActivity("Activity needs to be SearchProfileActivity", SearchProfileActivity.class);
     }
-
-
 
     public String followUser(){
         String username = signUp();
@@ -132,11 +118,6 @@ public class GrantUserFollowTest {
         solo.sleep(2000);
     }
 
-    /**
-     * Generates a username for the test
-     * @return String userName
-     * @author Lukas Waschuk
-     */
     public String generateUSN(){
         Random random = new Random();
         int upperbound = 1000000000;
@@ -145,21 +126,11 @@ public class GrantUserFollowTest {
         return userName;
     }
 
-    /**
-     * makes the username a email
-     * @param usn
-     * @return String -> concaatinated email
-     * @author lukas waschuk
-     */
     public String concatEmail(String usn){
         return usn+"@gmail.com";
     }
 
 
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

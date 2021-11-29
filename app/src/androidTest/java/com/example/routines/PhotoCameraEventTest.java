@@ -16,6 +16,8 @@ import org.junit.Test;
 
 /**
  * this is testing for us 02 03 01
+ * this test will not work with robotium because it interacts with the camera which is not part of the app
+ * @author lukas waschuk
  */
 public class PhotoCameraEventTest {
     private Solo solo;
@@ -23,10 +25,6 @@ public class PhotoCameraEventTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -106,11 +104,6 @@ public class PhotoCameraEventTest {
         deleteHabit();
     }
 
-
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

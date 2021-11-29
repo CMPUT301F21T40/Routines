@@ -16,6 +16,7 @@ import org.junit.Test;
 
 /**
  * INTENT TESTING US 03.01.01
+ * @author lukas waschuk
  */
 public class LogoutTest {
     private Solo solo;
@@ -23,10 +24,6 @@ public class LogoutTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -61,10 +58,7 @@ public class LogoutTest {
         solo.assertCurrentActivity("Activity needs to be welcome activity", WelcomeActivity.class);
         solo.sleep(500);
     }
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
+
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

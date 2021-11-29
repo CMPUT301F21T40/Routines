@@ -13,6 +13,7 @@ import java.util.Random;
 
 /**
  * Intent testing for us 05 01 01 << Request to follow a user >>
+ *     @author lukas waschuk
  *
  */
 public class FollowUserTest {
@@ -22,10 +23,6 @@ public class FollowUserTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -44,10 +41,6 @@ public class FollowUserTest {
         solo.assertCurrentActivity("Activity needs to be homeActivity", HomeActivity.class);
     }
 
-    /**
-     * use rand to make a new username and allow the new user to be followed by our test account
-     * @return
-     */
     public String signUp(){
         String username = generateUSN();
         String email = concatEmail(username);
@@ -73,11 +66,6 @@ public class FollowUserTest {
         return username;
     }
 
-    /**
-     * search for the user using the USN we created
-     * @param userName
-     * @author Lukas Waschuk
-     */
     public void search(String userName){
         // get the profile button from the bottom menu
         View bottomBar= solo.getCurrentActivity().findViewById(R.id.bottom_navigation); // get the button inside the frame layout
@@ -114,11 +102,6 @@ public class FollowUserTest {
         solo.sleep(1000);
     }
 
-    /**
-     * Generates a username for the test
-     * @return String userName
-     * @author Lukas Waschuk
-     */
     public String generateUSN(){
         Random random = new Random();
         int upperbound = 1000000000;
@@ -127,21 +110,11 @@ public class FollowUserTest {
         return userName;
     }
 
-    /**
-     * makes the username a email
-     * @param usn
-     * @return String -> concaatinated email
-     * @author lukas waschuk
-     */
     public String concatEmail(String usn){
         return usn+"@gmail.com";
     }
 
 
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

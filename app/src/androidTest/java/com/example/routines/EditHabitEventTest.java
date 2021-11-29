@@ -16,6 +16,7 @@ import org.junit.Test;
 
 /**
  * INTENT TESTING FOR US.02.05.01
+ * @author lukas waschuk
  */
 public class EditHabitEventTest {
     private Solo solo;
@@ -23,10 +24,6 @@ public class EditHabitEventTest {
     public ActivityTestRule<WelcomeActivity> rule =
             new ActivityTestRule<>(WelcomeActivity.class, true, true);
 
-    /**
-     * Runs before all tests and creates solo instances
-     * @throws Exception
-     */
     @Before
     public void setup() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
@@ -112,10 +109,6 @@ public class EditHabitEventTest {
         deleteHabit(); // delete the habit so it does not cause errors in the future
     }
 
-    /**
-     * Closes the activity after every test
-     * @throws Exception
-     */
     @After
     public void tearDown() throws Exception{
         solo.finishOpenedActivities();

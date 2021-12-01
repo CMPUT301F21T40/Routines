@@ -1,10 +1,13 @@
 package com.example.routines;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +47,11 @@ import java.util.HashMap;
 public class SearchProfileActivity extends AppCompatActivity {
     //initialize the layout
     TextView userName;
+    ImageView userPhoto;
     Button followButton;
     FirebaseFirestore db = FirebaseFirestore.getInstance(); // connect to firebase
+    FirebaseStorage storage;
+    StorageReference storageRef;
     CollectionReference requestReference;
     FirebaseAuth myAuth;
     String requestId;
@@ -52,6 +60,7 @@ public class SearchProfileActivity extends AppCompatActivity {
     FrameLayout fragmentLayout;
     String userId;
     SearchHabitsFragment searchHabitFragment;
+
 
     CollectionReference habitCollection;
 
@@ -72,6 +81,9 @@ public class SearchProfileActivity extends AppCompatActivity {
         //enable back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("User Photo");
+
         habitDataList = new ArrayList<>();
         habitIdList = new ArrayList<>();
         follow = false;
@@ -80,7 +92,7 @@ public class SearchProfileActivity extends AppCompatActivity {
         userName = findViewById(R.id.search_profile_name);
         followButton = findViewById(R.id.follow);
         habitLabel = findViewById(R.id.habit_label);
-
+        userPhoto = findViewById(R.id.image_profile);
 
         myAuth = FirebaseAuth.getInstance();
         FirebaseUser user = myAuth.getCurrentUser();
@@ -111,6 +123,15 @@ public class SearchProfileActivity extends AppCompatActivity {
                                 userName.setText(name);
                                 habitLabel.setText("Follow this user to view their habits");
                                 habitLabel.setTextSize(15);
+                                StorageReference imageRef = storageRef.child(id);
+                                imageRef.getBytes(1024*1024)
+                                        .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                            @Override
+                                            public void onSuccess(byte[] bytes) {
+                                                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                userPhoto.setImageBitmap(bitmap);
+                                            }
+                                        });
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             } else {
                                 Log.d("TAG", "No such document");
